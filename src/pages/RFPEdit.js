@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styling/rfpstyle.css';
 import { Link, useHistory } from 'react-router-dom';
-
 
 const RFPEdit = () => {
   const [editable, setEditable] = useState(false);
@@ -15,15 +15,29 @@ const RFPEdit = () => {
   const [selectedVendors, setSelectedVendors] = useState([]);
 
   const [documents, setDocuments] = useState([
-    { id: 1, name: 'Document 1', selected: false },
-    { id: 2, name: 'Document 2', selected: false },
+    { id: 1, name: 'Aadhar Card', selected: false },
+    { id: 2, name: 'Pan Card', selected: false },
+    { id: 3, name: 'Turn Over of the company', selected: false },
+    { id: 4, name: 'GST Invoice', selected: false },
     // Add more documents as needed
   ]);
 
-  const [rfpSplit, setRfpSplit] = useState(50);
+  const [rfpDecision, setRfpDecision] = useState('Yes');
   const [remarks, setRemarks] = useState('');
   const [bidSubmissionDate, setBidSubmissionDate] = useState('');
   const [bidOpenDate, setBidOpenDate] = useState('');
+
+  useEffect(() => {
+    // Fetch vendors from API and setVendors
+    // Replace 'http://localhost:3001/vendors' with the actual API endpoint
+    fetch('http://localhost:3001/vendors')
+      .then(response => response.json())
+      .then(data => {
+        console.log('Fetched vendors:', data);
+        setVendors(data);
+      })
+      .catch(error => console.error('Error fetching vendors:', error));
+  }, []);
 
   const handleEditClick = () => {
     setEditable(true);
@@ -45,6 +59,12 @@ const RFPEdit = () => {
       selected: doc.id === documentId ? !doc.selected : doc.selected,
     }));
     setDocuments(updatedDocuments);
+  };
+
+  const handleVendorSelect = (vendor) => {
+    setSelectedVendors([...selectedVendors, vendor]);
+    const updatedVendors = vendors.filter((v) => v !== vendor);
+    setVendors(updatedVendors);
   };
 
   return (
@@ -81,26 +101,25 @@ const RFPEdit = () => {
           </table>
         </div>
 
-        {editable && (
-          <div className="vendor-section mt-4">
-            <label className="me-2">Select Vendor:</label>
-            <select
-              className="form-select"
-              multiple
-              value={selectedVendors}
-              onChange={(e) => setSelectedVendors(Array.from(e.target.selectedOptions, option => option.value))}
-            >
-              {vendors.map((vendor, index) => (
-                <option key={index} value={vendor}>
-                  {vendor}
-                </option>
-              ))}
-            </select>
-            <button type="button" onClick={handleAddVendor}>
-              Add Vendor
-            </button>
-          </div>
-        )}
+
+
+        <select
+          className="form-select"
+          value={''} // Set to an empty string or null
+          onChange={(e) => handleVendorSelect(e.target.value)}
+        >
+          <option value={''} disabled>Select Vendor</option>
+          {vendors.map((vendor) => (
+            <option key={vendor.id} value={vendor.name}>
+              {vendor.name}
+            </option>
+          ))}
+        </select>
+        <button type="button" onClick={handleAddVendor}>
+          Add Vendor
+        </button>
+
+
 
         <div className="document-list mt-4">
           <div className="form-title">Documents</div>
@@ -118,16 +137,28 @@ const RFPEdit = () => {
           ))}
         </div>
 
-        <div className="rfp-slider mt-4">
-          <div className="form-title">RFP Split</div>
-          <input
-            type="range"
-            min="0"
-            max="100"
-            value={rfpSplit}
-            onChange={(e) => setRfpSplit(parseInt(e.target.value, 10))}
-          />
-          <div>{rfpSplit}%</div>
+        <div className="rfp-decision mt-4">
+          <div className="form-title">RFP Decision</div>
+          <div>
+            <label>
+              <input
+                type="radio"
+                value="Yes"
+                checked={rfpDecision === 'Yes'}
+                onChange={() => setRfpDecision('Yes')}
+              />
+              Yes
+            </label>
+            <label>
+              <input
+                type="radio"
+                value="No"
+                checked={rfpDecision === 'No'}
+                onChange={() => setRfpDecision('No')}
+              />
+              No
+            </label>
+          </div>
         </div>
 
         <div className="remarks mt-4">
@@ -139,17 +170,15 @@ const RFPEdit = () => {
           />
         </div>
 
-        <div className="calendar mt-4">
-          <div className="form-title">Bid Submission Date</div>
+        <div className="calendar mt-4 d-flex">
+          <div className="form-title mx-2">Bid Submission Date</div>
           <input
             type="date"
             value={bidSubmissionDate}
             onChange={(e) => setBidSubmissionDate(e.target.value)}
           />
-        </div>
 
-        <div className="calendar mt-4">
-          <div className="form-title">Bid Open Date</div>
+          <div className="form-title mx-2">Bid Open Date</div>
           <input
             type="date"
             value={bidOpenDate}

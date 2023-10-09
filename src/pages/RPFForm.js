@@ -1,56 +1,53 @@
-import React , {useState}from 'react';
-
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-
+import { BsFillPersonFill, BsBox, BsLayers, BsQuestion } from 'react-icons/bs'; // Import Bootstrap icons
 import '../styling/rfpstyle.css';
 
 const RPFForm = () => {
   const [createRPF, setCreateRPF] = useState(false);
+  const [dummyData, setDummyData] = useState([]);
+  const dummyDataApiEndpoint = 'http://localhost:3040/dummyData';
   const navigate = useNavigate();
 
-  
+  useEffect(() => {
+    fetch(dummyDataApiEndpoint)
+      .then(response => response.json())
+      .then(data => {
+        console.log('Fetched dummy data:', data);
+        setDummyData(data);
+      })
+      .catch(error => console.error('Error fetching dummy data:', error));
+  }, []);
 
   
-  const dummyData = [
-    { indentId: 1, name: 'Item A', unit: 'pcs', quantity: 5 },
-    { indentId: 2, name: 'Item B', unit: 'kg', quantity: 3 },
-    { indentId: 3, name: 'Item B', unit: 'kg', quantity: 13 },
-    { indentId: 4, name: 'Item B', unit: 'kg', quantity: 2 },
-    { indentId: 5, name: 'Item B', unit: 'kg', quantity: 34 },
-    { indentId: 6, name: 'Item B', unit: 'kg', quantity: 44 },
-    // Add more dummy data as needed
-  ];
 
   const handleCreateRPFChange = () => {
     setCreateRPF(!createRPF);
 
     // If 'Yes' is clicked, navigate to RPFEdit.js
     if (!createRPF) {
-      navigate('/RFPEdit');
+      navigate('/RFPEdit', { state: { dummyData } });
     }
   };
-
-  
-
 
   return (
     <div className="main-container">
       <div className="translucent-form">
-        <div className="form-title">Purposed Indent</div>
+      <div className="form-title"><BsLayers className="icon" /> Purposed Indent</div>
 
         <div className="table-container">
-          <table>
+          <table >
             <thead>
               <tr>
-                <th>Indent ID</th>
-                <th>Name</th>
-                <th>Measure of Unit</th>
-                <th>Quantity</th>
+              <th><BsBox className="icon" /> Indent ID</th>
+                <th><BsFillPersonFill className="icon" /> Name</th>
+                <th><BsQuestion className="icon" /> Measure of Unit</th>
+                <th><BsLayers className="icon" /> Quantity</th>
               </tr>
             </thead>
             <tbody>
               {dummyData.map((item, index) => (
-                <tr key={index}>
+                <tr key={index} style={{ background: index % 2 === 0 ? '#f0f0f0' : 'white' }}>
                   <td>{item.indentId}</td>
                   <td>{item.name}</td>
                   <td>{item.unit}</td>
@@ -62,16 +59,18 @@ const RPFForm = () => {
         </div>
 
         <div className="create-rpf">
-          <div className="form-title">Do you want to create RPF?</div>
+          <div className="form-title">Do you want to create RFP?</div>
           <div className="yes-no-buttons">
-            <button className="yes-button"  onClick={handleCreateRPFChange}>Yes
+            <button className="yes-button" onClick={handleCreateRPFChange}>
+              Yes, Let's Go!
             </button>
-            <button className="no-button">No</button>
+            <button className="no-button">No, Maybe Later</button>
           </div>
         </div>
+        </div>
       </div>
-    </div>
+  
   );
-}
+};
 
 export default RPFForm;

@@ -1,18 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styling/rfpstyle.css';
-import { useNavigate } from 'react-router-dom';
+import { BsFillPersonFill, BsBox, BsLayers, BsQuestion } from 'react-icons/bs';
+
+import { useNavigate, useLocation } from 'react-router-dom';
 
 
 const RFPEdit = () => {
+  const location = useLocation();
   const navigate = useNavigate(); 
   const [editable, setEditable] = useState(false);
-  const [indents, setIndents] = useState([
-    { indentId: 1, name: 'Item A', unit: 'pcs', quantity: 5 },
-    { indentId: 2, name: 'Item B', unit: 'kg', quantity: 3 },
-    // Add more indents as needed
-  ]);
+  const [indents, setIndents] = useState(location.state?.dummyData || []);
 
+  // const navigate = useNavigate();
+
+  //const [dummyData, setDummyData] = useState(location.state?.dummyData || []);
+
+ 
   const [vendors, setVendors] = useState(['Vendor 1', 'Vendor 2', 'Vendor 3']);
   const [selectedVendors, setSelectedVendors] = useState([]);
 
@@ -85,16 +89,16 @@ const RFPEdit = () => {
   return (
     <div className="main-container">
       <div className="translucent-form">
-        <div className="form-title">Purposed Indent</div>
+        <div className="form-title"><BsLayers className="icon" /> Purposed Indent</div>
 
         <div className="table-container">
           <table>
             <thead>
               <tr>
-                <th>Indent ID</th>
-                <th>Name</th>
-                <th>Measure of Unit</th>
-                <th>Quantity</th>
+                <th><BsBox className="icon" /> Indent ID</th>
+                <th><BsFillPersonFill className="icon" /> Name</th>
+                <th><BsQuestion className="icon" /> Measure of Unit</th>
+                <th><BsLayers className="icon" /> Quantity</th>
                 {editable && <th>Action</th>}
               </tr>
             </thead>
@@ -133,6 +137,8 @@ const RFPEdit = () => {
         <button type="button" onClick={handleAddVendor}>
           Add Vendor
         </button>
+
+        
 
 
 

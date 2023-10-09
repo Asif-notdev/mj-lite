@@ -72,3 +72,14 @@ th {
     color: white;
     border: none;
 }
+
+
+.yes-button, .no-button {
+    border-radius: 8px; /* Adjust the radius as needed */
+  }
+  
+  
+  
+  
+  
+  

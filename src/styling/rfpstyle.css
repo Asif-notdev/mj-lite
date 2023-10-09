@@ -72,6 +72,7 @@ th {
     color: white;
     border: none;
 }
+<<<<<<< HEAD
 
 
 .yes-button, .no-button {
@@ -83,3 +84,9 @@ th {
   
   
   
+=======
+.buttonstyle{
+    color: #000000;
+    
+}
+>>>>>>> d478e68ae350698f9c8af8c4393e603e2ca1095a

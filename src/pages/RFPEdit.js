@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styling/rfpstyle.css';
-import { Link, useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+
 
 const RFPEdit = () => {
+  const navigate = useNavigate(); 
   const [editable, setEditable] = useState(false);
   const [indents, setIndents] = useState([
     { indentId: 1, name: 'Item A', unit: 'pcs', quantity: 5 },
@@ -66,6 +68,19 @@ const RFPEdit = () => {
     const updatedVendors = vendors.filter((v) => v !== vendor);
     setVendors(updatedVendors);
   };
+
+  const handleFinalSubmit = () => {
+    // Additional logic for final submission if needed
+    window.alert('RFP Finally Submitted');
+    navigate('/RFPList'); // Redirect to RFPList page
+  };
+
+  const handleSaveAsDraft = () => {
+    // Additional logic for saving as draft if needed
+    window.alert('RFP Saved as Draft');
+    navigate('/RFPList'); // Redirect to RFPList page
+  };
+
 
   return (
     <div className="main-container">
@@ -189,6 +204,15 @@ const RFPEdit = () => {
         <div className="create-rpf mt-4">
           <button className="yes-button" onClick={handleEditClick}>
             Edit
+          </button>
+        </div>
+
+        <div className="create-rpf mt-4">
+          <button className="yes-button" onClick={handleFinalSubmit}>
+            Final Submit
+          </button>
+          <button className="save-draft-button" onClick={handleSaveAsDraft}>
+            Save as Draft
           </button>
         </div>
       </div>

@@ -74,7 +74,9 @@ const RFPList = () => {
   };
 
   return (
-    <div>
+    <div className="translucent-form">
+
+      <h1>List of RFP</h1>
       {rfpData.map((rfp) => (
         <div key={rfp.id} className="accordion" id={`rfpAccordion${rfp.id}`}>
           <div className="accordion-item">
@@ -101,10 +103,20 @@ const RFPList = () => {
                 <p>Bid Submission Date: {rfp.submissionDate}</p>
                 <p>Bid Opening Date: {rfp.openingDate}</p>
                 <p>Bid description: {rfp.description}</p>
-                <button className="btn btn-primary me-2">
-                  <Link to={`/rfpdetailview/${rfp.id}`}>View</Link>
+                <button  className="btn btn-primary me-2">
+                <Link to={`/rfpdetailview/${rfp.id}`} style={{ color: 'black' ,textDecoration:'none' }}>
+                  View</Link>
+
                 </button>
-                <button className="btn btn-warning me-2">Edit</button>
+
+                <button className="btn btn-warning me-2">
+                  
+                <Link to={`/rfpedit`} style={{ color: 'black' ,textDecoration:'none' }} >
+                  Edit</Link>
+                  
+                  </button>
+
+
                 <button
                   className="btn btn-danger"
                   onClick={() => handleDeleteConfirmation(rfp)}

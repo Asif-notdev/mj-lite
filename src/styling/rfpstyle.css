@@ -85,26 +85,6 @@ th {
   
   
   
-<<<<<<< HEAD
-  .document-label input[type="checkbox"] {
-    appearance: none;
-    width: 12px;
-    height: 12px;
-    margin-right: 5px;
-    background-color: #ffffff;
-    border: 1px solid #cccccc;
-    border-radius: 50%;
-  }
-  
-  .document-label input[type="checkbox"]:checked {
-    background-color: #007BFF;
-    border-color: #007BFF;
-    background-image: url("data:image/svg+xml,%3Csvg width='10' height='10' viewBox='0 0 10 10' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M2 5L5 8 8 2' stroke='white' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-  }
-
-  
-    
-=======
 .buttonstyle{
     color: #000000;
     
@@ -132,4 +112,3 @@ th {
   
 /* Add this CSS to your styling/rfpstyle.css file */
 
->>>>>>> 5fd79ac88aec734ad1c0f8eadd09007996bb42d1

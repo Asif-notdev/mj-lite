@@ -4,7 +4,6 @@ import '../styling/rfpstyle.css';
 import { BsFillPersonFill, BsBox, BsLayers, BsQuestion, BsTrash, BsCurrencyRupee } from 'react-icons/bs';
 import { BsFileEarmarkText } from 'react-icons/bs';
 import { RiCheckboxBlankCircleLine, RiCheckboxCircleLine } from 'react-icons/ri';
-
 import { useNavigate, useLocation } from 'react-router-dom';
 
 const RFPEdit = () => {
@@ -351,3 +350,4 @@ const RFPEdit = () => {
 };
 
 export default RFPEdit;
+

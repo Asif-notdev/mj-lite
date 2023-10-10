@@ -85,6 +85,7 @@ th {
   
   
   
+<<<<<<< HEAD
   .document-label input[type="checkbox"] {
     appearance: none;
     width: 12px;
@@ -103,3 +104,32 @@ th {
 
   
     
+=======
+.buttonstyle{
+    color: #000000;
+    
+}
+
+/* Add this CSS to your styling/rfpstyle.css file */
+
+/* Default background color */
+.accordion-button {
+    background-color: #ffffff;
+    color: rgb(0, 0, 0);
+  }
+  
+  /* Hover state */
+  .accordion-button:hover {
+    background-color: #008cff;
+    color: #000000;
+  }
+  
+  /* Active (clicked) state */
+  .accordion-button:focus {
+    background-color: white;
+    color: #000000;
+  }
+  
+/* Add this CSS to your styling/rfpstyle.css file */
+
+>>>>>>> 5fd79ac88aec734ad1c0f8eadd09007996bb42d1

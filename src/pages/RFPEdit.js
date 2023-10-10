@@ -31,7 +31,7 @@ const RFPEdit = () => {
     { id: 4, name: 'GST Invoice', selected: false },
   ]);
 
-  const [rfpDecision, setRfpDecision] = useState('Yes');
+  const [rfpDivision, setrfpDivision] = useState(true);
   const [remarks, setRemarks] = useState('');
   const [bidSubmissionDate, setBidSubmissionDate] = useState('');
   const [bidOpenDate, setBidOpenDate] = useState('');
@@ -85,13 +85,59 @@ const RFPEdit = () => {
   const handleFinalSubmit = () => {
     // Additional logic for final submission if needed
     window.alert('RFP Finally Submitted');
+     
+  
+      postData();
+    
     navigate('/RFPList'); // Redirect to RFPList page
+  };
+
+  const postData = async () => {
+    try {
+      const url = 'http://localhost:8080/fillrfp'; // Replace with your API endpoint
+      const jsonData = {
+        "id": 5,
+        "estimatedPrice": 1000.00,
+        "isSplitable": rfpDivision,
+        "isPublish": true,
+        "isDraft": false,
+        "remarks": remarks,
+        "rfpCreationDate": "12-09-2023",
+        "bidOpeningDate": bidOpenDate,
+        "bidSubmissionDate": bidSubmissionDate,
+        "buyer":1,
+        "li":[{
+          "VID": "1",
+          "VendorName": "Address1"
+        },]
+      
+      };
+
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          // Add any other headers you need
+        },
+        body: JSON.stringify(jsonData),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      // Process the response data if needed
+      const responseData = await response.json();
+      console.log(responseData);
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
 
   const handleSaveAsDraft = () => {
     // Additional logic for saving as draft if needed
     window.alert('RFP Saved as Draft');
-    navigate('/RFPList'); // Redirect to RFPList page
+    navigate('/RFList'); // Redirect to RFPList page
   };
 
   const filteredVendors = allVendors.filter((vendor) => !selectedVendors.includes(vendor) && !removedVendors.includes(vendor));
@@ -235,15 +281,15 @@ const RFPEdit = () => {
           <div className="btn-group" role="group" aria-label="RFP Decision">
             <button
               type="button"
-              className={`btn btn-${rfpDecision === 'Yes' ? 'success' : 'secondary'}`}
-              onClick={() => setRfpDecision('Yes')}
+              className={`btn btn-${rfpDivision === 'Yes' ? 'success' : 'secondary'}`}
+              onClick={() => setrfpDivision(true)}
             >
               Yes
             </button>
             <button
               type="button"
-              className={`btn btn-${rfpDecision === 'No' ? 'success' : 'secondary'}`}
-              onClick={() => setRfpDecision('No')}
+              className={`btn btn-${rfpDivision === 'No' ? 'success' : 'secondary'}`}
+              onClick={() => setrfpDivision(false)}
             >
               No
             </button>
@@ -293,7 +339,7 @@ const RFPEdit = () => {
           </button>
 
           <button
-            className="btn btn-secondary mx-5"
+            className="btn btn-secondary"
             onClick={handleSaveAsDraft}
           >
             Save as Draft
@@ -312,3 +358,4 @@ const RFPEdit = () => {
 };
 
 export default RFPEdit;
+

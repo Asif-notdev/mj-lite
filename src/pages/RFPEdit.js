@@ -54,8 +54,8 @@ const RFPEdit = () => {
     setAllVendors(updatedVendors);
   };
 
-  
-  
+
+
 
   const handleRemoveVendor = (vendor) => {
     const updatedVendors = selectedVendors.filter((v) => v !== vendor);
@@ -63,7 +63,7 @@ const RFPEdit = () => {
     setRemovedVendors([...removedVendors, vendor]);
   };
 
-  
+
   const handleEditClick = () => {
     setEditable(true);
   };
@@ -85,10 +85,10 @@ const RFPEdit = () => {
   const handleFinalSubmit = () => {
     // Additional logic for final submission if needed
     window.alert('RFP Finally Submitted');
-     
-  
-      postData();
-    
+
+
+    postData();
+
     navigate('/RFPList'); // Redirect to RFPList page
   };
 
@@ -105,12 +105,12 @@ const RFPEdit = () => {
         "rfpCreationDate": "12-09-2023",
         "bidOpeningDate": bidOpenDate,
         "bidSubmissionDate": bidSubmissionDate,
-        "buyer":1,
-        "li":[{
+        "buyer": 1,
+        "li": [{
           "VID": "1",
           "VendorName": "Address1"
         },]
-      
+
       };
 
       const response = await fetch(url, {
@@ -222,17 +222,17 @@ const RFPEdit = () => {
         </div>
 
         <select
-  className="form-select mt-4"
-  value={''}
-  onChange={(e) => handleVendorSelect(e.target.value)}
->
-  <option value={''} disabled>Select Vendor</option>
-  {filteredVendors.map((vendor, index) => (
-    <option key={index} value={vendor.name}>
-      {vendor.name}
-    </option>
-  ))}
-</select>
+          className="form-select mt-4"
+          value={''}
+          onChange={(e) => handleVendorSelect(e.target.value)}
+        >
+          <option value={''} disabled>Select Vendor</option>
+          {filteredVendors.map((vendor, index) => (
+            <option key={index} value={vendor.name}>
+              {vendor.name}
+            </option>
+          ))}
+        </select>
 
 
         {selectedVendors.length > 0 && (
@@ -255,7 +255,7 @@ const RFPEdit = () => {
           </div>
         )}
 
-      
+
         <div className="document-list mt-4">
           <div className="form-title">Documents</div>
 
@@ -279,20 +279,22 @@ const RFPEdit = () => {
         <div className="rfp-decision mt-4">
           <div className="form-title">RFP Split</div>
           <div className="btn-group" role="group" aria-label="RFP Decision">
-            <button
-              type="button"
-              className={`btn btn-${rfpDivision === 'Yes' ? 'success' : 'secondary'}`}
-              onClick={() => setrfpDivision(true)}
-            >
-              Yes
-            </button>
-            <button
-              type="button"
-              className={`btn btn-${rfpDivision === 'No' ? 'success' : 'secondary'}`}
-              onClick={() => setrfpDivision(false)}
-            >
-              No
-            </button>
+            <div className="btn-group" role="group" aria-label="RFP Decision">
+              <button
+                type="button"
+                className={`btn btn-${rfpDivision ? 'success' : 'secondary'}`}
+                onClick={() => setrfpDivision(true)}
+              >
+                Yes
+              </button>
+              <button
+                type="button"
+                className={`btn btn-${!rfpDivision ? 'success' : 'secondary'}`}
+                onClick={() => setrfpDivision(false)}
+              >
+                No
+              </button>
+            </div>
           </div>
         </div>
 
@@ -325,7 +327,7 @@ const RFPEdit = () => {
               value={bidOpenDate}
               onChange={(e) => setBidOpenDate(e.target.value)}
             />
-            
+
           </div>
         </div>
 

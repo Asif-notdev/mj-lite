@@ -89,7 +89,7 @@ const RPFForm = () => {
           </table>
         </div>
 
-        <div className="create-rpf">
+        <div className="create-rpf ">
           <div className="form-title">Do you want to create RFP?</div>
           <div className="yes-no-buttons">
             <button className="yes-button" onClick={handleCreateRPFChange}>

@@ -72,7 +72,6 @@ th {
     color: white;
     border: none;
 }
-<<<<<<< HEAD
 
 
 .yes-button, .no-button {
@@ -84,9 +83,30 @@ th {
   
   
   
-=======
 .buttonstyle{
     color: #000000;
     
 }
->>>>>>> d478e68ae350698f9c8af8c4393e603e2ca1095a
+
+/* Add this CSS to your styling/rfpstyle.css file */
+
+/* Default background color */
+.accordion-button {
+    background-color: #ffffff;
+    color: rgb(0, 0, 0);
+  }
+  
+  /* Hover state */
+  .accordion-button:hover {
+    background-color: #008cff;
+    color: #000000;
+  }
+  
+  /* Active (clicked) state */
+  .accordion-button:focus {
+    background-color: white;
+    color: #000000;
+  }
+  
+/* Add this CSS to your styling/rfpstyle.css file */
+

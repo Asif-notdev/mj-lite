@@ -4,8 +4,11 @@ import '../styling/rfpstyle.css';
 import { Link, useHistory } from 'react-router-dom';
 import FileInput from './Document';
 import FileUploadComponent from '../MyTesting/DynemicFileUploading';
+import {useLocation } from 'react-router-dom';
 
 const BidSubmit = () => {
+
+
   const [editable, setEditable] = useState(false);
   const [indents, setIndents] = useState([
     { indentId: 1, name: 'Item A', unit: 'pcs', quantity: 5 },
@@ -23,7 +26,7 @@ const BidSubmit = () => {
     { id: 5, name: 'TurnOver Proff', selected: false },
   ]);
 
-  const [rfpSplit, setRfpSplit] = useState(50);
+ 
   const [remarks, setRemarks] = useState('');
   const [bidSubmissionDate, setBidSubmissionDate] = useState('');
   const [bidOpenDate, setBidOpenDate] = useState('');
@@ -37,6 +40,21 @@ const BidSubmit = () => {
     updatedIndents.splice(index, 1);
     setIndents(updatedIndents);
   };
+
+  // const handleFinalSubmit = () => {
+  //   // Additional logic for final submission if needed
+  //   window.alert('RFP Finally Submitted');
+  //   navigate('/RFPList'); // Redirect to RFPList page
+  // };
+
+
+  // const handleSaveAsDraft = () => {
+
+  //   window.alert('RFP Saved as Draft');
+  //   navigate('/RFPList');
+  // };
+
+
 
   const handleAddVendor = () => {
     setVendors([...vendors, `Vendor ${vendors.length + 1}`]);
@@ -131,50 +149,63 @@ const BidSubmit = () => {
 
         <FileInput/>
         {/* <FileUploadComponent/> */}
-        <div className="rfp-slider mt-4">
-          <div className="form-title">RFP Split</div>
-          <input
-            type="range"
-            min="0"
-            max="100"
-            value={rfpSplit}
-            onChange={(e) => setRfpSplit(parseInt(e.target.value, 10))}
-          />
-          <div>{rfpSplit}%</div>
-        </div>
 
         <div className="remarks mt-4">
           <div className="form-title">Remarks</div>
           <textarea
+            className="form-control"
             rows="4"
             value={remarks}
             onChange={(e) => setRemarks(e.target.value)}
           />
         </div>
 
-        <div className="calendar mt-4">
-          <div className="form-title">Bid Submission Date</div>
+        <div className="calendar mt-4 d-flex">
+          <div className="form-title mx-2">Bid Submission Date</div>
           <input
             type="date"
+            className="form-control"
             value={bidSubmissionDate}
             onChange={(e) => setBidSubmissionDate(e.target.value)}
           />
-        </div>
 
-        <div className="calendar mt-4">
-          <div className="form-title">Bid Open Date</div>
+          <div className="form-title mx-2">Bid Open Date</div>
           <input
             type="date"
+            className="form-control"
             value={bidOpenDate}
             onChange={(e) => setBidOpenDate(e.target.value)}
           />
         </div>
 
         <div className="create-rpf mt-4">
-          <button className="yes-button" onClick={handleEditClick}>
+          <button
+            className="btn btn-primary"
+            // onClick={handleEditClick}
+            disabled={editable}
+          >
             Edit
           </button>
         </div>
+
+        <div className="create-rpf mt-4">
+          <button
+            className="btn btn-success"
+            // onClick={handleFinalSubmit}
+            disabled={!editable}
+          >
+            Final Submit
+          </button>
+          <button
+            className="btn btn-secondary ml-2"
+            // onClick={handleSaveAsDraft}
+            disabled={!editable}
+          >
+            Save as Draft
+          </button>
+        </div>
+
+
       </div>
     </div>
   );

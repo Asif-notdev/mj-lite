@@ -17,14 +17,15 @@ window.$ = $;
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
-    
+    {/* <App /> */}
+      <BidSubmit/>
+
     {/* <FileUploadComponent/> */}
 
 
     {/* <MyDynemicFileAdding/>
-    <MyDynemicFileAdding/>
-    <BidSubmit/> */}
+    <MyDynemicFileAdding/> */}
+  
     
   </React.StrictMode>
 );

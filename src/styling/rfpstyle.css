@@ -112,3 +112,10 @@ th {
   
 /* Add this CSS to your styling/rfpstyle.css file */
 
+.form-title-head {
+    font-weight: bold;
+    color: rgb(0, 0, 0);
+    background-color: #008cff;
+   
+    padding: 10px;
+  }

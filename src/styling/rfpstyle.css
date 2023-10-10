@@ -48,6 +48,8 @@ th {
     background-color: #008cff;
 }
 
+
+
 .create-rpf {
     margin-top: 20px;
 }
@@ -65,8 +67,48 @@ th {
     border: none;
 }
 
+
+
 .no-button {
     background-color: #d9534f;
     color: white;
     border: none;
 }
+
+
+.yes-button, .no-button {
+    border-radius: 8px; /* Adjust the radius as needed */
+  }
+  
+  
+  
+  
+  
+  
+.buttonstyle{
+    color: #000000;
+    
+}
+
+/* Add this CSS to your styling/rfpstyle.css file */
+
+/* Default background color */
+.accordion-button {
+    background-color: #ffffff;
+    color: rgb(0, 0, 0);
+  }
+  
+  /* Hover state */
+  .accordion-button:hover {
+    background-color: #008cff;
+    color: #000000;
+  }
+  
+  /* Active (clicked) state */
+  .accordion-button:focus {
+    background-color: white;
+    color: #000000;
+  }
+  
+/* Add this CSS to your styling/rfpstyle.css file */
+

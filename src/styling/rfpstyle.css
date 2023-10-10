@@ -85,7 +85,7 @@ th {
   
   
   
-<<<<<<< HEAD
+
   .document-label input[type="checkbox"] {
     appearance: none;
     width: 12px;
@@ -104,7 +104,7 @@ th {
 
   
     
-=======
+
 .buttonstyle{
     color: #000000;
     
@@ -130,6 +130,24 @@ th {
     color: #000000;
   }
   
-/* Add this CSS to your styling/rfpstyle.css file */
+  .create-rpf {
+    display: flex;
+    justify-self: flex-end;
+    
+  }
+  
+  .btn-primary {
+    margin-right: auto;
+    width: 100px;
+  }
 
->>>>>>> 5fd79ac88aec734ad1c0f8eadd09007996bb42d1
+  /* Add this to your rfpstyle.css */
+
+.btn-group button {
+    transition: background-color 0.3s ease; /* Add transition to background-color property */
+  }
+  
+  .btn-group button:hover {
+    filter: brightness(90%); /* Optional: Adjust brightness on hover for visual feedback */
+  }
+  

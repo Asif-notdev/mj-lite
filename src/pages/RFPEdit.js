@@ -1,20 +1,28 @@
+// RFPEdit.js
+
 import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styling/rfpstyle.css';
 import { BsFillPersonFill, BsBox, BsLayers, BsQuestion, BsTrash, BsCurrencyRupee } from 'react-icons/bs';
 import { BsFileEarmarkText } from 'react-icons/bs';
 import { RiCheckboxBlankCircleLine, RiCheckboxCircleLine } from 'react-icons/ri';
-
 import { useNavigate, useLocation } from 'react-router-dom';
 
 const RFPEdit = () => {
   const location = useLocation();
+  const userName = location.state?.userName || ''; // Use optional chaining to avoid errors
+
+  useEffect(() => {
+    console.log('userName in RFPEdit:', userName);
+  }, [userName]);
+
   const navigate = useNavigate();
   const [editable, setEditable] = useState(false);
   const [indents, setIndents] = useState(location.state?.dummyData || []);
 
-  const [vendors, setVendors] = useState(['Vendor 1', 'Vendor 2', 'Vendor 3']);
+  const [allVendors, setAllVendors] = useState(['Vendor 1', 'Vendor 2', 'Vendor 3']);
   const [selectedVendors, setSelectedVendors] = useState([]);
+  const [removedVendors, setRemovedVendors] = useState([]);
 
   const [documents, setDocuments] = useState([
     { id: 1, name: 'Aadhar Card', selected: false },
@@ -29,17 +37,33 @@ const RFPEdit = () => {
   const [bidOpenDate, setBidOpenDate] = useState('');
 
   useEffect(() => {
-    // Fetch vendors from API and setVendors
+    // Fetch vendors from API and setAllVendors
     // Replace 'http://localhost:3001/vendors' with the actual API endpoint
     fetch('http://localhost:3001/vendors')
       .then(response => response.json())
       .then(data => {
         console.log('Fetched vendors:', data);
-        setVendors(data);
+        setAllVendors(data);
       })
       .catch(error => console.error('Error fetching vendors:', error));
   }, []);
 
+  const handleVendorSelect = (vendor) => {
+    setSelectedVendors([...selectedVendors, vendor]);
+    const updatedVendors = allVendors.filter((v) => v !== vendor);
+    setAllVendors(updatedVendors);
+  };
+
+  
+  
+
+  const handleRemoveVendor = (vendor) => {
+    const updatedVendors = selectedVendors.filter((v) => v !== vendor);
+    setSelectedVendors(updatedVendors);
+    setRemovedVendors([...removedVendors, vendor]);
+  };
+
+  
   const handleEditClick = () => {
     setEditable(true);
   };
@@ -50,27 +74,12 @@ const RFPEdit = () => {
     setIndents(updatedIndents);
   };
 
-  const handleAddVendor = () => {
-    setVendors([...vendors, `Vendor ${vendors.length + 1}`]);
-  };
-
   const handleDocumentChange = (documentId) => {
     const updatedDocuments = documents.map(doc => ({
       ...doc,
       selected: doc.id === documentId ? !doc.selected : doc.selected,
     }));
     setDocuments(updatedDocuments);
-  };
-
-  const handleVendorSelect = (vendor) => {
-    setSelectedVendors([...selectedVendors, vendor]);
-    const updatedVendors = vendors.filter((v) => v !== vendor);
-    setVendors(updatedVendors);
-  };
-
-  const handleRemoveVendor = (vendor) => {
-    const updatedVendors = selectedVendors.filter((v) => v !== vendor);
-    setSelectedVendors(updatedVendors);
   };
 
   const handleFinalSubmit = () => {
@@ -85,9 +94,19 @@ const RFPEdit = () => {
     navigate('/RFPList'); // Redirect to RFPList page
   };
 
+  const filteredVendors = allVendors.filter((vendor) => !selectedVendors.includes(vendor) && !removedVendors.includes(vendor));
+
+
   return (
     <div className="main-container">
       <div className="translucent-form">
+        <div className="user-info">
+          {userName !== '' ? (
+            <span>Welcome, {userName}</span>
+          ) : (
+            <span>Loading...</span>
+          )}
+        </div>
         <div className="form-title"><BsLayers className="icon" /> Proposed Intent</div>
 
         <div className="table-container mt-4">
@@ -157,24 +176,19 @@ const RFPEdit = () => {
         </div>
 
         <select
-          className="form-select mt-4"
-          value={''}
-          onChange={(e) => handleVendorSelect(e.target.value)}
-        >
-          <option value={''} disabled>Select Vendor</option>
-          {vendors.map((vendor) => (
-            <option key={vendor.id} value={vendor.name}>
-              {vendor.name}
-            </option>
-          ))}
-        </select>
-        <button
-          type="button"
-          className="btn btn-primary mt-2"
-          onClick={handleAddVendor}
-        >
-          Add Vendor
-        </button>
+  className="form-select mt-4"
+  value={''}
+  onChange={(e) => handleVendorSelect(e.target.value)}
+>
+  <option value={''} disabled>Select Vendor</option>
+  {filteredVendors.map((vendor, index) => (
+    <option key={index} value={vendor.name}>
+      {vendor.name}
+    </option>
+  ))}
+</select>
+
+
         {selectedVendors.length > 0 && (
           <div className="selected-vendor mt-4">
             <div className="form-title">Selected Vendors</div>
@@ -195,6 +209,7 @@ const RFPEdit = () => {
           </div>
         )}
 
+      
         <div className="document-list mt-4">
           <div className="form-title">Documents</div>
 
@@ -250,7 +265,7 @@ const RFPEdit = () => {
             <label className="form-title">Bid Submission Date</label>
             <input
               type="date"
-              className="form-control"
+              className="form-control form-control-lg"
               value={bidSubmissionDate}
               onChange={(e) => setBidSubmissionDate(e.target.value)}
             />
@@ -260,16 +275,17 @@ const RFPEdit = () => {
             <label className="form-title">Bid Open Date</label>
             <input
               type="date"
-              className="form-control"
+              className="form-control form-control-lg"
               value={bidOpenDate}
               onChange={(e) => setBidOpenDate(e.target.value)}
             />
+            
           </div>
         </div>
 
         <div className="create-rpf mt-5">
           <button
-            className="btn btn-primary mx-5"
+            className="btn btn-primary"
             onClick={handleEditClick}
             disabled={editable}
           >
@@ -277,9 +293,8 @@ const RFPEdit = () => {
           </button>
 
           <button
-            className="btn btn-secondary"
+            className="btn btn-secondary mx-5"
             onClick={handleSaveAsDraft}
-            disabled={!editable}
           >
             Save as Draft
           </button>
@@ -287,7 +302,6 @@ const RFPEdit = () => {
           <button
             className="btn btn-success mx-5"
             onClick={handleFinalSubmit}
-            disabled={!editable}
           >
             Final Submit
           </button>

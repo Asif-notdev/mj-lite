@@ -1,16 +1,21 @@
+// RPFForm.js
+
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { BsFillPersonFill, BsBox, BsLayers, BsQuestion,BsCurrencyRupee } from 'react-icons/bs'; // Import Bootstrap icons
+import { useNavigate } from 'react-router-dom';
+import { BsFillPersonFill, BsBox, BsLayers, BsQuestion, BsCurrencyRupee } from 'react-icons/bs';
 import '../styling/rfpstyle.css';
 
 const RPFForm = () => {
   
   const [createRPF, setCreateRPF] = useState(false);
   const [dummyData, setDummyData] = useState([]);
+  const [userName, setUserName] = useState('');
   const dummyDataApiEndpoint = 'http://localhost:3040/dummyData';
+  const userNameApiEndpoint = 'http://localhost:3050/userName'; // Replace with your actual API endpoint
   const navigate = useNavigate();
 
   useEffect(() => {
+    // Fetch dummy data
     fetch(dummyDataApiEndpoint)
       .then(response => response.json())
       .then(data => {
@@ -18,29 +23,53 @@ const RPFForm = () => {
         setDummyData(data);
       })
       .catch(error => console.error('Error fetching dummy data:', error));
-  }, []);
 
-  
+    // Fetch user name
+     // Fetch user name
+  fetch(userNameApiEndpoint)
+  .then(response => response.json())
+  .then(data => {
+    console.log('Fetched user name:', data);
+    // Check if the necessary properties exist before accessing them
+    const userNameValue = data && data[0] && data[0].name;
+
+    console.log('userNameValue:', userNameValue); // Log the userNameValue
+    setUserName(userNameValue || '');
+  })
+  .catch(error => {
+    console.error('Error fetching user name:', error);
+    // Log the specific error message
+    console.error('Error message:', error.message);
+  });
+}, []);
 
   const handleCreateRPFChange = () => {
     setCreateRPF(!createRPF);
 
-    // If 'Yes' is clicked, navigate to RPFEdit.js
+    // If 'Yes' is clicked, navigate to RFPEdit.js with the user name
     if (!createRPF) {
-      navigate('/RFPEdit', { state: { dummyData } });
+      navigate('/RFPEdit', { state: { dummyData, userName } });
     }
   };
 
   return (
     <div className="main-container">
       <div className="translucent-form">
-      <div className="form-title"><BsLayers className="icon" /> Proposed Intent</div>
+        <div className="user-info">
+          {userName !== '' ? (
+            <span>Welcome, {userName}</span>
+          ) : (
+            <span>Loading...</span>
+          )}
+        </div>
+
+        <div className="form-title"><BsLayers className="icon" /> Proposed Intent</div>
 
         <div className="table-container">
-          <table >
+          <table>
             <thead>
               <tr>
-              <th><BsBox className="icon" /> Intent ID</th>
+                <th><BsBox className="icon" /> Intent ID</th>
                 <th><BsFillPersonFill className="icon" /> Name</th>
                 <th><BsQuestion className="icon" /> Measure of Unit</th>
                 <th><BsLayers className="icon" /> Quantity</th>
@@ -61,7 +90,7 @@ const RPFForm = () => {
           </table>
         </div>
 
-        <div className="create-rpf">
+        <div className="create-rpf ">
           <div className="form-title">Do you want to create RFP?</div>
           <div className="yes-no-buttons">
             <button className="yes-button" onClick={handleCreateRPFChange}>
@@ -70,9 +99,8 @@ const RPFForm = () => {
             <button className="no-button">No, Maybe Later</button>
           </div>
         </div>
-        </div>
       </div>
-  
+    </div>
   );
 };
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { BsFillPersonFill, BsBox, BsLayers, BsQuestion } from 'react-icons/bs'; // Import Bootstrap icons
+import { BsFillPersonFill, BsBox, BsLayers, BsQuestion,BsCurrencyRupee } from 'react-icons/bs'; // Import Bootstrap icons
 import '../styling/rfpstyle.css';
 
 const RPFForm = () => {
@@ -33,16 +33,17 @@ const RPFForm = () => {
   return (
     <div className="main-container">
       <div className="translucent-form">
-      <div className="form-title"><BsLayers className="icon" /> Purposed Indent</div>
+      <div className="form-title"><BsLayers className="icon" /> Proposed Intent</div>
 
         <div className="table-container">
           <table >
             <thead>
               <tr>
-              <th><BsBox className="icon" /> Indent ID</th>
+              <th><BsBox className="icon" /> Intent ID</th>
                 <th><BsFillPersonFill className="icon" /> Name</th>
                 <th><BsQuestion className="icon" /> Measure of Unit</th>
                 <th><BsLayers className="icon" /> Quantity</th>
+                <th><BsCurrencyRupee className="icon" /> Estimated Price</th>
               </tr>
             </thead>
             <tbody>
@@ -52,6 +53,7 @@ const RPFForm = () => {
                   <td>{item.name}</td>
                   <td>{item.unit}</td>
                   <td>{item.quantity}</td>
+                  <td>{item.price}</td>
                 </tr>
               ))}
             </tbody>

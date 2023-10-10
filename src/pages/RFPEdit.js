@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styling/rfpstyle.css';
-import { BsFillPersonFill, BsBox, BsLayers, BsQuestion, BsTrash } from 'react-icons/bs';
+import { BsFillPersonFill, BsBox, BsLayers, BsQuestion, BsTrash, BsCurrencyRupee } from 'react-icons/bs';
+import { BsFileEarmarkText } from 'react-icons/bs';
 import { RiCheckboxBlankCircleLine, RiCheckboxCircleLine } from 'react-icons/ri';
 
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -67,6 +68,11 @@ const RFPEdit = () => {
     setVendors(updatedVendors);
   };
 
+  const handleRemoveVendor = (vendor) => {
+    const updatedVendors = selectedVendors.filter((v) => v !== vendor);
+    setSelectedVendors(updatedVendors);
+  };
+
   const handleFinalSubmit = () => {
     // Additional logic for final submission if needed
     window.alert('RFP Finally Submitted');
@@ -128,16 +134,17 @@ const RFPEdit = () => {
   return (
     <div className="main-container">
       <div className="translucent-form">
-        <div className="form-title"><BsLayers className="icon" /> Purposed Indent</div>
+        <div className="form-title"><BsLayers className="icon" /> Proposed Intent</div>
 
-        <div className="table-container  mt-4">
+        <div className="table-container mt-4">
           <table>
             <thead>
               <tr style={{ background: '#007BFF' }}>
-                <th><BsBox className="icon" /> Indent ID</th>
+                <th><BsBox className="icon" /> Intent ID</th>
                 <th><BsFillPersonFill className="icon" /> Name</th>
                 <th><BsQuestion className="icon" /> Measure of Unit</th>
                 <th><BsLayers className="icon" /> Quantity</th>
+                <th><BsCurrencyRupee className="icon" /> Estimated Price</th>
                 {editable && <th>Action</th>}
               </tr>
             </thead>
@@ -147,7 +154,38 @@ const RFPEdit = () => {
                   <td>{item.indentId}</td>
                   <td>{item.name}</td>
                   <td>{item.unit}</td>
-                  <td>{item.quantity}</td>
+                  {editable ? (
+                    <>
+                      <td>
+                        <input
+                          type="text"
+                          value={item.quantity}
+                          onChange={(e) => {
+                            const updatedIndents = [...indents];
+                            updatedIndents[index].quantity = e.target.value;
+                            setIndents(updatedIndents);
+                          }}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          type="text"
+                          value={item.price}
+                          onChange={(e) => {
+                            const updatedIndents = [...indents];
+                            updatedIndents[index].price = e.target.value;
+                            setIndents(updatedIndents);
+                          }}
+                        />
+                      </td>
+                    </>
+                  ) : (
+                    <>
+                      <td>{item.quantity}</td>
+                      <td>{item.price}</td>
+                    </>
+                  )}
+
                   {editable && (
                     <td>
                       <button
@@ -165,8 +203,8 @@ const RFPEdit = () => {
         </div>
 
         <select
-          className="form-select  mt-4" 
-          value={''} // Set to an empty string or null
+          className="form-select mt-4"
+          value={''}
           onChange={(e) => handleVendorSelect(e.target.value)}
         >
           <option value={''} disabled>Select Vendor</option>
@@ -183,26 +221,48 @@ const RFPEdit = () => {
         >
           Add Vendor
         </button>
+        {selectedVendors.length > 0 && (
+          <div className="selected-vendor mt-4">
+            <div className="form-title">Selected Vendors</div>
+            <div className="selected-vendor-box d-flex">
+              {selectedVendors.map((vendor) => (
+                <div key={vendor} className="selected-vendor-item mx-2 ">
+                  {vendor}
+                  <button
+                    className="btn btn-sm btn-danger ml-2 mx-1"
+                    style={{ padding: '0.2rem 0.4rem', fontSize: '0.8rem' }}
+                    onClick={() => handleRemoveVendor(vendor)}
+                  >
+                    &times;
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         <div className="document-list mt-4">
           <div className="form-title">Documents</div>
-          {documents.map((doc) => (
-            <div key={doc.id}>
-              <label className="document-label">
-                <input
-                  type="checkbox"
-                  checked={doc.selected}
-                  onChange={() => handleDocumentChange(doc.id)}
-                />
-                {doc.selected ? <RiCheckboxCircleLine /> : <RiCheckboxBlankCircleLine />}
-                {doc.name}
-              </label>
-            </div>
-          ))}
+
+          <div className="row">
+            {documents.map((doc) => (
+              <div className="col-md-3" key={doc.id}>
+                <label className="document-label">
+                  <input
+                    type="checkbox"
+                    id={`document-${doc.id}`}
+                    checked={doc.selected}
+                    onChange={() => handleDocumentChange(doc.id)}
+                  />
+                  {doc.name}
+                </label>
+              </div>
+            ))}
+          </div>
         </div>
 
         <div className="rfp-decision mt-4">
-          <div className="form-title">RFP Decision</div>
+          <div className="form-title">RFP Split</div>
           <div className="btn-group" role="group" aria-label="RFP Decision">
             <button
               type="button"
@@ -232,37 +292,39 @@ const RFPEdit = () => {
         </div>
 
         <div className="calendar mt-4 d-flex">
-          <div className="form-title mx-2">Bid Submission Date</div>
-          <input
-            type="date"
-            className="form-control"
-            value={bidSubmissionDate}
-            onChange={(e) => setBidSubmissionDate(e.target.value)}
-          />
+          <div className="form-group mx-2">
+            <label className="form-title">Bid Submission Date</label>
+            <input
+              type="date"
+              className="form-control"
+              value={bidSubmissionDate}
+              onChange={(e) => setBidSubmissionDate(e.target.value)}
+            />
+          </div>
 
-          <div className="form-title mx-2">Bid Open Date</div>
-          <input
-            type="date"
-            className="form-control"
-            value={bidOpenDate}
-            onChange={(e) => setBidOpenDate(e.target.value)}
-          />
+          <div className="form-group mx-5">
+            <label className="form-title">Bid Open Date</label>
+            <input
+              type="date"
+              className="form-control"
+              value={bidOpenDate}
+              onChange={(e) => setBidOpenDate(e.target.value)}
+            />
+          </div>
         </div>
 
-        <div className="create-rpf mt-4">
+        <div className="create-rpf mt-5">
           <button
-            className="btn btn-primary"
+            className="btn btn-primary mx-5"
             onClick={handleEditClick}
             disabled={editable}
           >
             Edit
           </button>
-        </div>
 
-        <div className="create-rpf mt-4">
           <button
             className="btn btn-success"
-            onClick={postData}
+            onClick={handleFinalSubmit}
             disabled={!editable}
           >
             Final Submit
@@ -273,6 +335,14 @@ const RFPEdit = () => {
             disabled={!editable}
           >
             Save as Draft
+          </button>
+
+          <button
+            className="btn btn-success mx-5"
+            onClick={handleFinalSubmit}
+            disabled={!editable}
+          >
+            Final Submit
           </button>
         </div>
       </div>

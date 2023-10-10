@@ -1,11 +1,11 @@
 {
     "dummyData": [
-      { "indentId": 1, "name": "Keyboard", "unit": "pcs", "quantity": 5 },
-      { "indentId": 2, "name": "Mouse", "unit": "pcs", "quantity": 3 },
-      { "indentId": 3, "name": "Laptop", "unit": "kg", "quantity": 13 },
-      { "indentId": 4, "name": "Gadjet", "unit": "kg", "quantity": 2 },
-      { "indentId": 5, "name": "Motherboard", "unit": "kg", "quantity": 34 },
-      { "indentId": 6, "name": "Mobile", "unit": "kg", "quantity": 44 }
+      { "indentId": 1, "name": "Keyboard", "unit": "pcs", "quantity": 5, "price":7650 },
+      { "indentId": 2, "name": "Mouse", "unit": "pcs", "quantity": 3, "price":4550 },
+      { "indentId": 3, "name": "Laptop", "unit": "kg", "quantity": 13, "price":9850 },
+      { "indentId": 4, "name": "Gadjet", "unit": "kg", "quantity": 2, "price":987 },
+      { "indentId": 5, "name": "Motherboard", "unit": "kg", "quantity": 34, "price":430 },
+      { "indentId": 6, "name": "Mobile", "unit": "kg", "quantity": 44, "price":6750 }
     ]
   }
   

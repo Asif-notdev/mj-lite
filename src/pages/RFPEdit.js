@@ -19,7 +19,7 @@ const RFPEdit = () => {
   }, [userName]);
 
   const navigate = useNavigate();
-  const [editable, setEditable] = useState(false);
+  const [editable, setEditable] = useState(true);
   const [indents, setIndents] = useState(location.state?.dummyData || []);
 
   const [allVendors, setAllVendors] = useState(['Vendor 1', 'Vendor 2', 'Vendor 3']);
@@ -88,7 +88,7 @@ const RFPEdit = () => {
       selected: doc.id === documentId ? !doc.selected : doc.selected,
     }));
     setDocuments(updatedDocuments);
-  
+
     // Update the selected documents state
     const selectedDocs = updatedDocuments.filter(doc => doc.selected).map(doc => doc.id);
     setSelectedDocuments(selectedDocs);
@@ -101,7 +101,7 @@ const RFPEdit = () => {
       const jsonData = {
         "id": 5,
         "estimatedPrice":
-         1000.00,
+          1000.00,
         "isSplitable": rfpDivision,
         "isPublish": true,
         "isDraft": false,
@@ -189,40 +189,39 @@ const RFPEdit = () => {
                   <td>{item.indentId}</td>
                   <td>{item.name}</td>
                   <td>{item.unit}</td>
-                  {editable ? (
-                    <>
-                      <td>
-                        <input
-                          type="text"
-                          value={item.quantity}
-                          onChange={(e) => {
-                            const updatedIndents = [...indents];
-                            updatedIndents[index].quantity = e.target.value;
-                            setIndents(updatedIndents);
-                          }}
-                        />
-                      </td>
-                      <td>
-                        <input
-                          type="text"
-                          value={item.price}
-                          onChange={(e) => {
-                            const updatedIndents = [...indents];
-                            updatedIndents[index].price = e.target.value;
-                            setIndents(updatedIndents);
-                          }}
-                        />
-                      </td>
-                    </>
-                  ) : (
-                    <>
-                      <td>{item.quantity}</td>
-                      <td>{item.price}</td>
-                    </>
-                  )}
-
+                  <td>
+                    {editable ? (
+                      <input
+                        type="text"
+                        value={item.quantity}
+                        onChange={(e) => {
+                          const updatedIndents = [...indents];
+                          updatedIndents[index].quantity = e.target.value;
+                          setIndents(updatedIndents);
+                        }}
+                      />
+                    ) : (
+                      item.quantity
+                    )}
+                  </td>
+                  <td>
+                    {editable ? (
+                      <input
+                        type="text"
+                        value={item.price}
+                        onChange={(e) => {
+                          const updatedIndents = [...indents];
+                          updatedIndents[index].price = e.target.value;
+                          setIndents(updatedIndents);
+                        }}
+                      />
+                    ) : (
+                      item.price
+                    )}
+                  </td>
                   {editable && (
                     <td>
+                     
                       <button
                         className="btn btn-danger btn-sm"
                         onClick={() => handleDeleteIndent(index)}
@@ -232,6 +231,7 @@ const RFPEdit = () => {
                     </td>
                   )}
                 </tr>
+
               ))}
             </tbody>
           </table>
@@ -345,29 +345,29 @@ const RFPEdit = () => {
         </div>
 
         <div className="create-rpf mt-5">
-          <button
+          {/* <button
             className="btn btn-primary"
             onClick={handleEditClick}
             disabled={editable}
           >
             Edit
+          </button> */}
+          <button
+            className="btn btn-secondary "
+            onClick={handleSaveAsDraft}
+
+          >
+            Save as Draft
           </button>
           <button
-              className="btn btn-secondary "
-              onClick={handleSaveAsDraft}
-              
-            >
-              Save as Draft
-            </button>
-            <button
-              className="btn btn-success mx-5"
-              onClick={handleFinalSubmit}
-             
-            >
-              Final Submit
-            </button>
-           
-          
+            className="btn btn-success mx-5"
+            onClick={handleFinalSubmit}
+
+          >
+            Final Submit
+          </button>
+
+
 
           {/* Save as Draft Modal */}
           <Modal show={showSaveAsDraftModal} onHide={() => setShowSaveAsDraftModal(false)}>

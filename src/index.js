@@ -10,21 +10,15 @@ import FileUploadComponent from './MyTesting/DynemicFileUploading';
 import MyDynemicFileAdding from './MyTesting/MyNew';
 
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-import $ from 'jquery';
-window.jQuery = $;
-window.$ = $;
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    {/* <App /> */}
-      <App/>
 
-    {/* <FileUploadComponent/> */}
+      {/* <App/> */}
 
-
-    {/* <MyDynemicFileAdding/>
-    <MyDynemicFileAdding/> */}
+      <BidSubmit/>
   
     
   </React.StrictMode>

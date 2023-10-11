@@ -100,7 +100,8 @@ const RFPEdit = () => {
       const url = 'http://localhost:8080/fillrfp'; // Replace with your API endpoint
       const jsonData = {
         "id": 5,
-        "estimatedPrice": 1000.00,
+        "estimatedPrice":
+         1000.00,
         "isSplitable": rfpDivision,
         "isPublish": true,
         "isDraft": false,

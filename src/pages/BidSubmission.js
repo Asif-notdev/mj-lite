@@ -147,8 +147,11 @@ const BidSubmit = () => {
           </div>
         )}
 
+        <div className='form-title my-2'> <h3 className='font-weight-bold'>Attach Documents</h3></div>
+
         <FileInput/>
         {/* <FileUploadComponent/> */}
+
 
         <div className="remarks mt-4">
           <div className="form-title">Remarks</div>

@@ -1,49 +1,72 @@
 import React, { useState } from 'react';
-import { useEffect } from 'react';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
-function FileInput(){
-  
-    const docList= ['Adhar Card', 'Adhar Card','GST Invoice','Company Id','TurnOver Proff']
-    const [documents, setDocuments] = useState([{ id: 1, name:'', selected: false }]);
-  
+function FileInput() {
+  const [documentData, setDocumentData] = useState([
+    { type: 'Select Type', link: '' },
+  ]);
 
-    useEffect(() => {
-      const newDocuments = docList.map((name, index) => ({
-        id: index + 1, 
-        name: name,
-        selected: false,
-      }));
-
-      setDocuments(newDocuments);
-
-    },[]);
-
-
-  const handleDocumentChange = (documentId) => {
-    const updatedDocuments = documents.map(doc => ({
-      ...doc,
-      selected: doc.id === documentId ? !doc.selected : doc.selected,
-    }));
-    setDocuments(updatedDocuments);
+  const addDocumentLink = () => {
+    const newDocument = { type: 'Select Type', link: '' };
+    setDocumentData([...documentData, newDocument]);
   };
 
-  return (
-    <>
-          <div className="p-2 my-2 bg-primary ">Upload The Required Document Documents</div>
-          
-          <div>
-          {
-            documents.map((doc) => (
-              <div key={doc.id} className="form-title">
-                <label > {doc.name} </label>
-                <span style={{float:'right'}}><input type="text"  style={{float:'right'}} onChange={handleDocumentChange} /></span>
-              </div>
-            ))
-          }
-        </div>
-    </>
-  )
+  const handleLinkChange = (index, event) => {
+    const newDocumentData = [...documentData];
+    newDocumentData[index].link = event.target.value;
+    setDocumentData(newDocumentData);
+  };
 
+  const handleTypeChange = (index, event) => {
+    const newDocumentData = [...documentData];
+    newDocumentData[index].type = event.target.value;
+    setDocumentData(newDocumentData);
+  };
+
+  const documentTypes = ['Select Type', 'Adhar', 'PAN', 'Passport', 'Other'];
+
+  return (
+    <Form>
+      {documentData.map((document, index) => (
+        <div key={index} className="mb-3 p-3 border border-secondary rounded">
+          <Form.Group controlId={`documentType${index}`}>
+            <Form.Label className="fw-bold">Document Type</Form.Label>
+            <Form.Control
+              as="select"
+              value={document.type}
+              onChange={(event) => handleTypeChange(index, event)}
+            >
+              {documentTypes.map((type, typeIndex) => (
+                <option key={typeIndex}>{type}</option>
+              ))}
+            </Form.Control>
+
+          </Form.Group>
+
+          <Form.Group controlId={`documentLink${index}`}>
+            <Form.Label className="fw-bold ">Document Link</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Enter the link to the document"
+              value={document.link}
+              onChange={(event) => handleLinkChange(index, event)}
+            />
+
+            {/* <Form.Text className="text-muted">
+              Please provide the URL for this document.
+            </Form.Text> */}
+            
+          </Form.Group>
+        </div>
+      ))}
+      <Button variant="secondary" onClick={addDocumentLink}>
+        <FontAwesomeIcon icon={faPlus} /> Add More Document
+      </Button>
+    </Form>
+  );
 }
 
 export default FileInput;

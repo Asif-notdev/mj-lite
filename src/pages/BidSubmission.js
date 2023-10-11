@@ -1,35 +1,54 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import '../styling/rfpstyle.css';
-
-import { Link, useHistory } from 'react-router-dom';
 import FileInput from './Document';
 import { Modal, Button } from 'react-bootstrap'; // Import Modal and Button from React Bootstrap
-import FileUploadComponent from '../MyTesting/DynemicFileUploading';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate} from 'react-router-dom';
 
 const BidSubmit = () => {
 
-
   const navigate = useNavigate();
+
   const [editable, setEditable] = useState(false);
-  const [indents, setIndents] = useState([
-    { indentId: 1, name: 'Item A', unit: 'pcs', quantity: 5 },
-    { indentId: 2, name: 'Item B', unit: 'kg', quantity: 3 },
-  ]);
+  const [dummyData, setDummyData] = useState([]);
+  const [userName, setUserName] = useState('');
+  const dummyDataApiEndpoint = 'http://localhost:3040/dummyData';
+  const userNameApiEndpoint = 'http://localhost:3050/userName'; // Replace with your actual API endpoint
+
+  useEffect(() => {
+    // Fetch dummy data
+    fetch(dummyDataApiEndpoint)
+      .then(response => response.json())
+      .then(data => {
+        console.log('Fetched dummy data:', data);
+        setDummyData(data);
+      })
+      .catch(error => console.error('Error fetching dummy data:', error));
+
+    // Fetch user name
+    fetch(userNameApiEndpoint)
+      .then(response => response.json())
+      .then(data => {
+        console.log('Fetched user name:', data);
+        // Check if the necessary properties exist before accessing them
+        const userNameValue = data && data[0] && data[0].name;
+
+        console.log('userNameValue:', userNameValue); // Log the userNameValue
+        setUserName(userNameValue || '');
+      })
+      .catch(error => {
+        console.error('Error fetching user name:', error);
+        // Log the specific error message
+        console.error('Error message:', error.message);
+      });
+  }, []);
+
+  // const[]
 
   const [vendors, setVendors] = useState(['Vendor 1', 'Vendor 2', 'Vendor 3']);
   const [selectedVendors, setSelectedVendors] = useState([]);
   
   const [showSaveAsDraftModal, setShowSaveAsDraftModal] = useState(false);
   const [showFinalSubmitModal, setShowFinalSubmitModal] = useState(false);
-
-  const [documents, setDocuments] = useState([
-    { id: 1, name: 'Adhar Card', selected: false },
-    { id: 2, name: 'PAN Card', selected: false },
-    { id: 3, name: 'GST Invoice', selected: false },
-    { id: 4, name: 'Company Id', selected: false },
-    { id: 5, name: 'TurnOver Proff', selected: false },
-  ]);
 
  
   const [remarks, setRemarks] = useState('');
@@ -39,25 +58,6 @@ const BidSubmit = () => {
   const handleEditClick = () => {
     setEditable(true);
   };
-
-  const handleDeleteIndent = (index) => {
-    const updatedIndents = [...indents];
-    updatedIndents.splice(index, 1);
-    setIndents(updatedIndents);
-  };
-
-  // const handleFinalSubmit = () => {
-  //   // Additional logic for final submission if needed
-  //   window.alert('RFP Finally Submitted');
-  //   navigate('/RFPList'); // Redirect to RFPList page
-  // };
-
-
-  // const handleSaveAsDraft = () => {
-
-  //   window.alert('RFP Saved as Draft');
-  //   navigate('/RFPList');
-  // };
 
   const handleFinalSubmit = () => {
     setShowFinalSubmitModal(true);
@@ -72,27 +72,14 @@ const BidSubmit = () => {
   const handleSaveAsDraft = () => {
     setShowSaveAsDraftModal(true);
   };
-
   const handleSaveAsDraftConfirm = () => {
     // Additional logic for saving as a draft if needed
     navigate('/RFPList'); // Redirect to RFPList page
     setShowSaveAsDraftModal(false);
   };
-
-
-
   const handleAddVendor = () => {
     setVendors([...vendors, `Vendor ${vendors.length + 1}`]);
   };
-
-  const handleDocumentChange = (documentId) => {
-    const updatedDocuments = documents.map(doc => ({
-      ...doc,
-      selected: doc.id === documentId ? !doc.selected : doc.selected,
-    }));
-    setDocuments(updatedDocuments);
-  };
-
   return (
     <div className="main-container">
       <div className="translucent-form">
@@ -137,7 +124,7 @@ const BidSubmit = () => {
               </tr>
             </thead>
             <tbody>
-              {indents.map((item, index) => (
+              {dummyData.map((item, index) => (
                 <tr key={index}>
                   <td>{item.indentId}</td>
                   <td>{item.name}</td>
@@ -151,7 +138,7 @@ const BidSubmit = () => {
           </table>
         </div>
 
-        {editable && (
+        {/* {editable && (
           <div className="vendor-section mt-4">
             <label className="me-2">Select Vendor:</label>
             <select
@@ -170,7 +157,7 @@ const BidSubmit = () => {
               Add Vendor
             </button>
           </div>
-        )}
+        )} */}
 
         <div className='form-title my-2'> <h3 className='font-weight-bold'>Attach Documents</h3></div>
 
@@ -179,7 +166,7 @@ const BidSubmit = () => {
 
 
         <div className="remarks mt-4">
-          <div className="form-title">Remarks</div>
+          <div className="form-title">Comments</div>
           <textarea
             className="form-control"
             rows="4"
@@ -188,40 +175,12 @@ const BidSubmit = () => {
           />
         </div>
 
-        <div className="calendar mt-4 d-flex">
-          <div className="form-group mx-2">
-            <label className="form-title">Bid Submission Date</label>
-            <input
-              type="date"
-              className="form-control form-control-lg"
-              value={bidSubmissionDate}
-              onChange={(e) => setBidSubmissionDate(e.target.value)}
-            />
-          </div>
-
-          <div className="form-group mx-5">
-            <label className="form-title">Bid Open Date</label>
-            <input
-              type="date"
-              className="form-control form-control-lg"
-              value={bidOpenDate}
-              onChange={(e) => setBidOpenDate(e.target.value)}
-            />
-          </div>
-        </div>
-
-
-        
         <div className="create-rpf mt-5">
+          
           <button
-            className="btn btn-primary"
-            onClick={handleEditClick}
-            disabled={editable}
-          >
-            Edit
-          </button>
-          <button
-              className="btn btn-secondary "
+              class
+              
+              Name="btn btn-secondary "
               onClick={handleSaveAsDraft}
               
             >

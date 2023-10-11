@@ -28,6 +28,7 @@ import RFPDetailView from './pages/RFPDetailView';
 import NavBar from './components/NavBar';
 import Footer from './components/Footer';
 import './style.css';
+import { Container } from 'react-bootstrap';
 function App() {
   return (
     

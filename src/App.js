@@ -7,6 +7,7 @@ import RFPDetailView from './pages/RFPDetailView';
 import NavBar from './components/NavBar';
 import Footer from './components/Footer';
 import './style.css';
+import BidSubmit from './pages/BidSubmission';
 
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
         <Route path="/rfpedit" element={<RFPEdit />} />
         <Route path="/rfplist" element={<RFPList />} />
         <Route path="/rfpdetailview/:id" element={<RFPDetailView />} />
+        <Route path="/bidsubmission" element={<BidSubmit />} />
       </Routes>
       <Footer/>
     </Router>

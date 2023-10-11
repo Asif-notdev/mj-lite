@@ -4,13 +4,15 @@ import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styling/rfpstyle.css';
 import { BsFillPersonFill, BsBox, BsLayers, BsQuestion, BsTrash, BsCurrencyRupee } from 'react-icons/bs';
-import { BsFileEarmarkText } from 'react-icons/bs';
-import { RiCheckboxBlankCircleLine, RiCheckboxCircleLine } from 'react-icons/ri';
+import { Modal, Button } from 'react-bootstrap'; // Import Modal and Button from React Bootstrap
 import { useNavigate, useLocation } from 'react-router-dom';
 
 const RFPEdit = () => {
   const location = useLocation();
   const userName = location.state?.userName || ''; // Use optional chaining to avoid errors
+
+  const [showSaveAsDraftModal, setShowSaveAsDraftModal] = useState(false);
+  const [showFinalSubmitModal, setShowFinalSubmitModal] = useState(false);
 
   useEffect(() => {
     console.log('userName in RFPEdit:', userName);
@@ -23,6 +25,8 @@ const RFPEdit = () => {
   const [allVendors, setAllVendors] = useState(['Vendor 1', 'Vendor 2', 'Vendor 3']);
   const [selectedVendors, setSelectedVendors] = useState([]);
   const [removedVendors, setRemovedVendors] = useState([]);
+  const [selectedDocuments, setSelectedDocuments] = useState([]);
+
 
   const [documents, setDocuments] = useState([
     { id: 1, name: 'Aadhar Card', selected: false },
@@ -54,15 +58,11 @@ const RFPEdit = () => {
     setAllVendors(updatedVendors);
   };
 
-
-
-
   const handleRemoveVendor = (vendor) => {
     const updatedVendors = selectedVendors.filter((v) => v !== vendor);
     setSelectedVendors(updatedVendors);
     setRemovedVendors([...removedVendors, vendor]);
   };
-
 
   const handleEditClick = () => {
     setEditable(true);
@@ -80,17 +80,12 @@ const RFPEdit = () => {
       selected: doc.id === documentId ? !doc.selected : doc.selected,
     }));
     setDocuments(updatedDocuments);
-  };
-
-  const handleFinalSubmit = () => {
-    // Additional logic for final submission if needed
-    window.alert('RFP Finally Submitted');
-
-
-    postData();
-
-    navigate('/RFPList'); // Redirect to RFPList page
-  };
+  
+    // Update the selected documents state
+    const selectedDocs = updatedDocuments.filter(doc => doc.selected).map(doc => doc.id);
+    setSelectedDocuments(selectedDocs);
+    console.log(selectedDocs);
+  }
 
   const postData = async () => {
     try {
@@ -110,8 +105,7 @@ const RFPEdit = () => {
         "li": [{
           "VID": "1",
           "VendorName": "Address1"
-        },]
-
+        }],
       };
 
       const response = await fetch(url, {
@@ -135,14 +129,27 @@ const RFPEdit = () => {
     }
   };
 
-  const handleSaveAsDraft = () => {
-    // Additional logic for saving as draft if needed
-    window.alert('RFP Saved as Draft');
-    navigate('/RFList'); // Redirect to RFPList page
-  };
-
   const filteredVendors = allVendors.filter((vendor) => !selectedVendors.includes(vendor) && !removedVendors.includes(vendor));
 
+  const handleFinalSubmit = () => {
+    setShowFinalSubmitModal(true);
+  };
+
+  const handleFinalSubmitConfirm = () => {
+    // Additional logic for final submission if needed
+    navigate('/RFPList'); // Redirect to RFPList page
+    setShowFinalSubmitModal(false);
+  };
+
+  const handleSaveAsDraft = () => {
+    setShowSaveAsDraftModal(true);
+  };
+
+  const handleSaveAsDraftConfirm = () => {
+    // Additional logic for saving as a draft if needed
+    navigate('/RFPList'); // Redirect to RFPList page
+    setShowSaveAsDraftModal(false);
+  };
 
   return (
     <div className="main-container">
@@ -235,7 +242,6 @@ const RFPEdit = () => {
           ))}
         </select>
 
-
         {selectedVendors.length > 0 && (
           <div className="selected-vendor mt-4">
             <div className="form-title">Selected Vendors</div>
@@ -255,7 +261,6 @@ const RFPEdit = () => {
             </div>
           </div>
         )}
-
 
         <div className="document-list mt-4">
           <div className="form-title">Documents</div>
@@ -328,7 +333,6 @@ const RFPEdit = () => {
               value={bidOpenDate}
               onChange={(e) => setBidOpenDate(e.target.value)}
             />
-
           </div>
         </div>
 
@@ -340,20 +344,51 @@ const RFPEdit = () => {
           >
             Edit
           </button>
-
           <button
-            className="btn btn-secondary"
-            onClick={handleSaveAsDraft}
-          >
-            Save as Draft
-          </button>
+              className="btn btn-secondary "
+              onClick={handleSaveAsDraft}
+              
+            >
+              Save as Draft
+            </button>
+            <button
+              className="btn btn-success mx-5"
+              onClick={handleFinalSubmit}
+             
+            >
+              Final Submit
+            </button>
+           
+          
 
-          <button
-            className="btn btn-success mx-5"
-            onClick={handleFinalSubmit}
-          >
-            Final Submit
-          </button>
+          {/* Save as Draft Modal */}
+          <Modal show={showSaveAsDraftModal} onHide={() => setShowSaveAsDraftModal(false)}>
+            <Modal.Header closeButton>
+              <Modal.Title>Save as Draft</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>Your draft is saved.</Modal.Body>
+            <Modal.Footer>
+              <Button variant="primary" onClick={handleSaveAsDraftConfirm}>
+                OK
+              </Button>
+            </Modal.Footer>
+          </Modal>
+
+          {/* Final Submit Modal */}
+          <Modal show={showFinalSubmitModal} onHide={() => setShowFinalSubmitModal(false)}>
+            <Modal.Header closeButton>
+              <Modal.Title>Final Submit</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>Are you sure you want to submit?</Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={() => setShowFinalSubmitModal(false)}>
+                Cancel
+              </Button>
+              <Button variant="primary" onClick={handleFinalSubmitConfirm}>
+                OK
+              </Button>
+            </Modal.Footer>
+          </Modal>
         </div>
       </div>
     </div>
@@ -361,4 +396,3 @@ const RFPEdit = () => {
 };
 
 export default RFPEdit;
-

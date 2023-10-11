@@ -11,7 +11,7 @@ body {
 
 
 .translucent-form {
-
+  bottom: 40px;
   background: rgba(255, 255, 255, 0.8);
   padding: 20px;
   border-radius: 10px;
@@ -145,7 +145,8 @@ th {
 
 .btn-primary {
   margin-right: auto;
-  width: 100px;
+  width: 80px;
+  height: 50px;
 }
 
 /* Add this to your rfpstyle.css */

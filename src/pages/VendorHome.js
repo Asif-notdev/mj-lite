@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import Navbar from './Navbar';
 import Accordion from './Accordion';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -27,7 +26,6 @@ const ItemList = () => {
 
   return (
     <div className='translucent-form'>
-      <Navbar />
       <div className="user-info">
           {userName !== '' ? (
             <span>Welcome, {userName}</span>

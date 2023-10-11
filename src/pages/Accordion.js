@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './styling/rfpstyle.css';
+import '../styling/rfpstyle.css';
 import { BsFillFileEarmarkTextFill} from 'react-icons/bs';
 
 function formatDateToDdMmmYyyy(date) {

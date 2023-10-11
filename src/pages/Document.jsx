@@ -36,7 +36,7 @@ function FileInput(){
             documents.map((doc) => (
               <div key={doc.id} className="form-title">
                 <label > {doc.name} </label>
-                <span style={{float:'right'}}><input style={{float:'right'}} type="file" onChange={handleDocumentChange} /></span>
+                <span style={{float:'right'}}><input type="text"  style={{float:'right'}} onChange={handleDocumentChange} /></span>
               </div>
             ))
           }

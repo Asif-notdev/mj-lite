@@ -41,7 +41,7 @@ const RFPEdit = () => {
   useEffect(() => {
     // Fetch vendors from API and setAllVendors
     // Replace 'http://localhost:3001/vendors' with the actual API endpoint
-    fetch('http://localhost:3001/vendors')
+    fetch('http://localhost:8080/vendorlist')
       .then(response => response.json())
       .then(data => {
         console.log('Fetched vendors:', data);

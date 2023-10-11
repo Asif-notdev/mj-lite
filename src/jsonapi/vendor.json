@@ -2,7 +2,12 @@
     "vendors": [
       { "id": 1, "name": "Alkar" },
       { "id": 2, "name": "Deptra" },
-      { "id": 3, "name": "Vascrte" }
+      { "id": 3, "name": "Vascrte" },
+      { "id": 4, "name": "onhame" },
+      { "id": 5, "name": "lokiy" },
+      { "id": 6, "name": "bastra" },
+      { "id": 7, "name": "narata" },
+      { "id": 8, "name": "tyeje" }
       
     ]
   }

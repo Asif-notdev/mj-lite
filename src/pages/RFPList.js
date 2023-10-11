@@ -1,48 +1,59 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import '../styling/rfpstyle.css';
 
 const RFPList = () => {
   // Define the JSON data here for RFPList
-  const rfpData = [
-    {
-      id: 1,
-      name: 'RFP 1',
-      price: 1000,
-      creationDate: '2023-10-01',
-      submissionDate: '2023-10-10',
-      openingDate: '2023-10-15',
-      description: 'ABC', // Add the description field
-    },
-    {
-      id: 2,
-      name: 'RFP 2',
-      price: 1500,
-      creationDate: '2023-10-02',
-      submissionDate: '2023-10-12',
-      openingDate: '2023-10-18',
-      description: 'XYZ', // Add the description field
-    },
-    {
-      id: 3,
-      name: 'RFP 3',
-      price: 800,
-      creationDate: '2023-10-03',
-      submissionDate: '2023-10-08',
-      openingDate: '2023-10-20',
-      description: 'PQR', // Add the description field
-    },
-    {
-      id: 4,
-      name: 'RFP 4',
-      price: 1200,
-      creationDate: '2023-10-04',
-      submissionDate: '2023-10-14',
-      openingDate: '2023-10-25',
-      description: 'LMN', // Add the description field
-    },
-  ];
+  const [rfpData, setRfpData] = useState([]);
 
+  // const rfpData = [
+  //   {
+  //     id: 1,
+  //     name: 'RFP 1',
+  //     price: 1000,
+  //     creationDate: '2023-10-01',
+  //     submissionDate: '2023-10-10',
+  //     openingDate: '2023-10-15',
+  //     description: 'ABC', // Add the description field
+  //   },
+  //   {
+  //     id: 2,
+  //     name: 'RFP 2',
+  //     price: 1500,
+  //     creationDate: '2023-10-02',
+  //     submissionDate: '2023-10-12',
+  //     openingDate: '2023-10-18',
+  //     description: 'XYZ', // Add the description field
+  //   },
+  //   {
+  //     id: 3,
+  //     name: 'RFP 3',
+  //     price: 800,
+  //     creationDate: '2023-10-03',
+  //     submissionDate: '2023-10-08',
+  //     openingDate: '2023-10-20',
+  //     description: 'PQR', // Add the description field
+  //   },
+  //   {
+  //     id: 4,
+  //     name: 'RFP 4',
+  //     price: 1200,
+  //     creationDate: '2023-10-04',
+  //     submissionDate: '2023-10-14',
+  //     openingDate: '2023-10-25',
+  //     description: 'LMN', // Add the description field
+  //   },
+  // ];
+
+  useEffect(() => {
+    fetch("http://localhost:8080/rfplist/1")
+      .then(response => response.json())
+      .then(data => {
+        console.log('Fetched dummy data:', data);
+        setRfpData(data);
+      })
+      .catch(error => console.error('Error fetching dummy data:', error));
+  }, []);
   // Define state variables for delete confirmation
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [selectedRFP, setSelectedRFP] = useState(null);
@@ -87,7 +98,7 @@ const RFPList = () => {
                 data-bs-toggle="collapse"
                 data-bs-target={`#rfpCollapse${rfp.id}`}
               >
-                {rfp.name}
+                {rfp.id}
               </button>
             </h2>
             <div
@@ -98,11 +109,11 @@ const RFPList = () => {
             >
               <div className="accordion-body">
                 <p>RFP ID: {rfp.id}</p>
-                <p>Price: ${rfp.price}</p>
-                <p>RFP Creation Date: {rfp.creationDate}</p>
-                <p>Bid Submission Date: {rfp.submissionDate}</p>
-                <p>Bid Opening Date: {rfp.openingDate}</p>
-                <p>Bid description: {rfp.description}</p>
+                <p>Price: ${rfp.estimatedPrice}</p>
+                <p>RFP Creation Date: {rfp.rfpCreationDate}</p>
+                <p>Bid Submission Date: {rfp.bidSubmissionDate}</p>
+                <p>Bid Opening Date: {rfp.bidOpeningDate}</p>
+                <p>Bid description: {rfp.remarks}</p>
                 <button  className="btn btn-primary me-2">
                 <Link to={`/rfpdetailview/${rfp.id}`} style={{ color: 'black' ,textDecoration:'none' }}>
                   View</Link>

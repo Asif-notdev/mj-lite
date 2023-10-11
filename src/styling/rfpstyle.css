@@ -160,3 +160,22 @@ th {
   filter: brightness(90%);
   /* Optional: Adjust brightness on hover for visual feedback */
 }
+
+
+.tender-view-button{
+  margin-right: 15px;
+  padding: 7px 12px;
+  transition:box-shadow 0.4s;
+}
+
+.tender-view-button:hover{
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.4);
+}
+
+.button-row{
+  text-align: right;
+}
+
+.acc-table{
+  border: none;
+}

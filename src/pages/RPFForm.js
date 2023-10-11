@@ -62,13 +62,13 @@ const RPFForm = () => {
           )}
         </div>
 
-        <div className="form-title"><BsLayers className="icon" /> Proposed Intent</div>
+        <div className="form-title"><BsLayers className="icon" /> Proposed Indent</div>
 
         <div className="table-container">
           <table>
             <thead>
               <tr>
-                <th><BsBox className="icon" /> Intent ID</th>
+                <th><BsBox className="icon" /> Indent ID</th>
                 <th><BsFillPersonFill className="icon" /> Name</th>
                 <th><BsQuestion className="icon" /> Measure of Unit</th>
                 <th><BsLayers className="icon" /> Quantity</th>

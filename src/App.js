@@ -10,6 +10,7 @@ import './style.css';
 import BidSubmit from './pages/BidSubmission';
 
 
+import { Container } from 'react-bootstrap';
 function App() {
   return (
     

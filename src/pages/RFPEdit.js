@@ -28,12 +28,7 @@ const RFPEdit = () => {
   const [selectedDocuments, setSelectedDocuments] = useState([]);
 
 
-  const [documents, setDocuments] = useState([
-    { id: 1, name: 'Aadhar Card', selected: false },
-    { id: 2, name: 'Pan Card', selected: false },
-    { id: 3, name: 'Turn Over of the company', selected: false },
-    { id: 4, name: 'GST Invoice', selected: false },
-  ]);
+  const [documents, setDocuments] = useState([]);
 
   const [rfpDivision, setrfpDivision] = useState(true);
   const [remarks, setRemarks] = useState('');
@@ -51,6 +46,19 @@ const RFPEdit = () => {
       })
       .catch(error => console.error('Error fetching vendors:', error));
   }, []);
+
+  useEffect(() => {
+    // Fetch vendors from API and setAllVendors
+    // Replace 'http://localhost:3001/vendors' with the actual API endpoint
+    fetch('http://localhost:8080/doclist')
+      .then(response => response.json())
+      .then(data => {
+        console.log('Fetched vendors:', data);
+        setDocuments(data);
+      })
+      .catch(error => console.error('Error fetching vendors:', error));
+  }, []);
+
 
   const handleVendorSelect = (vendor) => {
     setSelectedVendors([...selectedVendors, vendor]);

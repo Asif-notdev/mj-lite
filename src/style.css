@@ -74,6 +74,7 @@ body {
     display: flex;
     justify-content: space-between;
     padding: 6px;
+    
 }
 
 .container{
@@ -84,3 +85,6 @@ body {
     background: url('./images/bgrfp.jpg') fixed no-repeat;
     background-size: cover;
 }
+
+
+  

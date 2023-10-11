@@ -3,12 +3,14 @@ import '../styling/rfpstyle.css';
 
 import { Link, useHistory } from 'react-router-dom';
 import FileInput from './Document';
+import { Modal, Button } from 'react-bootstrap'; // Import Modal and Button from React Bootstrap
 import FileUploadComponent from '../MyTesting/DynemicFileUploading';
-import {useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const BidSubmit = () => {
 
 
+  const navigate = useNavigate();
   const [editable, setEditable] = useState(false);
   const [indents, setIndents] = useState([
     { indentId: 1, name: 'Item A', unit: 'pcs', quantity: 5 },
@@ -17,6 +19,9 @@ const BidSubmit = () => {
 
   const [vendors, setVendors] = useState(['Vendor 1', 'Vendor 2', 'Vendor 3']);
   const [selectedVendors, setSelectedVendors] = useState([]);
+  
+  const [showSaveAsDraftModal, setShowSaveAsDraftModal] = useState(false);
+  const [showFinalSubmitModal, setShowFinalSubmitModal] = useState(false);
 
   const [documents, setDocuments] = useState([
     { id: 1, name: 'Adhar Card', selected: false },
@@ -53,6 +58,26 @@ const BidSubmit = () => {
   //   window.alert('RFP Saved as Draft');
   //   navigate('/RFPList');
   // };
+
+  const handleFinalSubmit = () => {
+    setShowFinalSubmitModal(true);
+  };
+
+  const handleFinalSubmitConfirm = () => {
+    // Additional logic for final submission if needed
+    navigate('/RFPList'); // Redirect to RFPList page
+    setShowFinalSubmitModal(false);
+  };
+
+  const handleSaveAsDraft = () => {
+    setShowSaveAsDraftModal(true);
+  };
+
+  const handleSaveAsDraftConfirm = () => {
+    // Additional logic for saving as a draft if needed
+    navigate('/RFPList'); // Redirect to RFPList page
+    setShowSaveAsDraftModal(false);
+  };
 
 
 
@@ -147,8 +172,11 @@ const BidSubmit = () => {
           </div>
         )}
 
+        <div className='form-title my-2'> <h3 className='font-weight-bold'>Attach Documents</h3></div>
+
         <FileInput/>
         {/* <FileUploadComponent/> */}
+
 
         <div className="remarks mt-4">
           <div className="form-title">Remarks</div>
@@ -161,51 +189,83 @@ const BidSubmit = () => {
         </div>
 
         <div className="calendar mt-4 d-flex">
-          <div className="form-title mx-2">Bid Submission Date</div>
-          <input
-            type="date"
-            className="form-control"
-            value={bidSubmissionDate}
-            onChange={(e) => setBidSubmissionDate(e.target.value)}
-          />
+          <div className="form-group mx-2">
+            <label className="form-title">Bid Submission Date</label>
+            <input
+              type="date"
+              className="form-control form-control-lg"
+              value={bidSubmissionDate}
+              onChange={(e) => setBidSubmissionDate(e.target.value)}
+            />
+          </div>
 
-          <div className="form-title mx-2">Bid Open Date</div>
-          <input
-            type="date"
-            className="form-control"
-            value={bidOpenDate}
-            onChange={(e) => setBidOpenDate(e.target.value)}
-          />
+          <div className="form-group mx-5">
+            <label className="form-title">Bid Open Date</label>
+            <input
+              type="date"
+              className="form-control form-control-lg"
+              value={bidOpenDate}
+              onChange={(e) => setBidOpenDate(e.target.value)}
+            />
+          </div>
         </div>
 
-        <div className="create-rpf mt-4">
+
+        
+        <div className="create-rpf mt-5">
           <button
             className="btn btn-primary"
-            // onClick={handleEditClick}
+            onClick={handleEditClick}
             disabled={editable}
           >
             Edit
           </button>
-        </div>
-
-        <div className="create-rpf mt-4">
           <button
-            className="btn btn-success"
-            // onClick={handleFinalSubmit}
-            disabled={!editable}
-          >
-            Final Submit
-          </button>
-          <button
-            className="btn btn-secondary ml-2"
-            // onClick={handleSaveAsDraft}
-            disabled={!editable}
-          >
-            Save as Draft
-          </button>
+              className="btn btn-secondary "
+              onClick={handleSaveAsDraft}
+              
+            >
+              Save as Draft
+            </button>
+            <button
+              className="btn btn-success mx-5"
+              onClick={handleFinalSubmit}
+             
+            >
+              Final Submit
+            </button>
+           
+          
+
+          {/* Save as Draft Modal */}
+          <Modal show={showSaveAsDraftModal} onHide={() => setShowSaveAsDraftModal(false)}>
+            <Modal.Header closeButton>
+              <Modal.Title>Save as Draft</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>Your draft is saved.</Modal.Body>
+            <Modal.Footer>
+              <Button variant="primary" onClick={handleSaveAsDraftConfirm}>
+                OK
+              </Button>
+            </Modal.Footer>
+          </Modal>
+
+          {/* Final Submit Modal */}
+          <Modal show={showFinalSubmitModal} onHide={() => setShowFinalSubmitModal(false)}>
+            <Modal.Header closeButton>
+              <Modal.Title>Final Submit</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>Are you sure you want to submit?</Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={() => setShowFinalSubmitModal(false)}>
+                Cancel
+              </Button>
+              <Button variant="primary" onClick={handleFinalSubmitConfirm}>
+                OK
+              </Button>
+            </Modal.Footer>
+          </Modal>
         </div>
-
-
       </div>
     </div>
   );

@@ -6,7 +6,7 @@ import { BsFillPersonFill, BsBox, BsLayers, BsQuestion, BsCurrencyRupee } from '
 import '../styling/rfpstyle.css';
 
 const RPFForm = () => {
-  
+
   const [createRPF, setCreateRPF] = useState(false);
   const [dummyData, setDummyData] = useState([]);
   const [userName, setUserName] = useState('');
@@ -25,23 +25,22 @@ const RPFForm = () => {
       .catch(error => console.error('Error fetching dummy data:', error));
 
     // Fetch user name
-     // Fetch user name
-  fetch(userNameApiEndpoint)
-  .then(response => response.json())
-  .then(data => {
-    console.log('Fetched user name:', data);
-    // Check if the necessary properties exist before accessing them
-    const userNameValue = data && data[0] && data[0].name;
+    fetch(userNameApiEndpoint)
+      .then(response => response.json())
+      .then(data => {
+        console.log('Fetched user name:', data);
+        // Check if the necessary properties exist before accessing them
+        const userNameValue = data && data[0] && data[0].name;
 
-    console.log('userNameValue:', userNameValue); // Log the userNameValue
-    setUserName(userNameValue || '');
-  })
-  .catch(error => {
-    console.error('Error fetching user name:', error);
-    // Log the specific error message
-    console.error('Error message:', error.message);
-  });
-}, []);
+        console.log('userNameValue:', userNameValue); // Log the userNameValue
+        setUserName(userNameValue || '');
+      })
+      .catch(error => {
+        console.error('Error fetching user name:', error);
+        // Log the specific error message
+        console.error('Error message:', error.message);
+      });
+  }, []);
 
   const handleCreateRPFChange = () => {
     setCreateRPF(!createRPF);
@@ -90,13 +89,13 @@ const RPFForm = () => {
           </table>
         </div>
 
-        <div className="create-rpf ">
+        <div className="create-rpf mt-4">
           <div className="form-title">Do you want to create RFP?</div>
-          <div className="yes-no-buttons">
+          <div className="yes-no-buttons mx-3">
             <button className="yes-button" onClick={handleCreateRPFChange}>
               Yes, Let's Go!
             </button>
-            <button className="no-button">No, Maybe Later</button>
+            <button className="no-button mx-1">No, Maybe Later</button>
           </div>
         </div>
       </div>

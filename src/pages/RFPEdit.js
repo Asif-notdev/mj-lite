@@ -25,6 +25,8 @@ const RFPEdit = () => {
   const [allVendors, setAllVendors] = useState(['Vendor 1', 'Vendor 2', 'Vendor 3']);
   const [selectedVendors, setSelectedVendors] = useState([]);
   const [removedVendors, setRemovedVendors] = useState([]);
+  const [selectedDocuments, setSelectedDocuments] = useState([]);
+
 
   const [documents, setDocuments] = useState([
     { id: 1, name: 'Aadhar Card', selected: false },
@@ -78,7 +80,12 @@ const RFPEdit = () => {
       selected: doc.id === documentId ? !doc.selected : doc.selected,
     }));
     setDocuments(updatedDocuments);
-  };
+  
+    // Update the selected documents state
+    const selectedDocs = updatedDocuments.filter(doc => doc.selected).map(doc => doc.id);
+    setSelectedDocuments(selectedDocs);
+    console.log(selectedDocs);
+  }
 
   const postData = async () => {
     try {
@@ -336,9 +343,6 @@ const RFPEdit = () => {
           >
             Edit
           </button>
-          {/* Submit buttons */}
-          <div className="create-rpf mt-4">
-
           <button
               className="btn btn-secondary "
               onClick={handleSaveAsDraft}
@@ -354,7 +358,7 @@ const RFPEdit = () => {
               Final Submit
             </button>
            
-          </div>
+          
 
           {/* Save as Draft Modal */}
           <Modal show={showSaveAsDraftModal} onHide={() => setShowSaveAsDraftModal(false)}>

@@ -1,6 +1,6 @@
 body {
   
-  margin: 0;
+  margin-bottom: 340px;
   padding: 0;
   font-family: sans-serif;
   height: 100vh;
@@ -11,12 +11,12 @@ body {
 
 
 .translucent-form {
-  bottom: 40px;
   background: rgba(255, 255, 255, 0.8);
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   margin: 20px;
+  
 }
 
 .form-title {

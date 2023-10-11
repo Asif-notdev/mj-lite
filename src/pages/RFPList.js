@@ -98,7 +98,7 @@ const RFPList = () => {
                 data-bs-toggle="collapse"
                 data-bs-target={`#rfpCollapse${rfp.id}`}
               >
-                {rfp.name}
+                {rfp.id}
               </button>
             </h2>
             <div
@@ -109,11 +109,11 @@ const RFPList = () => {
             >
               <div className="accordion-body">
                 <p>RFP ID: {rfp.id}</p>
-                <p>Price: ${rfp.price}</p>
-                <p>RFP Creation Date: {rfp.creationDate}</p>
-                <p>Bid Submission Date: {rfp.submissionDate}</p>
-                <p>Bid Opening Date: {rfp.openingDate}</p>
-                <p>Bid description: {rfp.description}</p>
+                <p>Price: ${rfp.estimatedPrice}</p>
+                <p>RFP Creation Date: {rfp.rfpCreationDate}</p>
+                <p>Bid Submission Date: {rfp.bidSubmissionDate}</p>
+                <p>Bid Opening Date: {rfp.bidOpeningDate}</p>
+                <p>Bid description: {rfp.remarks}</p>
                 <button  className="btn btn-primary me-2">
                 <Link to={`/rfpdetailview/${rfp.id}`} style={{ color: 'black' ,textDecoration:'none' }}>
                   View</Link>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Accordion from './Accordion';
+import '../styling/rfpstyle.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const ItemList = () => {
@@ -33,7 +34,9 @@ const ItemList = () => {
             <span>Loading...</span>
           )}
         </div>
-      <div className="container mt-5">
+        <h4>List of Tenders available for you:</h4>
+      <div>
+        
         <Accordion />
       </div>
     </div>

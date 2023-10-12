@@ -192,13 +192,13 @@ const RFPEdit = () => {
             <thead>
               <tr style={{ background: '#007BFF' }}>
                 <th>
-                  <BsBox className="icon" /> Item ID
+                  <BsBox className="icon" /> Product ID
                 </th>
                 <th>
                   <BsFillPersonFill className="icon" /> Name
                 </th>
                 <th>
-                  <BsQuestion className="icon" /> Measure of Unit
+                  <BsQuestion className="icon" /> Product Unit
                 </th>
                 <th>
                   <BsLayers className="icon" /> Quantity
@@ -254,7 +254,7 @@ const RFPEdit = () => {
                     )}
                   </td>
                   <td>
-                    {editable ? (
+                     
                       <input
                         type="text"
                         value={item.estimatedPrice}
@@ -264,9 +264,7 @@ const RFPEdit = () => {
                           setIndents(updatedIndents);
                         }}
                       />
-                    ) : (
-                      item.estimatedPrice
-                    )}
+                    
                   </td>
                   {editable && (
                     <td>
@@ -285,7 +283,7 @@ const RFPEdit = () => {
         </div>
         <div class="container d-flex justify-content-end">
           <span class="form-title fs-4">Grand Total:</span>
-          <span class="text-success fw-bold mt-2 mx-2">
+          <span class="text-success fw-bold  mx-2" style={{ fontSize: '1.5em' }}>
             {indents.reduce((total, item) => total + (item.estimatedPrice || 0), 0)}
           </span>
         </div>

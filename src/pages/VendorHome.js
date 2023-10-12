@@ -39,10 +39,10 @@ const ItemList = () => {
       <div>
         
         <Accordion />
-        {/* Add a Link to the Bid Detail View page */}
+        {/* Add a Link to the Bid Detail View page
         <Link to="/biddetailview/:id">
           <button>View Tender</button>
-        </Link>
+        </Link> */}
       </div>
     </div>
   );

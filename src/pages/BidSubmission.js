@@ -130,7 +130,7 @@ const BidSubmit = () => {
                   <td>{item.name}</td>
                   <td>{item.unit}</td>
                   <td>{item.quantity}</td>
-                  <td>858494949</td>
+                  <td>12</td>
                   <td><input type='number'></input></td>
                 </tr>
               ))}

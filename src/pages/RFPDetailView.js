@@ -9,7 +9,7 @@ const RFPDetailView = () => {
 
 
   useEffect(() => {
-    fetch("http://localhost:8080/rfplist/1")
+    fetch("http://localhost:8080/rfp/"+id)
       .then(response => response.json())
       .then(data => {
         console.log('Fetched dummy data:', data);
@@ -20,15 +20,7 @@ const RFPDetailView = () => {
 
 
   
-  useEffect(() => {
-    fetch("http://localhost:8080/rfpvendorlist/1")
-      .then(response => response.json())
-      .then(data => {
-        console.log('Fetched dummy data:', data);
-        setRfpData(data);
-      })
-      .catch(error => console.error('Error fetching dummy data:', error));
-  }, []);
+  
 
 
 
@@ -86,11 +78,11 @@ const RFPDetailView = () => {
   //               },
   // ];
 
-  const rfp = rfpData.find((data) => data.id === id);
+  //const rfp = rfpData.find((data) => data.id === id);
 
-  if (!rfp) {
-    return <div>RFP not found.</div>;
-  }
+  // if (!rfp) {
+  //   return <div>RFP not found.</div>;
+  // }
 
   return (
     <div>
@@ -103,45 +95,45 @@ const RFPDetailView = () => {
 
           <Card.Body>
             <Card.Title>
-              <strong>RFP ID:</strong> {rfp.id}
+              <strong>RFP ID:</strong> {rfpData.id}
             </Card.Title>
             <Card.Text>
               <p>
-                <strong>RFP Name:</strong> {rfp.id}
+                <strong>RFP Name:</strong> {rfpData.id}
               </p>
               <p>
-                <strong>Measuring Unit:</strong> {rfp.name}
+                <strong>Measuring Unit:</strong> {rfpData.buyerName}
               </p>
               <p>
-                <strong>Price:</strong> ${rfp.estimatedPrice}
+                <strong>Price:</strong> ${rfpData.estimatedPrice}
               </p>
-              <div>
+              {/* <div>
                 <strong>Vendor List:</strong>
                 <ul>
-                  {rfp.vendorList.map((vendor) => (
-                    <li key={vendor.id}>{vendor.name}</li>
+                  {(rfpData.vendoList).map((vendor) => (
+                    <li>{vendor}</li>
                   ))}
                 </ul>
-              </div>
+              </div> */}
               <div>
                 <strong>Attached Documents:</strong>
                 <ul>
-                  {rfp.attachedDocuments.map((doc, index) => (
-                    <li key={index}>{doc}</li>
+                  {(rfpData.docNameList).map((doc) => (
+                    <li>{doc}</li>
                   ))}
                 </ul>
               </div>
               <p>
-                <strong>RFP Split:</strong> {rfp.rfpSplit ? 'Yes' : 'No'}
+                <strong>RFP Split:</strong> {rfpData.splitable ? 'Yes' : 'No'}
               </p>
               <p>
-                <strong>Bid Submission Date:</strong> {rfp.bidSubmissionDate}
+                <strong>Bid Submission Date:</strong> {rfpData.bidSubmissionDate}
               </p>
               <p>
-                <strong>Bid Opening Date:</strong> {rfp.bidOpeningDate}
+                <strong>Bid Opening Date:</strong> {rfpData.bidOpeningDate}
               </p>
               <p>
-                <strong>Bid Creation Date:</strong> {rfp.bidCreationDate}
+                <strong>Bid Creation Date:</strong> {rfpData.rfpCreationDate}
               </p>
             </Card.Text>
             <Button variant="primary">

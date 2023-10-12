@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 
@@ -6,7 +7,7 @@ const RFPList = () => {
   const rfpData = [
     {
       id: 1,
-      bidName: 'Bid 1',
+      rfpName: 'RFP 1',
       bidCreationDate: '2023-10-01',
       bidOpeningDate: '2023-10-10',
       bidSubmissionDate: '2023-10-15',
@@ -16,7 +17,7 @@ const RFPList = () => {
     },
     {
       id: 2,
-      bidName: 'Bid 2',
+      rfpName: 'RFP 2',
       bidCreationDate: '2023-10-02',
       bidOpeningDate: '2023-10-12',
       bidSubmissionDate: '2023-10-17',
@@ -26,7 +27,7 @@ const RFPList = () => {
     },
     {
       id: 3,
-      bidName: 'Bid 3',
+      rfpName: 'RFP 3',
       bidCreationDate: '2023-10-03',
       bidOpeningDate: '2023-10-14',
       bidSubmissionDate: '2023-10-18',
@@ -36,7 +37,7 @@ const RFPList = () => {
     },
     {
       id: 4,
-      bidName: 'Bid 4',
+      rfpName: 'RFP 4',
       bidCreationDate: '2023-10-04',
       bidOpeningDate: '2023-10-16',
       bidSubmissionDate: '2023-10-19',
@@ -45,6 +46,10 @@ const RFPList = () => {
       active: false, // Set to false for no badge
     },
   ];
+  const thStyle = {
+    backgroundColor: 'blue', // Background color of th
+    color: 'white', // Text color
+  };
 
   return (
     <div className="translucent-form">
@@ -62,9 +67,9 @@ const RFPList = () => {
               >
                 <div className="d-flex justify-content-between align-items-center">
                   <div>
-                    Bid ID: {rfp.id} - {rfp.bidName}
+                    Bid ID: {rfp.id} - {rfp.rfpName}
                   </div>
-                  {rfp.active && <span className="badge bg-success mx-3">Active</span>}
+                  {rfp.active && <span className="badge bg-success">Active</span>}
                 </div>
               </button>
             </h2>
@@ -75,12 +80,16 @@ const RFPList = () => {
               data-bs-parent={`#rfpAccordion${rfp.id}`}
             >
               <div className="accordion-body">
-                <table className={`table ${rfp.active ? 'bg-primary' : ''}`}>
+                <table
+                  className={`table ${rfp.active ? 'bg-primary' : ''}`}
+                >
                   <thead>
                     <tr>
-                      <th className="bg-primary">Document List</th>
-                      <th className="bg-primary">Vendor List</th>
-                      <th className="bg-primary">Dates</th>
+                      <th style={thStyle}>Document List</th>
+                      <th style={thStyle}>Vendor List</th>
+                      <th style={thStyle}>Dates</th>
+
+                      <th style={thStyle}>View Bid</th> {/* This empty column will push the button to the right */}
                     </tr>
                   </thead>
                   <tbody>
@@ -104,7 +113,13 @@ const RFPList = () => {
                           <li>Creation Date: {rfp.bidCreationDate}</li>
                           <li>Opening Date: {rfp.bidOpeningDate}</li>
                           <li>Submission Date: {rfp.bidSubmissionDate}</li>
+                       
                         </ul>
+                      </td>
+                      <td>
+                        <Link to={`/viewbid/${rfp.id}`}>
+                          <button className="btn btn-success">View Bid</button>
+                        </Link>
                       </td>
                     </tr>
                   </tbody>

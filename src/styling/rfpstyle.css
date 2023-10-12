@@ -7,9 +7,7 @@ body {
   background: url('../images/bgrfp.jpg') fixed no-repeat;
   background-size: cover;
 }
-.acc-table{
-  border: none;
-}
+
 
 
 .translucent-form {
@@ -144,12 +142,12 @@ th {
   justify-self: flex-end;
 
 }
-
+/* 
 .btn-primary {
   margin-right: auto;
   width: 80px;
   height: 50px;
-}
+} */
 
 /* Add this to your rfpstyle.css */
 
@@ -175,6 +173,8 @@ th {
 }
 
 .button-row{
+  text-align: center;
+}
+.rightspan{
   text-align: right;
 }
-

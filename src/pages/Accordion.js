@@ -56,7 +56,11 @@ const Accordion = () => {
                                     <h6 className='mx-3'>{item.buyerName}</h6>
                                     <h6 className='mx-1'>(Tender Id: {item.tenderId})
                                     </h6>
+                                      <span className={`badge ${item.isActive ? 'bg-success' : 'bg-danger'} text-white me-2 mx-3`}>
+                                        {item.isActive ? 'Open for Submissions' : 'Submission Closed'}
+                                      </span>
                                 </button>
+                                
                             </h6>
 
                             <div id={`itemCollapse${item.id}`} 

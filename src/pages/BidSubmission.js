@@ -114,12 +114,13 @@ const BidSubmit = () => {
           <table>
             <thead>
               <tr>
-                <th>Item ID</th>
-                <th>Item Name</th>
-                <th>Item Unit</th>
-                <th>Item quantity</th>
-                <th>Estimate Price</th>
-                <th>Your Price</th>
+                <th>Product ID</th>
+                <th>Product Name</th>
+                <th>Product Unit</th>
+                <th>Product quantity</th>
+                <th>Estimated Unit Price</th>
+                <th>Your Unit Price</th>
+                <th>Estimated Price</th>
 
               </tr>
             </thead>
@@ -130,7 +131,7 @@ const BidSubmit = () => {
                   <td>{item.name}</td>
                   <td>{item.unit}</td>
                   <td>{item.quantity}</td>
-                  <td>12</td>
+                  <td>{item.price}</td>
                   <td><input type='number'></input></td>
                 </tr>
               ))}

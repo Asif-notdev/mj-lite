@@ -108,8 +108,8 @@ const RFPEdit = () => {
         "bidOpeningDate": bidOpenDate,
         "bidSubmissionDate": bidSubmissionDate,
         "buyer": 1,
-        "doc":[...selectedDocuments]
-        // "li":selectedVendors
+        "doc":[...selectedDocuments],
+        "li":[...allVendors]
       
       };
 

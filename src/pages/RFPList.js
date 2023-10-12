@@ -46,7 +46,7 @@ const RFPList = () => {
   // ];
 
   useEffect(() => {
-    fetch("http://localhost:8080/rfplist/1")
+    fetch("http://localhost:8080/rfplist/2")
       .then(response => response.json())
       .then(data => {
         console.log('Fetched dummy data:', data);

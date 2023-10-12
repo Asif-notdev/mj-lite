@@ -11,6 +11,7 @@ import NavBar from './components/NavBar';
 import Footer from './components/Footer';
 import './style.css';
 import BidSubmit from './pages/BidSubmission';
+import BidDetailView from './pages/BidDetailView';
 
 
 import { Container } from 'react-bootstrap';
@@ -27,6 +28,8 @@ function App() {
         <Route path="/rfpdetailview/:id" element={<RFPDetailView />} />
         <Route path="/bidsubmission" element={<BidSubmit />} />
         <Route path="/vendorhome" element={<ItemList />} />
+        <Route path="/biddetailview/:id" element={<BidDetailView />} />
+
       </Routes>
       <Footer/>
     </Router>

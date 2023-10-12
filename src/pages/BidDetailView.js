@@ -1,44 +1,23 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Card, Button, Navbar } from 'react-bootstrap';
 
 const BidDetailView = () => {
-  const { bidId } = useParams(); // Assuming you have a bid ID parameter
+  const { id } = useParams();
+  const [bidData, setBidData] = useState([]);
 
-  // Define the JSON data for the BidDetailView based on the 'bidId' parameter
-  const bidData = [
-    {
-      bidId: '1',
-      rfpId: '1',
-      documents: ['Document 1', 'Document 2'],
-      vendorName: 'Vendor 1',
-      vendorId: '1',
-      bidSubmissionDate: '2023-10-10',
-      bidOpeningDate: '2023-10-15',
-      bidCreationDate: '2023-09-30',
-      isActive: 'Yes',
-      isDraft: 'No',
-      price: 1500,
-    },
-    {
-      bidId: '2',
-      rfpId: '1',
-      documents: ['Document 3'],
-      vendorName: 'Vendor 2',
-      vendorId: '2',
-      bidSubmissionDate: '2023-10-12',
-      bidOpeningDate: '2023-10-18',
-      bidCreationDate: '2023-09-28',
-      isActive: 'Yes',
-      isDraft: 'Yes',
-      price: 1200,
-    },
-    // Add more data as needed
-  ];
+  useEffect(() => {
+    // Fetch bid data based on the id
+    fetch(`http://localhost:8080/bid/${id}`)
+      .then(response => response.json())
+      .then(data => {
+        console.log('Fetched bid data:', data);
+        setBidData(data);
+      })
+      .catch(error => console.error('Error fetching bid data:', error));
+  }, [id]);
 
-  const bid = bidData.find((data) => data.bidId === bidId);
-
-  if (!bid) {
+  if (!bidData) {
     return <div>Bid not found.</div>;
   }
 
@@ -52,47 +31,51 @@ const BidDetailView = () => {
 
           <Card.Body>
             <Card.Title>
-              <strong>Bid ID:</strong> {bid.bidId}
+              <strong>Bid ID:</strong> {bidData.bidId}
             </Card.Title>
             <Card.Text>
               <p>
-                <strong>RFP ID:</strong> {bid.rfpId}
+                <strong>RFP ID:</strong> {bidData.rfpId}
               </p>
-              <div>
+              <p>
                 <strong>List of Documents:</strong>
                 <ul>
-                  {bid.documents.map((doc, index) => (
-                    <li key={index}>{doc}</li>
-                  ))}
+                  {bidData.documents ? (
+                    bidData.documents.map((document, index) => (
+                      <li key={index}>{document}</li>
+                    ))
+                  ) : (
+                    <li>No documents available</li>
+                  )}
                 </ul>
-              </div>
-              <p>
-                <strong>Vendor Name:</strong> {bid.vendorName}
               </p>
               <p>
-                <strong>Vendor ID:</strong> {bid.vendorId}
+                <strong>Vendor Name:</strong> {bidData.vendorName}
               </p>
               <p>
-                <strong>Bid Submission Date:</strong> {bid.bidSubmissionDate}
+                <strong>Vendor ID:</strong> {bidData.vendorId}
               </p>
               <p>
-                <strong>Bid Opening Date:</strong> {bid.bidOpeningDate}
+                <strong>Bid Submission Date:</strong> {bidData.bidSubmissionDate}
               </p>
               <p>
-                <strong>Bid Creation Date:</strong> {bid.bidCreationDate}
+                <strong>Bid Opening Date:</strong> {bidData.bidOpeningDate}
               </p>
               <p>
-                <strong>Is Active:</strong> {bid.isActive}
+                <strong>Bid Creation Date:</strong> {bidData.bidCreationDate}
               </p>
               <p>
-                <strong>Is Draft:</strong> {bid.isDraft}
+                <strong>Is Active:</strong> {bidData.isActive ? 'Yes' : 'No'}
               </p>
               <p>
-                <strong>Price:</strong> ${bid.price}
+                <strong>Is Draft:</strong> {bidData.isDraft ? 'Yes' : 'No'}
+              </p>
+              <p>
+                <strong>Price:</strong> ${bidData.price}
               </p>
             </Card.Text>
             <Button variant="primary">
-              <Link to="/rfplist" style={{ color: 'black', textDecoration: 'none' }}>
+              <Link to="/vendorhome" style={{ color: 'black', textDecoration: 'none' }}>
                 Go Back
               </Link>
             </Button>

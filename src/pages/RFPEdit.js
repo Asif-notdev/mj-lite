@@ -19,14 +19,12 @@ const RFPEdit = () => {
   const [allVendors, setAllVendors] = useState(['Vendor 1', 'Vendor 2', 'Vendor 3']);
   const [selectedVendors, setSelectedVendors] = useState([]);
   const [removedVendors, setRemovedVendors] = useState([]);
-
   const [documents, setDocuments] = useState([
     { id: 1, name: 'Aadhar Card', selected: false },
     { id: 2, name: 'Pan Card', selected: false },
     { id: 3, name: 'Turn Over of the company', selected: false },
     { id: 4, name: 'GST Invoice', selected: false },
   ]);
-
   const [rfpDivision, setrfpDivision] = useState(true);
   const [remarks, setRemarks] = useState('');
   const [bidSubmissionDate, setBidSubmissionDate] = useState('');
@@ -42,7 +40,6 @@ const RFPEdit = () => {
       })
       .catch(error => console.error('Error fetching vendors:', error));
   }, []);
-
   const handleVendorSelect = (vendor) => {
     setSelectedVendors([...selectedVendors, vendor]);
     const updatedVendors = allVendors.filter((v) => v !== vendor);
@@ -68,14 +65,12 @@ const RFPEdit = () => {
     }));
     setDocuments(updatedDocuments);
   };
-
   const postData = async () => {
     try {
       const url = 'http://localhost:8080/fillrfp'; // Replace with your API endpoint
       const jsonData = {
         "id": 5,
-        "estimatedPrice":
-         1000.00,
+        "estimatedPrice": 1000.00,
         "isSplitable": rfpDivision,
         "isPublish": true,
         "isDraft": false,
@@ -135,13 +130,11 @@ const RFPEdit = () => {
           )}
         </div>
         <div className="form-title"><BsLayers className="icon" /> Proposed Intent</div>
-        <div className="form-title"><BsLayers className="icon" /> Proposed Indent</div>
-
         <div className="table-container mt-4">
           <table>
             <thead>
               <tr style={{ background: '#007BFF' }}>
-                <th><BsBox className="icon" /> Indent ID</th>
+                <th><BsBox className="icon" /> Intent ID</th>
                 <th><BsFillPersonFill className="icon" /> Name</th>
                 <th><BsQuestion className="icon" /> Measure of Unit</th>
                 <th><BsLayers className="icon" /> Quantity</th>
@@ -323,8 +316,7 @@ const RFPEdit = () => {
               Final Submit
             </button>
            
-          </div>
-
+          
           {/* Save as Draft Modal */}
           <Modal show={showSaveAsDraftModal} onHide={() => setShowSaveAsDraftModal(false)}>
             <Modal.Header closeButton>
@@ -358,10 +350,3 @@ const RFPEdit = () => {
   );
 };
 export default RFPEdit;
-
-
-
-
-
-
-

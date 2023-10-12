@@ -16,15 +16,9 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
 
-<<<<<<< HEAD
-      <App/>
-
-      {/* <BidSubmit/> */}
-=======
       <App/> 
 
       
->>>>>>> 714f459f6a91075d838f5df6902c9fb1624158a6
   
     
   </React.StrictMode>

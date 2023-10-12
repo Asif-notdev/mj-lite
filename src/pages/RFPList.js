@@ -1,16 +1,19 @@
 
-
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import '../styling/rfpstyle.css';
 
 const RFPList = () => {
+ 
+
   const rfpData = [
     {
       id: 1,
       name: 'RFP 1',
       price: 1000,
       creationDate: '2023-10-01',
+      submissionDate: '2023-10-10',
+      openingDate: '2023-10-15',
       description: 'ABC', // Add the description field
     },
     {
@@ -18,6 +21,8 @@ const RFPList = () => {
       name: 'RFP 2',
       price: 1500,
       creationDate: '2023-10-02',
+      submissionDate: '2023-10-12',
+      openingDate: '2023-10-18',
       description: 'XYZ', // Add the description field
     },
     {
@@ -25,6 +30,8 @@ const RFPList = () => {
       name: 'RFP 3',
       price: 800,
       creationDate: '2023-10-03',
+      submissionDate: '2023-10-08',
+      openingDate: '2023-10-20',
       description: 'PQR', // Add the description field
     },
     {
@@ -32,87 +39,50 @@ const RFPList = () => {
       name: 'RFP 4',
       price: 1200,
       creationDate: '2023-10-04',
+      submissionDate: '2023-10-14',
+      openingDate: '2023-10-25',
       description: 'LMN', // Add the description field
     },
   ];
 
-  // const rfpData = [
-  //   {
-  //     id: 1,
-  //     name: 'RFP 1',
-  //     price: 1000,
-  //     creationDate: '2023-10-01',
-  //     submissionDate: '2023-10-10',
-  //     openingDate: '2023-10-15',
-  //     description: 'ABC', // Add the description field
-  //   },
-  //   {
-  //     id: 2,
-  //     name: 'RFP 2',
-  //     price: 1500,
-  //     creationDate: '2023-10-02',
-  //     submissionDate: '2023-10-12',
-  //     openingDate: '2023-10-18',
-  //     description: 'XYZ', // Add the description field
-  //   },
-  //   {
-  //     id: 3,
-  //     name: 'RFP 3',
-  //     price: 800,
-  //     creationDate: '2023-10-03',
-  //     submissionDate: '2023-10-08',
-  //     openingDate: '2023-10-20',
-  //     description: 'PQR', // Add the description field
-  //   },
-  //   {
-  //     id: 4,
-  //     name: 'RFP 4',
-  //     price: 1200,
-  //     creationDate: '2023-10-04',
-  //     submissionDate: '2023-10-14',
-  //     openingDate: '2023-10-25',
-  //     description: 'LMN', // Add the description field
-  //   },
-  // ];
-
-  useEffect(() => {
-    fetch("http://localhost:8080/rfplist/2")
-      .then(response => response.json())
-      .then(data => {
-        console.log('Fetched dummy data:', data);
-        setRfpData(data);
-      })
-      .catch(error => console.error('Error fetching dummy data:', error));
-  }, []);
-  // Define state variables for delete confirmation
-  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
-  const [selectedRFP, setSelectedRFP] = useState(null);
+  // useEffect(() => {
+  //   fetch("http://localhost:8080/rfplist/2")
+  //     .then(response => response.json())
+  //     .then(data => {
+  //       console.log('Fetched dummy data:', data);
+  //       setRfpData(data);
+  //     })
+  //     .catch(error => console.error('Error fetching dummy data:', error));
+  // }, []);
+  // // Define state variables for delete confirmation
+  // const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+  // const [selectedRFP, setSelectedRFP] = useState(null);
 
   // Function to handle delete confirmation
-  const handleDeleteConfirmation = (rfp) => {
-    setSelectedRFP(rfp);
-    setShowDeleteConfirmation(true);
-  };
+  // const handleDeleteConfirmation = (rfp) => {
+  //   setSelectedRFP(rfp);
+  //   setShowDeleteConfirmation(true);
+  // };
 
-  // Function to handle canceling delete
-  const handleCancelDelete = () => {
-    setSelectedRFP(null);
-    setShowDeleteConfirmation(false);
-  };
+  // // Function to handle canceling delete
+  // const handleCancelDelete = () => {
+  //   setSelectedRFP(null);
+  //   setShowDeleteConfirmation(false);
+  // };
 
-  // Function to handle actual deletion
-  const handleDelete = () => {
-    if (selectedRFP) {
-      // Implement your delete logic here
-      // After deleting, you can redirect to the list page or perform any other action
-      // For now, we'll just hide the delete confirmation popup
-      const updatedRFPData = rfpData.filter((rfp) => rfp.id !== selectedRFP.id);
-      console.log('Deleted RFP with ID:', selectedRFP.id);
-      // Update the rfpData state or make an API request to update the data
-      setSelectedRFP(null);
-      setShowDeleteConfirmation(false);
-    }
-  };
+  // // Function to handle actual deletion
+  // const handleDelete = () => {
+  //   if (selectedRFP) {
+  //     // Implement your delete logic here
+  //     // After deleting, you can redirect to the list page or perform any other action
+  //     // For now, we'll just hide the delete confirmation popup
+  //     const updatedRFPData = rfpData.filter((rfp) => rfp.id !== selectedRFP.id);
+  //     console.log('Deleted RFP with ID:', selectedRFP.id);
+  //     // Update the rfpData state or make an API request to update the data
+  //     setSelectedRFP(null);
+  //     setShowDeleteConfirmation(false);
+  //   }
+  // };
 
   return (
     <div className="translucent-form">
@@ -168,7 +138,7 @@ const RFPList = () => {
     </div>
   </div>
 ))}
-
+{/* 
 {showDeleteConfirmation && (
   <div className="modal fade show" style={{ display: 'block' }}>
     <div className="modal-dialog">
@@ -191,7 +161,7 @@ const RFPList = () => {
       </div>
     </div>
   </div>
-)}
+)} */}
 </div>
 );
 };

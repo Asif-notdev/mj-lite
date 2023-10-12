@@ -5,7 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styling/rfpstyle.css';
 import { BsFillPersonFill, BsBox, BsLayers, BsQuestion, BsTrash, BsCurrencyRupee } from 'react-icons/bs';
 import { Modal, Button } from 'react-bootstrap'; // Import Modal and Button from React Bootstrap
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, json } from 'react-router-dom';
 
 const RFPEdit = () => {
   const location = useLocation();
@@ -92,16 +92,14 @@ const RFPEdit = () => {
     // Update the selected documents state
     const selectedDocs = updatedDocuments.filter(doc => doc.selected).map(doc => doc.id);
     setSelectedDocuments(selectedDocs);
-    console.log(selectedDocs);
+    console.log("docList" + selectedDocuments);
   }
 
   const postData = async () => {
     try {
       const url = 'http://localhost:8080/fillrfp'; // Replace with your API endpoint
       const jsonData = {
-        "id": 5,
-        "estimatedPrice":
-         1000.00,
+        "estimatedPrice": 1000.00,
         "isSplitable": rfpDivision,
         "isPublish": true,
         "isDraft": false,
@@ -110,10 +108,9 @@ const RFPEdit = () => {
         "bidOpeningDate": bidOpenDate,
         "bidSubmissionDate": bidSubmissionDate,
         "buyer": 1,
-        "li": [{
-          "VID": "1",
-          "VendorName": "Address1"
-        }],
+        "doc":[...selectedDocuments]
+        // "li":selectedVendors
+      
       };
 
       const response = await fetch(url, {
@@ -145,6 +142,7 @@ const RFPEdit = () => {
 
   const handleFinalSubmitConfirm = () => {
     // Additional logic for final submission if needed
+    postData();
     navigate('/RFPList'); // Redirect to RFPList page
     setShowFinalSubmitModal(false);
   };

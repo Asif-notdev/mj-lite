@@ -15,21 +15,10 @@ function formatOrderTime(subTime) {
 const BidView = () => {
   const [userName, setUserName] = useState('');
   const userNameApiEndpoint = 'http://localhost:3050/userName';
-  const itemsPerPage = 4; // Number of items per page
-  const [currentPage, setCurrentPage] = useState(1);
+//   const itemsPerPage = 4; // Number of items per page
+//   const [currentPage, setCurrentPage] = useState(1);
     const [items, setItems] = useState([
         { id: 1, rfpName: 'Procurement of Laptops', tenderId: 'SAIL1013'},
-        { id: 2, rfpName: 'Procurement of Steel Bars', tenderId: 'TATA0203'},
-        { id: 3, rfpName: 'Procurement of Lights for Meeting Room', tenderId: 'COAL0192' },
-        { id: 4, rfpName: 'Procurement of Sensors', tenderId: 'SAIL1013' },
-        { id: 5, rfpName: 'Procurement of Laptops', tenderId: 'TATA0203' },
-        { id: 6, rfpName: 'Procurement of Steel Bars', tenderId: 'COAL0192' },
-        { id: 7, rfpName: 'Procurement of Sensors', tenderId: 'SAIL1013' },
-        { id: 8, rfpName: 'Procurement of Lights for Meeting Room', tenderId: 'TATA0203' },
-        { id: 9, rfpName: 'Procurement of Laptops', tenderId: 'COAL0192' },
-        { id: 10, rfpName: 'Procurement of Steel Bars', tenderId: 'SAIL1013' },
-        { id: 11, rfpName: 'Procurement of Lights for Meeting Room', tenderId: 'TATA0203' },
-        { id: 12, rfpName: 'Procurement of Sensors', tenderId: 'COAL0192' },
       ]);
     const [vendor, setVendor] = useState([
         { vid: 1, vendorName: 'Nirala Iron & Steel Co.', subDate: '2023/07/12', subTime: '2023-07-12T15:45:00Z'},
@@ -38,15 +27,15 @@ const BidView = () => {
         { vid: 3, vendorName: 'Nirala Constructions', subDate: '2023/07/11', subTime: '2023-07-12T12:13:00Z'}
       ]);
 
-      // Calculate the index range for the current page
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const currentItems = items.slice(startIndex, endIndex);
+//       // Calculate the index range for the current page
+//   const startIndex = (currentPage - 1) * itemsPerPage;
+//   const endIndex = startIndex + itemsPerPage;
+//   const currentItems = items.slice(startIndex, endIndex);
 
-  // Handle page change
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-  };
+//   // Handle page change
+//   const handlePageChange = (page) => {
+//     setCurrentPage(page);
+//   };
 
   useEffect(() => {
     fetch(userNameApiEndpoint)
@@ -75,55 +64,37 @@ const BidView = () => {
             <span>Welcome, User</span>
           )}
         </div>
-        <h4>List of your published Tenders:</h4>
+        
       <div>
-      {currentItems.map((item) => (
-        <div key={item.id} className="accordion" id={`itemAccordion${item.id}`}>
-                <div className="accordion-item">
-                            <h6 className="accordion-header" id={`itemHeading${item.id}`}>
-                                <button className="accordion-button" 
-                                type="button" 
-                                data-bs-toggle="collapse" 
-                                data-bs-target={`#itemCollapse${item.id}`}>
-                                    <BsFillFileEarmarkTextFill className="icon" />
-                                    <h6 className='mx-3'>{item.rfpName}</h6>
-                                    <h6 className='mx-1'>(Tender Id: {item.tenderId})
-                                    </h6>
-                                </button>
-                            </h6>
+      {items.map((item) => (
+        <div>
+            <div className="create-rpf">
+                <BsFillFileEarmarkTextFill className="icon" />
+                <h6 className='mx-1'>{item.rfpName}</h6>
+                <h6 className='mx-1'>(Tender Id: {item.tenderId})</h6>
+            </div>
+                <table className='mt-1'>
+                    <th>Vendor</th>
+                    <th>Submission Date; Time</th>
+                    <th>View</th>
+                    {vendor.map((vdr) => (
+                    <tr>
+                        <td>
+                        <p>{vdr.vendorName} </p>
+                        </td>
 
-                            <div id={`itemCollapse${item.id}`} 
-                            className="accordion-collapse collapse" 
-                            aria-labelledby={`itemHeading${item.id}`} 
-                            data-bs-parent={`#itemAccordion${item.id}`}>
-                            <div className='accordion-body'>
-                                <table id='acc-table'>
-                                    <th>Vendor</th>
-                                    <th>Submission Date; Time</th>
-                                    <th>View</th>
-                                    {vendor.map((vdr) => (
-                                    <tr>
-                                        <td>
-                                        <p>{vdr.vendorName} </p>
-                                        </td>
-
-                                        <td>
-                                            <p>{formatDateToDdMmmYyyy(vdr.subDate)}; {formatOrderTime(vdr.subTime)}</p>
-                                        </td>
-                                        <td className='button-row'>
-                                            <button className='yes-button tender-view-button'><BsFillFileEarmarkTextFill className="icon" /></button>
-                                        </td>
-                                    </tr>
-                                    ))}
-                                </table>
-                                
-                            </div>
-                            </div>
-                    
-                </div>
+                        <td>
+                            <p>{formatDateToDdMmmYyyy(vdr.subDate)}; {formatOrderTime(vdr.subTime)}</p>
+                        </td>
+                        <td className='button-row'>
+                            <button className='yes-button tender-view-button'><BsFillFileEarmarkTextFill className="icon" /></button>
+                        </td>
+                    </tr>
+                    ))}
+                </table>
         </div>
     ))}
-    <nav aria-label="Page navigation example">
+    {/* <nav aria-label="Page navigation example">
         <ul className="pagination mt-4 d-flex justify-content-center">
           {Array.from({ length: Math.ceil(items.length / itemsPerPage) }).map((_, index) => (
             <li key={index} className={`page-item ${currentPage === index + 1 ? 'active' : ''}`}>
@@ -131,7 +102,7 @@ const BidView = () => {
             </li>
           ))}
         </ul>
-      </nav>
+      </nav> */}
       </div>
     </div>
   );

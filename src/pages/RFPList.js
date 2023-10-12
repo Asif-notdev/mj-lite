@@ -152,7 +152,7 @@ const RFPList = () => {
           <p>Creation Date: {rfp.rfpCreationDate}</p>
           <p>Description: {rfp.remarks}</p>
           <button className="btn btn-primary me-2">
-            <Link to={`/rfpdetailview/${rfp.id}`} style={{ color: 'black', textDecoration: 'none' }}>
+            <Link to={`/rfpdetailview/:${rfp.id}`} style={{ color: 'black', textDecoration: 'none' }}>
               View
             </Link>
           </button>

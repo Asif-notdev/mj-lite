@@ -5,36 +5,37 @@ import { Link } from 'react-router-dom';
 import '../styling/rfpstyle.css';
 
 const RFPList = () => {
-  const rfpData = [
-    {
-      id: 1,
-      name: 'RFP 1',
-      price: 1000,
-      creationDate: '2023-10-01',
-      description: 'ABC', // Add the description field
-    },
-    {
-      id: 2,
-      name: 'RFP 2',
-      price: 1500,
-      creationDate: '2023-10-02',
-      description: 'XYZ', // Add the description field
-    },
-    {
-      id: 3,
-      name: 'RFP 3',
-      price: 800,
-      creationDate: '2023-10-03',
-      description: 'PQR', // Add the description field
-    },
-    {
-      id: 4,
-      name: 'RFP 4',
-      price: 1200,
-      creationDate: '2023-10-04',
-      description: 'LMN', // Add the description field
-    },
-  ];
+  const [rfp,setRfp] = useState([]);
+  // const rfpData = [
+  //   {
+  //     id: 1,
+  //     name: 'RFP 1',
+  //     price: 1000,
+  //     creationDate: '2023-10-01',
+  //     description: 'ABC', // Add the description field
+  //   },
+  //   {
+  //     id: 2,
+  //     name: 'RFP 2',
+  //     price: 1500,
+  //     creationDate: '2023-10-02',
+  //     description: 'XYZ', // Add the description field
+  //   },
+  //   {
+  //     id: 3,
+  //     name: 'RFP 3',
+  //     price: 800,
+  //     creationDate: '2023-10-03',
+  //     description: 'PQR', // Add the description field
+  //   },
+  //   {
+  //     id: 4,
+  //     name: 'RFP 4',
+  //     price: 1200,
+  //     creationDate: '2023-10-04',
+  //     description: 'LMN', // Add the description field
+  //   },
+  // ];
 
   // const rfpData = [
   //   {
@@ -80,7 +81,7 @@ const RFPList = () => {
       .then(response => response.json())
       .then(data => {
         console.log('Fetched dummy data:', data);
-        setRfpData(data);
+        setRfp(data);
       })
       .catch(error => console.error('Error fetching dummy data:', error));
   }, []);
@@ -106,7 +107,7 @@ const RFPList = () => {
       // Implement your delete logic here
       // After deleting, you can redirect to the list page or perform any other action
       // For now, we'll just hide the delete confirmation popup
-      const updatedRFPData = rfpData.filter((rfp) => rfp.id !== selectedRFP.id);
+      const updatedRFPData = rfp.filter((rfp) => rfp.id !== selectedRFP.id);
       console.log('Deleted RFP with ID:', selectedRFP.id);
       // Update the rfpData state or make an API request to update the data
       setSelectedRFP(null);
@@ -126,7 +127,7 @@ const RFPList = () => {
       </div>
 
 
-{rfpData.map((rfp) => (
+{rfp.map((rfp) => (
   <div key={rfp.id} className="accordion" id={`rfpAccordion${rfp.id}`}>
     <div className="accordion-item">
       <h2 className="accordion-header" id={`rfpHeading${rfp.id}`}>
@@ -136,7 +137,7 @@ const RFPList = () => {
           data-bs-toggle="collapse"
           data-bs-target={`#rfpCollapse${rfp.id}`}
         >
-          {rfp.name} {/* Display the RFP name */}
+          {rfp.id} {/* Display the RFP name */}
         </button>
       </h2>
       <div
@@ -147,9 +148,9 @@ const RFPList = () => {
       >
         <div className="accordion-body">
           <p>RFP ID: {rfp.id}</p>
-          <p>Price: ${rfp.price}</p>
-          <p>Creation Date: {rfp.creationDate}</p>
-          <p>Description: {rfp.description}</p>
+          <p>Price: ${rfp.estimatedPrice}</p>
+          <p>Creation Date: {rfp.rfpCreationDate}</p>
+          <p>Description: {rfp.remarks}</p>
           <button className="btn btn-primary me-2">
             <Link to={`/rfpdetailview/${rfp.id}`} style={{ color: 'black', textDecoration: 'none' }}>
               View

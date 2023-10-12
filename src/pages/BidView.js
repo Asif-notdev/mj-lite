@@ -110,7 +110,7 @@ const BidView = () => {
                                         <td>
                                             <p>{formatDateToDdMmmYyyy(vdr.subDate)}; {formatOrderTime(vdr.subTime)}</p>
                                         </td>
-                                        <td className='button-row-bid'>
+                                        <td className='button-row'>
                                             <button className='yes-button tender-view-button'><BsFillFileEarmarkTextFill className="icon" /></button>
                                         </td>
                                     </tr>

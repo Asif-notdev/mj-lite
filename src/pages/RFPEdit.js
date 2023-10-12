@@ -158,6 +158,17 @@ const RFPEdit = () => {
     navigate('/RFPList'); // Redirect to RFPList page
     setShowSaveAsDraftModal(false);
   };
+  const areAllFieldsFilled = () => {
+    return (
+      indents.every(item => item.quantity && item.price) &&
+      selectedVendors.length > 0 &&
+      selectedDocuments.length > 0 &&
+      remarks.trim() !== '' &&
+      bidSubmissionDate !== '' &&
+      bidOpenDate !== ''
+    );
+  };
+
 
   return (
     <div className="main-container">
@@ -221,7 +232,7 @@ const RFPEdit = () => {
                   </td>
                   {editable && (
                     <td>
-                     
+
                       <button
                         className="btn btn-danger btn-sm"
                         onClick={() => handleDeleteIndent(index)}
@@ -362,6 +373,7 @@ const RFPEdit = () => {
           <button
             className="btn btn-success mx-5"
             onClick={handleFinalSubmit}
+            disabled={!areAllFieldsFilled()}
 
           >
             Final Submit

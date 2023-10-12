@@ -7,8 +7,10 @@ import { Modal, Button } from 'react-bootstrap'; // Import Modal and Button from
 import { useNavigate, useLocation } from 'react-router-dom';
 const RFPEdit = () => {
   const location = useLocation();
-  const userName = location.state?.userName || ''; // Use optional chaining to avoid errors
+  const userName = location.state?.userName || '';
+
   const [showSaveAsDraftModal, setShowSaveAsDraftModal] = useState(false);
+  const [showFillDataModal, setShowFillDataModal] = useState(false);  
   const [showFinalSubmitModal, setShowFinalSubmitModal] = useState(false);
   useEffect(() => {
     console.log('userName in RFPEdit:', userName);
@@ -19,19 +21,15 @@ const RFPEdit = () => {
   const [allVendors, setAllVendors] = useState(['Vendor 1', 'Vendor 2', 'Vendor 3']);
   const [selectedVendors, setSelectedVendors] = useState([]);
   const [removedVendors, setRemovedVendors] = useState([]);
-  const [documents, setDocuments] = useState([
-    { id: 1, name: 'Aadhar Card', selected: false },
-    { id: 2, name: 'Pan Card', selected: false },
-    { id: 3, name: 'Turn Over of the company', selected: false },
-    { id: 4, name: 'GST Invoice', selected: false },
-  ]);
+  const [selectedDocuments, setSelectedDocuments] = useState([]);
+
+  const [documents, setDocuments] = useState([]);
+
   const [rfpDivision, setrfpDivision] = useState(true);
   const [remarks, setRemarks] = useState('');
   const [bidSubmissionDate, setBidSubmissionDate] = useState('');
   const [bidOpenDate, setBidOpenDate] = useState('');
   useEffect(() => {
-    // Fetch vendors from API and setAllVendors
-    // Replace 'http://localhost:3001/vendors' with the actual API endpoint
     fetch('http://localhost:8080/vendorlist')
       .then(response => response.json())
       .then(data => {
@@ -40,6 +38,20 @@ const RFPEdit = () => {
       })
       .catch(error => console.error('Error fetching vendors:', error));
   }, []);
+
+  useEffect(() => {
+    fetch('http://localhost:8080/doclist')
+      .then(response => response.json())
+      .then(data => {
+        console.log('Fetched vendors:', data);
+        setDocuments(data);
+      })
+      .catch(error => console.error('Error fetching vendors:', error));
+  }, []);
+
+
+  
+
   const handleVendorSelect = (vendor) => {
     setSelectedVendors([...selectedVendors, vendor]);
     const updatedVendors = allVendors.filter((v) => v !== vendor);
@@ -64,12 +76,16 @@ const RFPEdit = () => {
       selected: doc.id === documentId ? !doc.selected : doc.selected,
     }));
     setDocuments(updatedDocuments);
-  };
+
+    const selectedDocs = updatedDocuments.filter(doc => doc.selected).map(doc => doc.id);
+    setSelectedDocuments(selectedDocs);
+    console.log("docList" + selectedDocuments);
+  }
+
   const postData = async () => {
     try {
-      const url = 'http://localhost:8080/fillrfp'; // Replace with your API endpoint
+      const url = 'http://localhost:8080/fillrfp';
       const jsonData = {
-        "id": 5,
         "estimatedPrice": 1000.00,
         "isSplitable": rfpDivision,
         "isPublish": true,
@@ -79,23 +95,20 @@ const RFPEdit = () => {
         "bidOpeningDate": bidOpenDate,
         "bidSubmissionDate": bidSubmissionDate,
         "buyer": 1,
-        "li": [{
-          "VID": "1",
-          "VendorName": "Address1"
-        }],
+        "doc":[...selectedDocuments],
+        "li":[...allVendors]
+      
       };
       const response = await fetch(url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          // Add any other headers you need
         },
         body: JSON.stringify(jsonData),
       });
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-      // Process the response data if needed
       const responseData = await response.json();
       console.log(responseData);
     } catch (error) {
@@ -104,21 +117,43 @@ const RFPEdit = () => {
   };
   const filteredVendors = allVendors.filter((vendor) => !selectedVendors.includes(vendor) && !removedVendors.includes(vendor));
   const handleFinalSubmit = () => {
+    if (!areAllFieldsFilled()) {
+      setShowFillDataModal(true);
+      return;
+    }
+
     setShowFinalSubmitModal(true);
   };
-  const handleFinalSubmitConfirm = () => {
-    // Additional logic for final submission if needed
-    navigate('/RFPList'); // Redirect to RFPList page
+
+  const handleFinalSubmitConfirm = async () => {
+    if (!areAllFieldsFilled()) {
+      setShowFillDataModal(true);
+      return;
+    }
+
+    await postData();
+    navigate('/RFPList');
     setShowFinalSubmitModal(false);
   };
   const handleSaveAsDraft = () => {
     setShowSaveAsDraftModal(true);
   };
   const handleSaveAsDraftConfirm = () => {
-    // Additional logic for saving as a draft if needed
-    navigate('/Draftlist'); // Redirect to DraftList page
+    navigate('/RFPList');
     setShowSaveAsDraftModal(false);
   };
+
+  const areAllFieldsFilled = () => {
+    return (
+      indents.every(item => item.quantity && item.price) &&
+      selectedVendors.length > 0 &&
+      selectedDocuments.length > 0 &&
+      remarks.trim() !== '' &&
+      bidSubmissionDate !== '' &&
+      bidOpenDate !== ''
+    );
+  };
+
   return (
     <div className="main-container">
       <div className="translucent-form">
@@ -226,8 +261,9 @@ const RFPEdit = () => {
           </div>
         )}
         <div className="document-list mt-4">
-          <div className="form-title">Documents</div>
-          <div className="row">
+          <div className="form-title " >Documents</div>
+
+          <div className="row ">
             {documents.map((doc) => (
               <div className="col-md-3" key={doc.id}>
                 <label className="document-label">
@@ -293,31 +329,33 @@ const RFPEdit = () => {
             />
           </div>
         </div>
-        <div className="create-rpf mt-5">
-          <button
+
+         
+        <div className="create-rpf mt-5 d-flex justify-content-end">
+       
+          {/* <button
             className="btn btn-primary"
             onClick={handleEditClick}
             disabled={editable}
           >
             Edit
+          </button> */}
+          <button
+            className="btn btn-secondary "
+            onClick={handleSaveAsDraft}
+            
+          >
+            Save as Draft
           </button>
           <button
-              className="btn btn-secondary "
-              onClick={handleSaveAsDraft}
-              
-            >
-              Save as Draft
-            </button>
-            <button
-              className="btn btn-success mx-5"
-              onClick={handleFinalSubmit}
-             
-            >
-              Final Submit
-            </button>
-           
-          
-          {/* Save as Draft Modal */}
+            className="btn btn-success mx-5"
+            onClick={handleFinalSubmit}
+            
+          >
+            Final Submit
+          </button>
+       
+
           <Modal show={showSaveAsDraftModal} onHide={() => setShowSaveAsDraftModal(false)}>
             <Modal.Header closeButton>
               <Modal.Title>Save as Draft</Modal.Title>
@@ -329,24 +367,39 @@ const RFPEdit = () => {
               </Button>
             </Modal.Footer>
           </Modal>
-          {/* Final Submit Modal */}
-          <Modal show={showFinalSubmitModal} onHide={() => setShowFinalSubmitModal(false)}>
-            <Modal.Header closeButton>
-              <Modal.Title>Final Submit</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>Are you sure you want to submit?</Modal.Body>
-            <Modal.Footer>
-              <Button variant="secondary" onClick={() => setShowFinalSubmitModal(false)}>
-                Cancel
-              </Button>
-              <Button variant="primary" onClick={handleFinalSubmitConfirm}>
-                OK
-              </Button>
-            </Modal.Footer>
-          </Modal>
-        </div>
+
+          <Modal show={showFillDataModal} onHide={() => setShowFillDataModal(false)}>
+          <Modal.Header closeButton>
+            <Modal.Title>Please Fill in All Data</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>Please fill in all required fields before submitting.</Modal.Body>
+          <Modal.Footer>
+            <Button variant="primary" onClick={() => setShowFillDataModal(false)}>
+              OK
+            </Button>
+          </Modal.Footer>
+        </Modal>
+        
+
+        <Modal show={showFinalSubmitModal} onHide={() => setShowFinalSubmitModal(false)}>
+          <Modal.Header closeButton>
+            <Modal.Title>Final Submit</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>Are you sure you want to submit?</Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={() => setShowFinalSubmitModal(false)}>
+              Cancel
+            </Button>
+            <Button variant="primary" onClick={handleFinalSubmitConfirm}>
+              OK
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </div>
+      
+    </div>
     </div>
   );
 };
 export default RFPEdit;
+

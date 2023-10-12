@@ -13,6 +13,7 @@ import BidSubmit from './pages/BidSubmission';
 import { Container } from 'react-bootstrap';
 import ItemList from './pages/VendorHome';
 import RFPDraft from './pages/RfpDraft';
+import BidView from './pages/BidView';
 function App() {
   return (
     
@@ -26,6 +27,7 @@ function App() {
         <Route path="/rfpdetailview/:id" element={<RFPDetailView />} />
         <Route path="/bidsubmission" element={<BidSubmit />} />
         <Route path="/vendorhome" element={<ItemList />} />
+        <Route path="/viewbids" element={<BidView />} />
       </Routes>
       <Footer/>
     </Router>

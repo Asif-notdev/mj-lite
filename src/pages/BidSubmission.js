@@ -1,30 +1,54 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import '../styling/rfpstyle.css';
-
-import { Link, useHistory } from 'react-router-dom';
 import FileInput from './Document';
-import FileUploadComponent from '../MyTesting/DynemicFileUploading';
-import {useLocation } from 'react-router-dom';
+import { Modal, Button } from 'react-bootstrap'; // Import Modal and Button from React Bootstrap
+import { useNavigate} from 'react-router-dom';
 
 const BidSubmit = () => {
 
+  const navigate = useNavigate();
 
   const [editable, setEditable] = useState(false);
-  const [indents, setIndents] = useState([
-    { indentId: 1, name: 'Item A', unit: 'pcs', quantity: 5 },
-    { indentId: 2, name: 'Item B', unit: 'kg', quantity: 3 },
-  ]);
+  const [dummyData, setDummyData] = useState([]);
+  const [userName, setUserName] = useState('');
+  const dummyDataApiEndpoint = 'http://localhost:3040/dummyData';
+  const userNameApiEndpoint = 'http://localhost:3050/userName'; // Replace with your actual API endpoint
+
+  useEffect(() => {
+    // Fetch dummy data
+    fetch(dummyDataApiEndpoint)
+      .then(response => response.json())
+      .then(data => {
+        console.log('Fetched dummy data:', data);
+        setDummyData(data);
+      })
+      .catch(error => console.error('Error fetching dummy data:', error));
+
+    // Fetch user name
+    fetch(userNameApiEndpoint)
+      .then(response => response.json())
+      .then(data => {
+        console.log('Fetched user name:', data);
+        // Check if the necessary properties exist before accessing them
+        const userNameValue = data && data[0] && data[0].name;
+
+        console.log('userNameValue:', userNameValue); // Log the userNameValue
+        setUserName(userNameValue || '');
+      })
+      .catch(error => {
+        console.error('Error fetching user name:', error);
+        // Log the specific error message
+        console.error('Error message:', error.message);
+      });
+  }, []);
+
+  // const[]
 
   const [vendors, setVendors] = useState(['Vendor 1', 'Vendor 2', 'Vendor 3']);
   const [selectedVendors, setSelectedVendors] = useState([]);
-
-  const [documents, setDocuments] = useState([
-    { id: 1, name: 'Adhar Card', selected: false },
-    { id: 2, name: 'PAN Card', selected: false },
-    { id: 3, name: 'GST Invoice', selected: false },
-    { id: 4, name: 'Company Id', selected: false },
-    { id: 5, name: 'TurnOver Proff', selected: false },
-  ]);
+  
+  const [showSaveAsDraftModal, setShowSaveAsDraftModal] = useState(false);
+  const [showFinalSubmitModal, setShowFinalSubmitModal] = useState(false);
 
  
   const [remarks, setRemarks] = useState('');
@@ -35,39 +59,27 @@ const BidSubmit = () => {
     setEditable(true);
   };
 
-  const handleDeleteIndent = (index) => {
-    const updatedIndents = [...indents];
-    updatedIndents.splice(index, 1);
-    setIndents(updatedIndents);
+  const handleFinalSubmit = () => {
+    setShowFinalSubmitModal(true);
   };
 
-  // const handleFinalSubmit = () => {
-  //   // Additional logic for final submission if needed
-  //   window.alert('RFP Finally Submitted');
-  //   navigate('/RFPList'); // Redirect to RFPList page
-  // };
+  const handleFinalSubmitConfirm = () => {
+    // Additional logic for final submission if needed
+    navigate('/RFPList'); // Redirect to RFPList page
+    setShowFinalSubmitModal(false);
+  };
 
-
-  // const handleSaveAsDraft = () => {
-
-  //   window.alert('RFP Saved as Draft');
-  //   navigate('/RFPList');
-  // };
-
-
-
+  const handleSaveAsDraft = () => {
+    setShowSaveAsDraftModal(true);
+  };
+  const handleSaveAsDraftConfirm = () => {
+    // Additional logic for saving as a draft if needed
+    navigate('/RFPList'); // Redirect to RFPList page
+    setShowSaveAsDraftModal(false);
+  };
   const handleAddVendor = () => {
     setVendors([...vendors, `Vendor ${vendors.length + 1}`]);
   };
-
-  const handleDocumentChange = (documentId) => {
-    const updatedDocuments = documents.map(doc => ({
-      ...doc,
-      selected: doc.id === documentId ? !doc.selected : doc.selected,
-    }));
-    setDocuments(updatedDocuments);
-  };
-
   return (
     <div className="main-container">
       <div className="translucent-form">
@@ -112,7 +124,7 @@ const BidSubmit = () => {
               </tr>
             </thead>
             <tbody>
-              {indents.map((item, index) => (
+              {dummyData.map((item, index) => (
                 <tr key={index}>
                   <td>{item.indentId}</td>
                   <td>{item.name}</td>
@@ -126,7 +138,7 @@ const BidSubmit = () => {
           </table>
         </div>
 
-        {editable && (
+        {/* {editable && (
           <div className="vendor-section mt-4">
             <label className="me-2">Select Vendor:</label>
             <select
@@ -145,7 +157,7 @@ const BidSubmit = () => {
               Add Vendor
             </button>
           </div>
-        )}
+        )} */}
 
         <div className='form-title my-2'> <h3 className='font-weight-bold'>Attach Documents</h3></div>
 
@@ -154,7 +166,7 @@ const BidSubmit = () => {
 
 
         <div className="remarks mt-4">
-          <div className="form-title">Remarks</div>
+          <div className="form-title">Comments</div>
           <textarea
             className="form-control"
             rows="4"
@@ -163,52 +175,56 @@ const BidSubmit = () => {
           />
         </div>
 
-        <div className="calendar mt-4 d-flex">
-          <div className="form-title mx-2">Bid Submission Date</div>
-          <input
-            type="date"
-            className="form-control"
-            value={bidSubmissionDate}
-            onChange={(e) => setBidSubmissionDate(e.target.value)}
-          />
-
-          <div className="form-title mx-2">Bid Open Date</div>
-          <input
-            type="date"
-            className="form-control"
-            value={bidOpenDate}
-            onChange={(e) => setBidOpenDate(e.target.value)}
-          />
-        </div>
-
-        <div className="create-rpf mt-4">
+        <div className="create-rpf mt-5">
+          
           <button
-            className="btn btn-primary"
-            // onClick={handleEditClick}
-            disabled={editable}
-          >
-            Edit
-          </button>
+              class
+              
+              Name="btn btn-secondary "
+              onClick={handleSaveAsDraft}
+              
+            >
+              Save as Draft
+            </button>
+            <button
+              className="btn btn-success mx-5"
+              onClick={handleFinalSubmit}
+             
+            >
+              Final Submit
+            </button>
+           
+          
+
+          {/* Save as Draft Modal */}
+          <Modal show={showSaveAsDraftModal} onHide={() => setShowSaveAsDraftModal(false)}>
+            <Modal.Header closeButton>
+              <Modal.Title>Save as Draft</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>Your draft is saved.</Modal.Body>
+            <Modal.Footer>
+              <Button variant="primary" onClick={handleSaveAsDraftConfirm}>
+                OK
+              </Button>
+            </Modal.Footer>
+          </Modal>
+
+          {/* Final Submit Modal */}
+          <Modal show={showFinalSubmitModal} onHide={() => setShowFinalSubmitModal(false)}>
+            <Modal.Header closeButton>
+              <Modal.Title>Final Submit</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>Are you sure you want to submit?</Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={() => setShowFinalSubmitModal(false)}>
+                Cancel
+              </Button>
+              <Button variant="primary" onClick={handleFinalSubmitConfirm}>
+                OK
+              </Button>
+            </Modal.Footer>
+          </Modal>
         </div>
-
-        <div className="create-rpf mt-4">
-          <button
-            className="btn btn-success"
-            // onClick={handleFinalSubmit}
-            disabled={!editable}
-          >
-            Final Submit
-          </button>
-          <button
-            className="btn btn-secondary ml-2"
-            // onClick={handleSaveAsDraft}
-            disabled={!editable}
-          >
-            Save as Draft
-          </button>
-        </div>
-
-
       </div>
     </div>
   );

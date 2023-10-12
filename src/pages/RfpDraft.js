@@ -1,55 +1,49 @@
-// RFPEdit.js
+// RFPDraft.js
 
 import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styling/rfpstyle.css';
 import { BsFillPersonFill, BsBox, BsLayers, BsQuestion, BsTrash, BsCurrencyRupee } from 'react-icons/bs';
-import { Modal, Button } from 'react-bootstrap'; // Import Modal and Button from React Bootstrap
-import { useNavigate, useLocation, json } from 'react-router-dom';
+import { Modal, Button } from 'react-bootstrap';
+import { useNavigate, useLocation } from 'react-router-dom';
 
-const RFPEdit = () => {
+const RFPDraft = () => {
   const location = useLocation();
-  const userName = location.state?.userName || ''; // Use optional chaining to avoid errors
+  
+  const preFilledData = location.state || {};
+
+  const {
+    indents: initialIndents,
+    selectedVendors: initialSelectedVendors,
+    removedVendors: initialRemovedVendors,
+    selectedDocuments: initialSelectedDocuments,
+    rfpDivision: initialRfpDivision,
+    remarks: initialRemarks,
+    bidSubmissionDate: initialBidSubmissionDate,
+    bidOpenDate: initialBidOpenDate,
+  } = preFilledData;
 
   const [showSaveAsDraftModal, setShowSaveAsDraftModal] = useState(false);
   const [showFinalSubmitModal, setShowFinalSubmitModal] = useState(false);
 
-  useEffect(() => {
-    console.log('userName in RFPEdit:', userName);
-  }, [userName]);
-
   const navigate = useNavigate();
   const [editable, setEditable] = useState(true);
-  const [indents, setIndents] = useState(location.state?.dummyData || []);
+  const [indents, setIndents] = useState(initialIndents || []);
 
   const [allVendors, setAllVendors] = useState(['Vendor 1', 'Vendor 2', 'Vendor 3']);
-  const [selectedVendors, setSelectedVendors] = useState([]);
-  const [removedVendors, setRemovedVendors] = useState([]);
-  const [selectedDocuments, setSelectedDocuments] = useState([]);
-
+  const [selectedVendors, setSelectedVendors] = useState(initialSelectedVendors || []);
+  const [removedVendors, setRemovedVendors] = useState(initialRemovedVendors || []);
+  const [selectedDocuments, setSelectedDocuments] = useState(initialSelectedDocuments || []);
 
   const [documents, setDocuments] = useState([]);
 
-  const [rfpDivision, setrfpDivision] = useState(true);
-  const [remarks, setRemarks] = useState('');
-  const [bidSubmissionDate, setBidSubmissionDate] = useState('');
-  const [bidOpenDate, setBidOpenDate] = useState('');
+  const [userName, setUserName] = useState('');
+  const [rfpDivision, setrfpDivision] = useState(initialRfpDivision || true);
+  const [remarks, setRemarks] = useState(initialRemarks || '');
+  const [bidSubmissionDate, setBidSubmissionDate] = useState(initialBidSubmissionDate || '');
+  const [bidOpenDate, setBidOpenDate] = useState(initialBidOpenDate || '');
 
   useEffect(() => {
-    // Fetch vendors from API and setAllVendors
-    // Replace 'http://localhost:3001/vendors' with the actual API endpoint
-    fetch('http://localhost:8080/vendorlist')
-      .then(response => response.json())
-      .then(data => {
-        console.log('Fetched vendors:', data);
-        setAllVendors(data);
-      })
-      .catch(error => console.error('Error fetching vendors:', error));
-  }, []);
-
-  useEffect(() => {
-    // Fetch vendors from API and setAllVendors
-    // Replace 'http://localhost:3001/vendors' with the actual API endpoint
     fetch('http://localhost:8080/doclist')
       .then(response => response.json())
       .then(data => {
@@ -58,7 +52,6 @@ const RFPEdit = () => {
       })
       .catch(error => console.error('Error fetching vendors:', error));
   }, []);
-
 
   const handleVendorSelect = (vendor) => {
     setSelectedVendors([...selectedVendors, vendor]);
@@ -70,10 +63,6 @@ const RFPEdit = () => {
     const updatedVendors = selectedVendors.filter((v) => v !== vendor);
     setSelectedVendors(updatedVendors);
     setRemovedVendors([...removedVendors, vendor]);
-  };
-
-  const handleEditClick = () => {
-    setEditable(true);
   };
 
   const handleDeleteIndent = (index) => {
@@ -92,14 +81,16 @@ const RFPEdit = () => {
     // Update the selected documents state
     const selectedDocs = updatedDocuments.filter(doc => doc.selected).map(doc => doc.id);
     setSelectedDocuments(selectedDocs);
-    console.log("docList" + selectedDocuments);
+    console.log(selectedDocs);
   }
 
   const postData = async () => {
     try {
       const url = 'http://localhost:8080/fillrfp'; // Replace with your API endpoint
       const jsonData = {
-        "estimatedPrice": 1000.00,
+        "id": 5,
+        "estimatedPrice":
+          1000.00,
         "isSplitable": rfpDivision,
         "isPublish": true,
         "isDraft": false,
@@ -108,9 +99,10 @@ const RFPEdit = () => {
         "bidOpeningDate": bidOpenDate,
         "bidSubmissionDate": bidSubmissionDate,
         "buyer": 1,
-        "doc":[...selectedDocuments]
-        // "li":selectedVendors
-      
+        "li": [{
+          "VID": "1",
+          "VendorName": "Address1"
+        }],
       };
 
       const response = await fetch(url, {
@@ -142,7 +134,6 @@ const RFPEdit = () => {
 
   const handleFinalSubmitConfirm = () => {
     // Additional logic for final submission if needed
-    postData();
     navigate('/RFPList'); // Redirect to RFPList page
     setShowFinalSubmitModal(false);
   };
@@ -160,7 +151,7 @@ const RFPEdit = () => {
   return (
     <div className="main-container">
       <div className="translucent-form">
-        <div className="user-info">
+      <div className="user-info">
           {userName !== '' ? (
             <span>Welcome, {userName}</span>
           ) : (
@@ -401,4 +392,4 @@ const RFPEdit = () => {
   );
 };
 
-export default RFPEdit;
+export default RFPDraft;

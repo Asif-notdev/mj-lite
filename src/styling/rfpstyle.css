@@ -1,13 +1,15 @@
 body {
   
-  margin-bottom: 340px;
+  margin: 0;
   padding: 0;
   font-family: sans-serif;
   height: 100vh;
   background: url('../images/bgrfp.jpg') fixed no-repeat;
   background-size: cover;
 }
-
+.acc-table{
+  border: none;
+}
 
 
 .translucent-form {
@@ -16,6 +18,7 @@ body {
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   margin: 20px;
+ 
   
 }
 
@@ -81,8 +84,7 @@ th {
 }
 
 
-.yes-button,
-.no-button {
+.yes-button, .no-button {
   border-radius: 8px;
   /* Adjust the radius as needed */
 }
@@ -160,3 +162,19 @@ th {
   filter: brightness(90%);
   /* Optional: Adjust brightness on hover for visual feedback */
 }
+
+
+.tender-view-button{
+  margin-right: 15px;
+  padding: 7px 12px;
+  transition:box-shadow 0.4s;
+}
+
+.tender-view-button:hover{
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.4);
+}
+
+.button-row{
+  text-align: right;
+}
+

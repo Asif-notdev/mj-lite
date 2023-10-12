@@ -64,7 +64,7 @@ const Accordion = () => {
                             aria-labelledby={`itemHeading${item.id}`} 
                             data-bs-parent={`#itemAccordion${item.id}`}>
                             <div className='accordion-body'>
-                                <table className='acc-table'>
+                                <table id='acc-table'>
                                     <tr>
                                         <td>
                                         List of Products:

@@ -12,6 +12,7 @@ import BidSubmit from './pages/BidSubmission';
 
 import { Container } from 'react-bootstrap';
 import ItemList from './pages/VendorHome';
+import RFPDraft from './pages/RfpDraft';
 function App() {
   return (
     
@@ -21,6 +22,7 @@ function App() {
         <Route path="/" element={<RPFForm />} />
         <Route path="/rfpedit" element={<RFPEdit />} />
         <Route path="/rfplist" element={<RFPList />} />
+        <Route path="/rfpdraft" element={<RFPDraft />} />
         <Route path="/rfpdetailview/:id" element={<RFPDetailView />} />
         <Route path="/bidsubmission" element={<BidSubmit />} />
         <Route path="/vendorhome" element={<ItemList />} />

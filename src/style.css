@@ -5,6 +5,7 @@
 body {
     margin: 0;
     margin-top: 100px;
+    
 }
 
 .sizeTitle {
@@ -77,14 +78,7 @@ body {
     
 }
 
-.container{
-    margin: 0;
-    padding: 0;
-    font-family: sans-serif;
-    height: 100vh;
-    background: url('./images/bgrfp.jpg') fixed no-repeat;
-    background-size: cover;
-}
+
 
 
   

@@ -16,7 +16,7 @@ const RFPEdit = () => {
     console.log('userName in RFPEdit:', userName);
   }, [userName]);
   const navigate = useNavigate();
-  const [editable, setEditable] = useState(false);
+  const [editable, setEditable] = useState(true);
   const [indents, setIndents] = useState(location.state?.dummyData || []);
   const [allVendors, setAllVendors] = useState(['Vendor 1', 'Vendor 2', 'Vendor 3']);
   const [selectedVendors, setSelectedVendors] = useState([]);

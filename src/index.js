@@ -5,20 +5,25 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+
 import BidSubmit from './pages/BidSubmission';
 import FileUploadComponent from './MyTesting/DynemicFileUploading';
 import MyDynemicFileAdding from './MyTesting/MyNew';
 
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-
+import $ from 'jquery';
+window.jQuery = $;
+window.$ = $;
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
 
-      <App/> 
+      <App/>
 
-      
+      {/* <BidSubmit/> */}
   
     
   </React.StrictMode>

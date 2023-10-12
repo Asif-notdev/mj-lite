@@ -1,10 +1,40 @@
+
+
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import '../styling/rfpstyle.css';
 
 const RFPList = () => {
-  // Define the JSON data here for RFPList
-  const [rfpData, setRfpData] = useState([]);
+  const rfpData = [
+    {
+      id: 1,
+      name: 'RFP 1',
+      price: 1000,
+      creationDate: '2023-10-01',
+      description: 'ABC', // Add the description field
+    },
+    {
+      id: 2,
+      name: 'RFP 2',
+      price: 1500,
+      creationDate: '2023-10-02',
+      description: 'XYZ', // Add the description field
+    },
+    {
+      id: 3,
+      name: 'RFP 3',
+      price: 800,
+      creationDate: '2023-10-03',
+      description: 'PQR', // Add the description field
+    },
+    {
+      id: 4,
+      name: 'RFP 4',
+      price: 1200,
+      creationDate: '2023-10-04',
+      description: 'LMN', // Add the description field
+    },
+  ];
 
   // const rfpData = [
   //   {
@@ -46,7 +76,7 @@ const RFPList = () => {
   // ];
 
   useEffect(() => {
-    fetch("http://localhost:8080/rfplist/1")
+    fetch("http://localhost:8080/rfplist/2")
       .then(response => response.json())
       .then(data => {
         console.log('Fetched dummy data:', data);
@@ -86,98 +116,85 @@ const RFPList = () => {
 
   return (
     <div className="translucent-form">
-
       <h1>List of RFP</h1>
-      {rfpData.map((rfp) => (
-        <div key={rfp.id} className="accordion" id={`rfpAccordion${rfp.id}`}>
-          <div className="accordion-item">
-            <h2 className="accordion-header" id={`rfpHeading${rfp.id}`}>
-              <button
-                className="accordion-button"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target={`#rfpCollapse${rfp.id}`}
-              >
-                {rfp.id}
-              </button>
-            </h2>
-            <div
-              id={`rfpCollapse${rfp.id}`}
-              className="accordion-collapse collapse"
-              aria-labelledby={`rfpHeading${rfp.id}`}
-              data-bs-parent={`#rfpAccordion${rfp.id}`}
-            >
-              <div className="accordion-body">
-                <p>RFP ID: {rfp.id}</p>
-                <p>Price: ${rfp.estimatedPrice}</p>
-                <p>RFP Creation Date: {rfp.rfpCreationDate}</p>
-                <p>Bid Submission Date: {rfp.bidSubmissionDate}</p>
-                <p>Bid Opening Date: {rfp.bidOpeningDate}</p>
-                <p>Bid description: {rfp.remarks}</p>
-                <button  className="btn btn-primary me-2">
-                <Link to={`/rfpdetailview/${rfp.id}`} style={{ color: 'black' ,textDecoration:'none' }}>
-                  View</Link>
 
-                </button>
-
-                <button className="btn btn-warning me-2">
-                  
-                <Link to={`/rfpedit`} style={{ color: 'black' ,textDecoration:'none' }} >
-                  Edit</Link>
-                  
-                  </button>
+      {/* Add a button at the top right corner */}
+      <div className="text-end mb-3">
+        <Link to="/draftlist">
+          <button className="btn btn-success">Draft List</button>
+        </Link>
+      </div>
 
 
-                <button
-                  className="btn btn-danger"
-                  onClick={() => handleDeleteConfirmation(rfp)}
-                >
-                  Delete
-                </button>
-              </div>
-            </div>
-          </div>
+{rfpData.map((rfp) => (
+  <div key={rfp.id} className="accordion" id={`rfpAccordion${rfp.id}`}>
+    <div className="accordion-item">
+      <h2 className="accordion-header" id={`rfpHeading${rfp.id}`}>
+        <button
+          className="accordion-button"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target={`#rfpCollapse${rfp.id}`}
+        >
+          {rfp.name} {/* Display the RFP name */}
+        </button>
+      </h2>
+      <div
+        id={`rfpCollapse${rfp.id}`}
+        className="accordion-collapse collapse"
+        aria-labelledby={`rfpHeading${rfp.id}`}
+        data-bs-parent={`#rfpAccordion${rfp.id}`}
+      >
+        <div className="accordion-body">
+          <p>RFP ID: {rfp.id}</p>
+          <p>Price: ${rfp.price}</p>
+          <p>Creation Date: {rfp.creationDate}</p>
+          <p>Description: {rfp.description}</p>
+          <button className="btn btn-primary me-2">
+            <Link to={`/rfpdetailview/${rfp.id}`} style={{ color: 'black', textDecoration: 'none' }}>
+              View
+            </Link>
+          </button>
+          {/* <button className="btn btn-warning me-2">
+            <Link to={`/rfpedit`} style={{ color: 'black', textDecoration: 'none' }}>
+              Edit
+            </Link>
+          </button>
+          <button className="btn btn-danger" onClick={() => handleDeleteConfirmation(rfp)}>
+            Delete
+          </button> */}
         </div>
-      ))}
-
-      {showDeleteConfirmation && (
-        <div className="modal fade show" style={{ display: 'block' }}>
-          <div className="modal-dialog">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">Confirm Deletion</h5>
-                <button
-                  type="button"
-                  className="btn-close"
-                  onClick={handleCancelDelete}
-                ></button>
-              </div>
-              <div className="modal-body">
-                Are you sure you want to delete the RFP with ID{' '}
-                {selectedRFP ? selectedRFP.id : ''}?
-              </div>
-              <div className="modal-footer">
-                <button
-                  type="button"
-                  className="btn btn-secondary"
-                  onClick={handleCancelDelete}
-                >
-                  Cancel
-                </button>
-                <button
-                  type="button"
-                  className="btn btn-danger"
-                  onClick={handleDelete}
-                >
-                  Delete
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      </div>
     </div>
-  );
+  </div>
+))}
+
+{showDeleteConfirmation && (
+  <div className="modal fade show" style={{ display: 'block' }}>
+    <div className="modal-dialog">
+      <div className="modal-content">
+        <div className="modal-header">
+          <h5 className="modal-title">Confirm Deletion</h5>
+          <button type="button" className="btn-close" onClick={handleCancelDelete}></button>
+        </div>
+        <div className="modal-body">
+          Are you sure you want to delete the RFP with ID {selectedRFP ? selectedRFP.id : ''}?
+        </div>
+        <div className="modal-footer">
+          <button type="button" className="btn btn-secondary" onClick={handleCancelDelete}>
+            Cancel
+          </button>
+          <button type="button" className="btn btn-danger" onClick={handleDelete}>
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
+</div>
+);
 };
 
 export default RFPList;
+

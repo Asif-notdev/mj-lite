@@ -23,7 +23,7 @@ const RFPDraft = () => {
     bidOpenDate: initialBidOpenDate,
   } = preFilledData;
 
-  const [showSaveAsDraftModal, setShowSaveAsDraftModal] = useState(false);
+ 
   const [showFinalSubmitModal, setShowFinalSubmitModal] = useState(false);
 
   const navigate = useNavigate();
@@ -138,14 +138,17 @@ const RFPDraft = () => {
     setShowFinalSubmitModal(false);
   };
 
-  const handleSaveAsDraft = () => {
-    setShowSaveAsDraftModal(true);
-  };
+ 
 
-  const handleSaveAsDraftConfirm = () => {
-    // Additional logic for saving as a draft if needed
-    navigate('/RFPList'); // Redirect to RFPList page
-    setShowSaveAsDraftModal(false);
+  const areAllFieldsFilled = () => {
+    return (
+      indents.every(item => item.quantity && item.price) &&
+      selectedVendors.length > 0 &&
+      selectedDocuments.length > 0 &&
+      remarks.trim() !== '' &&
+      bidSubmissionDate !== '' &&
+      bidOpenDate !== ''
+    );
   };
 
   return (
@@ -341,16 +344,17 @@ const RFPDraft = () => {
           >
             Edit
           </button> */}
-          <button
+          {/* <button
             className="btn btn-secondary "
             onClick={handleSaveAsDraft}
 
           >
             Save as Draft
-          </button>
+          </button> */}
           <button
             className="btn btn-success mx-5"
             onClick={handleFinalSubmit}
+            disabled={!areAllFieldsFilled()}
 
           >
             Final Submit
@@ -358,18 +362,7 @@ const RFPDraft = () => {
 
 
 
-          {/* Save as Draft Modal */}
-          <Modal show={showSaveAsDraftModal} onHide={() => setShowSaveAsDraftModal(false)}>
-            <Modal.Header closeButton>
-              <Modal.Title>Save as Draft</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>Your draft is saved.</Modal.Body>
-            <Modal.Footer>
-              <Button variant="primary" onClick={handleSaveAsDraftConfirm}>
-                OK
-              </Button>
-            </Modal.Footer>
-          </Modal>
+          
 
           {/* Final Submit Modal */}
           <Modal show={showFinalSubmitModal} onHide={() => setShowFinalSubmitModal(false)}>

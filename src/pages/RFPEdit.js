@@ -1,19 +1,74 @@
-// RFPEdit.js
-
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styling/rfpstyle.css';
 import { BsFillPersonFill, BsBox, BsLayers, BsQuestion, BsTrash, BsCurrencyRupee } from 'react-icons/bs';
 import { Modal, Button } from 'react-bootstrap'; // Import Modal and Button from React Bootstrap
 import { useNavigate, useLocation } from 'react-router-dom';
+import { BsCalendar, BsClock } from 'react-icons/bs';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+
+
 
 const RFPEdit = () => {
   const location = useLocation();
   const userName = location.state?.userName || '';
 
   const [showSaveAsDraftModal, setShowSaveAsDraftModal] = useState(false);
-  const [showFillDataModal, setShowFillDataModal] = useState(false);  
+  const [showFillDataModal, setShowFillDataModal] = useState(false);
   const [showFinalSubmitModal, setShowFinalSubmitModal] = useState(false);
+
+
+
+  const [bidSubmissionDateTime, setBidSubmissionDateTime] = useState(new Date());
+  const [bidOpenDateTime, setBidOpenDateTime] = useState(new Date());
+
+
+  const [minBidOpenDate, setMinBidOpenDate] = useState(new Date());
+
+  const handleBidSubmissionDateTimeChange = (date) => {
+    setBidSubmissionDateTime(date);
+    setMinBidOpenDate(date);
+  };
+
+  // Declare the variables
+  const bidOpenDate = new Date();
+  const bidSubmissionDate = new Date();
+
+
+
+  const handleBidOpenDateTimeChange = (date) => {
+    setBidOpenDateTime(date);
+  };
+
+
+  const calculateEstimatedPrice = (quantity, price) => {
+    return quantity && price ? quantity * price : 0;
+  };
+
+  const handleDeleteIndent = (index) => {
+    const updatedIndents = [...indents];
+    updatedIndents.splice(index, 1);
+    setIndents(updatedIndents);
+  };
+
+
+
+
+
+
+
+  const calendarRef = useRef(null);
+  const clockRef = useRef(null);
+
+  const openCalendar = () => {
+    calendarRef.current.setOpen(true);
+  };
+
+  const openClock = () => {
+    clockRef.current.setOpen(true);
+  };
+
 
   useEffect(() => {
     console.log('userName in RFPEdit:', userName);
@@ -32,8 +87,9 @@ const RFPEdit = () => {
 
   const [rfpDivision, setrfpDivision] = useState(true);
   const [remarks, setRemarks] = useState('');
-  const [bidSubmissionDate, setBidSubmissionDate] = useState('');
-  const [bidOpenDate, setBidOpenDate] = useState('');
+  const [rfpName, setRfpName] = useState('');
+
+
 
   useEffect(() => {
     fetch('http://localhost:8080/vendorlist')
@@ -56,7 +112,7 @@ const RFPEdit = () => {
   }, []);
 
 
-  
+
 
   const handleVendorSelect = (vendor) => {
     setSelectedVendors([...selectedVendors, vendor]);
@@ -74,11 +130,6 @@ const RFPEdit = () => {
     setEditable(true);
   };
 
-  const handleDeleteIndent = (index) => {
-    const updatedIndents = [...indents];
-    updatedIndents.splice(index, 1);
-    setIndents(updatedIndents);
-  };
 
   const handleDocumentChange = (documentId) => {
     const updatedDocuments = documents.map(doc => ({
@@ -161,6 +212,7 @@ const RFPEdit = () => {
   const areAllFieldsFilled = () => {
     return (
       indents.every(item => item.quantity && item.price) &&
+      rfpName.trim() !== '' &&
       selectedVendors.length > 0 &&
       selectedDocuments.length > 0 &&
       remarks.trim() !== '' &&
@@ -168,6 +220,18 @@ const RFPEdit = () => {
       bidOpenDate !== ''
     );
   };
+
+  useEffect(() => {
+    // Check if indents is defined before using it
+    if (indents) {
+      // Recalculate estimated prices when indents change
+      const updatedIndents = indents.map((item) => ({
+        ...item,
+        estimatedPrice: calculateEstimatedPrice(item.quantity, item.price),
+      }));
+      setIndents(updatedIndents);
+    }
+  }, [indents]);
 
   return (
     <div className="main-container">
@@ -185,17 +249,35 @@ const RFPEdit = () => {
           <table>
             <thead>
               <tr style={{ background: '#007BFF' }}>
-                <th><BsBox className="icon" /> Indent ID</th>
-                <th><BsFillPersonFill className="icon" /> Name</th>
-                <th><BsQuestion className="icon" /> Measure of Unit</th>
-                <th><BsLayers className="icon" /> Quantity</th>
-                <th><BsCurrencyRupee className="icon" /> Estimated Price</th>
+                <th>
+                  <BsBox className="icon" /> Indent ID
+                </th>
+                <th>
+                  <BsFillPersonFill className="icon" /> Name
+                </th>
+                <th>
+                  <BsQuestion className="icon" /> Measure of Unit
+                </th>
+                <th>
+                  <BsLayers className="icon" /> Quantity
+                </th>
+                <th>
+                  <BsCurrencyRupee className="icon" /> Estimated Unit Price
+                </th>
+                <th>
+                  <BsCurrencyRupee className="icon" /> Estimated Price
+                </th>
                 {editable && <th>Action</th>}
               </tr>
             </thead>
             <tbody>
               {indents.map((item, index) => (
-                <tr key={index} style={{ background: index % 2 === 0 ? '#f0f0f0' : 'white' }}>
+                <tr
+                  key={index}
+                  style={{
+                    background: index % 2 === 0 ? '#f0f0f0' : 'white',
+                  }}
+                >
                   <td>{item.indentId}</td>
                   <td>{item.name}</td>
                   <td>{item.unit}</td>
@@ -229,6 +311,21 @@ const RFPEdit = () => {
                       item.price
                     )}
                   </td>
+                  <td>
+                    {editable ? (
+                      <input
+                        type="text"
+                        value={item.estimatedPrice}
+                        onChange={(e) => {
+                          const updatedIndents = [...indents];
+                          updatedIndents[index].estimatedPrice = e.target.value;
+                          setIndents(updatedIndents);
+                        }}
+                      />
+                    ) : (
+                      item.estimatedPrice
+                    )}
+                  </td>
                   {editable && (
                     <td>
                       <button
@@ -243,6 +340,29 @@ const RFPEdit = () => {
               ))}
             </tbody>
           </table>
+        </div>
+
+
+        <div class="container d-flex justify-content-end">
+
+
+          <span class="form-title fs-4">Grand Total:</span>
+          <span class="text-success fw-bold mt-2 mx-2">
+            {indents.reduce((total, item) => total + (item.estimatedPrice || 0), 0)}
+          </span>
+
+        </div>
+
+
+
+        <div className="remarks mt-4">
+          <div className="form-title">RFP Name</div>
+          <input
+            className="form-control"
+            rows="4"
+            value={rfpName}
+            onChange={(e) => setRfpName(e.target.value)}
+          />
         </div>
 
         <select
@@ -330,31 +450,49 @@ const RFPEdit = () => {
           />
         </div>
 
-        <div className="calendar mt-4 d-flex">
+
+
+        <div className="calendar mt-4 border p-2 d-flex flex-row justify-content-between">
           <div className="form-group mx-2">
-            <label className="form-title">Bid Submission Date</label>
-            <input
-              type="date"
-              className="form-control form-control-lg"
-              value={bidSubmissionDate}
-              onChange={(e) => setBidSubmissionDate(e.target.value)}
+            <label className="form-title fs-4">Bid Submission Date and Time</label>
+            <DatePicker
+              selected={bidSubmissionDateTime}
+              onChange={handleBidSubmissionDateTimeChange}
+              showTimeSelect
+              timeFormat="HH:mm"
+              timeIntervals={15}
+              dateFormat="MM/dd/yyyy h:mm aa"
+              timeCaption="Time"
+              ref={calendarRef}
+              className="text-success"
             />
           </div>
 
-          <div className="form-group mx-5">
-            <label className="form-title">Bid Open Date</label>
-            <input
-              type="date"
-              className="form-control form-control-lg"
-              value={bidOpenDate}
-              onChange={(e) => setBidOpenDate(e.target.value)}
+          <div className=" ml-auto  form-group mx-5">
+            <label className="form-title fs-4">Bid Open Date and Time</label>
+            <DatePicker
+              selected={bidOpenDateTime}
+              onChange={handleBidOpenDateTimeChange}
+              showTimeSelect
+              timeFormat="HH:mm"
+              timeIntervals={15}
+              dateFormat="MM/dd/yyyy h:mm aa"
+              timeCaption="Time"
+              minDate={minBidOpenDate}
+              ref={clockRef}
+              className="text-success"
             />
           </div>
         </div>
 
-         
+
+
+
+
+
+
         <div className="create-rpf mt-5 d-flex justify-content-end">
-       
+
           {/* <button
             className="btn btn-primary"
             onClick={handleEditClick}
@@ -365,18 +503,18 @@ const RFPEdit = () => {
           <button
             className="btn btn-secondary "
             onClick={handleSaveAsDraft}
-            
+
           >
             Save as Draft
           </button>
           <button
             className="btn btn-success mx-5"
             onClick={handleFinalSubmit}
-            
+
           >
             Final Submit
           </button>
-       
+
 
           <Modal show={showSaveAsDraftModal} onHide={() => setShowSaveAsDraftModal(false)}>
             <Modal.Header closeButton>
@@ -391,35 +529,36 @@ const RFPEdit = () => {
           </Modal>
 
           <Modal show={showFillDataModal} onHide={() => setShowFillDataModal(false)}>
-          <Modal.Header closeButton>
-            <Modal.Title>Please Fill in All Data</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>Please fill in all required fields before submitting.</Modal.Body>
-          <Modal.Footer>
-            <Button variant="primary" onClick={() => setShowFillDataModal(false)}>
-              OK
-            </Button>
-          </Modal.Footer>
-        </Modal>
-        
+            <Modal.Header closeButton>
+              <Modal.Title>Please Fill in All Data</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>Please fill in all required fields before submitting.</Modal.Body>
+            <Modal.Footer>
+              <Button variant="primary" onClick={() => setShowFillDataModal(false)}>
+                OK
+              </Button>
+            </Modal.Footer>
+          </Modal>
 
-        <Modal show={showFinalSubmitModal} onHide={() => setShowFinalSubmitModal(false)}>
-          <Modal.Header closeButton>
-            <Modal.Title>Final Submit</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>Are you sure you want to submit?</Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={() => setShowFinalSubmitModal(false)}>
-              Cancel
-            </Button>
-            <Button variant="primary" onClick={handleFinalSubmitConfirm}>
-              OK
-            </Button>
-          </Modal.Footer>
-        </Modal>
+
+          <Modal show={showFinalSubmitModal} onHide={() => setShowFinalSubmitModal(false)}>
+            <Modal.Header closeButton>
+              <Modal.Title>Final Submit</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>Are you sure you want to submit?</Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={() => setShowFinalSubmitModal(false)}>
+                Cancel
+              </Button>
+              <Button variant="primary" onClick={handleFinalSubmitConfirm}>
+                OK
+              </Button>
+            </Modal.Footer>
+          </Modal>
+        </div>
+
       </div>
-      
-    </div>
+
     </div>
   );
 };

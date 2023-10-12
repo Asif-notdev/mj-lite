@@ -192,7 +192,7 @@ const RFPEdit = () => {
             <thead>
               <tr style={{ background: '#007BFF' }}>
                 <th>
-                  <BsBox className="icon" /> Indent ID
+                  <BsBox className="icon" /> Item ID
                 </th>
                 <th>
                   <BsFillPersonFill className="icon" /> Name

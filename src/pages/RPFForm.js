@@ -68,7 +68,7 @@ const RPFForm = () => {
           <table>
             <thead>
               <tr>
-                <th><BsBox className="icon" /> Indent ID</th>
+                <th><BsBox className="icon" /> Item ID</th>
                 <th><BsFillPersonFill className="icon" /> Name</th>
                 <th><BsQuestion className="icon" /> Measure of Unit</th>
                 <th><BsLayers className="icon" /> Quantity</th>

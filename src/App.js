@@ -19,6 +19,7 @@ import ItemList from './pages/VendorHome';
 import RFPDraft from './pages/RfpDraft';
 
 
+import BidView from './pages/BidView';
 function App() {
   return (
     <Router>
@@ -33,6 +34,7 @@ function App() {
         <Route path="/bidsubmission" element={<BidSubmit />} />
         <Route path="/vendorhome" element={<ItemList />} />
         <Route path="/biddetailview/:id" element={<BidDetailView />} />
+        <Route path="/viewbids" element={<BidView />} />
       </Routes>
       <Footer />
     </Router>

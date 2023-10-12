@@ -68,9 +68,9 @@ const RPFForm = () => {
           <table>
             <thead>
               <tr>
-                <th><BsBox className="icon" /> Indent ID</th>
+                <th><BsBox className="icon" /> Product ID</th>
                 <th><BsFillPersonFill className="icon" /> Name</th>
-                <th><BsQuestion className="icon" /> Measure of Unit</th>
+                <th><BsQuestion className="icon" /> Product Unit</th>
                 <th><BsLayers className="icon" /> Quantity</th>
                 <th><BsCurrencyRupee className="icon" /> Estimated Price</th>
               </tr>

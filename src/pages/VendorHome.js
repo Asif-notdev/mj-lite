@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom'; // Import Link from react-router-dom
 import Accordion from './Accordion';
+import '../styling/rfpstyle.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 const ItemList = () => {
   const [userName, setUserName] = useState('');
@@ -28,13 +29,15 @@ const ItemList = () => {
   return (
     <div className="translucent-form">
       <div className="user-info">
-        {userName !== '' ? (
-          <span>Welcome, {userName}</span>
-        ) : (
-          <span>Loading...</span>
-        )}
-      </div>
-      <div className="container mt-5">
+          {userName !== '' ? (
+            <span>Welcome, {userName}</span>
+          ) : (
+            <span>Loading...</span>
+          )}
+        </div>
+        <h4>List of Tenders available for you:</h4>
+      <div>
+        
         <Accordion />
         {/* Add a Link to the Bid Detail View page */}
         <Link to="/biddetailview/:id">

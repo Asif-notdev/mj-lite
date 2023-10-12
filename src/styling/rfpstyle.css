@@ -1,13 +1,15 @@
 body {
   
-  margin-bottom: 0;
+  margin: 0;
   padding: 0;
   font-family: sans-serif;
   height: 100vh;
   background: url('../images/bgrfp.jpg') fixed no-repeat;
   background-size: cover;
 }
-
+.acc-table{
+  border: none;
+}
 
 
 .translucent-form {
@@ -82,8 +84,7 @@ th {
 }
 
 
-.yes-button,
-.no-button {
+.yes-button, .no-button {
   border-radius: 8px;
   /* Adjust the radius as needed */
 }
@@ -177,6 +178,3 @@ th {
   text-align: right;
 }
 
-.acc-table{
-  border: none;
-}

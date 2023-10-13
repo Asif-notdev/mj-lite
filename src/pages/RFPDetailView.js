@@ -19,13 +19,6 @@ const RFPDetailView = () => {
   }, []);
 
 
-  
-  
-
-
-
-
-
   // // Define the JSON data here for RFPDetailView based on the 'id' parameter
   // const rfpData = [
   //   {

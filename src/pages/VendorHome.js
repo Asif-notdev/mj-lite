@@ -5,6 +5,7 @@ import Accordion from './Accordion';
 import '../styling/rfpstyle.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 const ItemList = () => {
+
   const [userName, setUserName] = useState('');
   const userNameApiEndpoint = 'http://localhost:3050/userName';
 
@@ -39,10 +40,10 @@ const ItemList = () => {
       <div>
         
         <Accordion />
-        {/* Add a Link to the Bid Detail View page */}
+        {/* Add a Link to the Bid Detail View page
         <Link to="/biddetailview/:id">
           <button>View Tender</button>
-        </Link>
+        </Link> */}
       </div>
     </div>
   );

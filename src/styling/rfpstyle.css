@@ -7,9 +7,7 @@ body {
   background: url('../images/bgrfp.jpg') fixed no-repeat;
   background-size: cover;
 }
-.acc-table{
-  border: none;
-}
+
 
 
 .translucent-form {
@@ -175,9 +173,8 @@ th {
 }
 
 .button-row{
-  text-align: right;
-}
-
-.button-row-bid{
   text-align: center;
+}
+.rightspan{
+  text-align: right;
 }

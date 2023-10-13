@@ -1,18 +1,19 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState,useEffect} from 'react';
 import '../styling/rfpstyle.css';
 import FileInput from './Document';
 import { Modal, Button } from 'react-bootstrap'; // Import Modal and Button from React Bootstrap
-import { useNavigate} from 'react-router-dom';
+import { useNavigate , useParams } from 'react-router-dom';
 
 const BidSubmit = () => {
 
   const navigate = useNavigate();
-
+  const { id } = useParams();
   const [editable, setEditable] = useState(false);
   const [dummyData, setDummyData] = useState([]);
   const [userName, setUserName] = useState('');
   const dummyDataApiEndpoint = 'http://localhost:3040/dummyData';
-  const userNameApiEndpoint = 'http://localhost:3050/userName'; // Replace with your actual API endpoint
+  const userNameApiEndpoint = 'http://localhost:3050/userName';
+  const docList = 'http://localhost/'+id; // Replace with your actual API endpoint
 
   useEffect(() => {
     // Fetch dummy data
@@ -43,7 +44,7 @@ const BidSubmit = () => {
   }, []);
 
   // const[]
-
+  const [rfpData, setRfpData] = useState([]);
   const [vendors, setVendors] = useState(['Vendor 1', 'Vendor 2', 'Vendor 3']);
   const [selectedVendors, setSelectedVendors] = useState([]);
   
@@ -80,6 +81,50 @@ const BidSubmit = () => {
   const handleAddVendor = () => {
     setVendors([...vendors, `Vendor ${vendors.length + 1}`]);
   };
+
+  
+  useEffect(() => {
+    fetch('http://localhost:8080/rfp/'+id)
+      .then(response => response.json())
+      .then(data => {
+        console.log('Fetched vendors:', data);
+        setRfpData(data);
+      })
+      .catch(error => console.error('Error fetching RfpList:', error));
+  }, []);
+
+  const postData = async () => {
+    try {
+      const url = 'http://localhost:8080/fillbid/'+id;
+      const jsonData = {
+        "bidId":1,
+        "vendorName": userName,
+        "isActive": true,
+        "remarks": remarks,
+        "isDraft": false,
+        "remarks": remarks,
+        "bidPrice":328748,
+        "buyer": 2,
+        
+       
+      
+      };
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(jsonData),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const responseData = await response.json();
+      console.log(responseData);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
   return (
     <div className="main-container">
       <div className="translucent-form">
@@ -101,9 +146,9 @@ const BidSubmit = () => {
             
             <tbody>
                 <tr>
-                  <td>845845</td>
-                  <td>RFP.name</td>
-                  <td>RFP.Desc</td>
+                  <td>{id}</td>
+                  <td>{rfpData.getBuyerName}</td>
+                  <td>{rfpData.remarks}</td>
                   <td>......</td>
                 </tr>
             </tbody>
@@ -159,7 +204,8 @@ const BidSubmit = () => {
           </div>
         )} */}
 
-        <div className='form-title my-2'> <h3 className='font-weight-bold'>Attach Documents</h3></div>
+        <div className='form-title my-2'> <h3 className='font-weight-bold'
+        >Attach Documents</h3></div>
 
         <FileInput/>
         {/* <FileUploadComponent/> */}
@@ -219,7 +265,7 @@ const BidSubmit = () => {
               <Button variant="secondary" onClick={() => setShowFinalSubmitModal(false)}>
                 Cancel
               </Button>
-              <Button variant="primary" onClick={handleFinalSubmitConfirm}>
+              <Button variant="primary" onClick={postData}>
                 OK
               </Button>
             </Modal.Footer>

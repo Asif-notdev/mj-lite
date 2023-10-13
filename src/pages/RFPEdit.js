@@ -81,7 +81,7 @@ const RFPEdit = () => {
     setSelectedDocuments(selectedDocs);
     console.log("docList" + selectedDocuments);
   }
-
+  const data = "MJ".concat(Math.random());
   const postData = async () => {
     try {
       const url = 'http://localhost:8080/fillrfp';
@@ -94,9 +94,10 @@ const RFPEdit = () => {
         "rfpCreationDate": "12-09-2023",
         "bidOpeningDate": bidOpenDate,
         "bidSubmissionDate": bidSubmissionDate,
-        "buyer": 1,
-        "doc":[...selectedDocuments],
-        "li":[...allVendors]
+        "buyer": 2,
+        //"doc":[...selectedDocuments],
+         "li":[...allVendors],
+         "doc":[...selectedDocuments]
       
       };
       const response = await fetch(url, {
@@ -235,7 +236,7 @@ const RFPEdit = () => {
           onChange={(e) => handleVendorSelect(e.target.value)}
         >
           <option value={''} disabled>Select Vendor</option>
-          {filteredVendors.map((vendor, index) => (
+          {allVendors.map((vendor, index) => (
             <option key={index} value={vendor.name}>
               {vendor.name}
             </option>

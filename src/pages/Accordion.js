@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../styling/rfpstyle.css';
 import { BsFillFileEarmarkTextFill} from 'react-icons/bs';
+import { Link } from 'react-router-dom';
+
 
 function formatDateToDdMmmYyyy(date) {
   const options = { day: 'numeric', month: 'short', year: 'numeric' };
@@ -10,26 +12,24 @@ function formatDateToDdMmmYyyy(date) {
 const Accordion = () => {
     const itemsPerPage = 4; // Number of items per page
   const [currentPage, setCurrentPage] = useState(1);
-    const [items, setItems] = useState([
-        { id: 1, buyerName: 'SAIL', tenderId: 'SAIL1013', createDate: '2023/07/12', isActive: true, dueDate: '2023/07/22'},
-        { id: 2, buyerName: 'TATA', tenderId: 'TATA0203', createDate: '2023/05/23', isActive: false, dueDate: '2023/05/30'},
-        { id: 3, buyerName: 'COAL INDIA', tenderId: 'COAL0192' },
-        { id: 4, buyerName: 'SAIL', tenderId: 'SAIL1013' },
-        { id: 5, buyerName: 'TATA', tenderId: 'TATA0203' },
-        { id: 6, buyerName: 'COAL INDIA', tenderId: 'COAL0192' },
-        { id: 7, buyerName: 'SAIL', tenderId: 'SAIL1013' },
-        { id: 8, buyerName: 'TATA', tenderId: 'TATA0203' },
-        { id: 9, buyerName: 'COAL INDIA', tenderId: 'COAL0192' },
-        { id: 10, buyerName: 'SAIL', tenderId: 'SAIL1013' },
-        { id: 11, buyerName: 'TATA', tenderId: 'TATA0203' },
-        { id: 12, buyerName: 'COAL INDIA', tenderId: 'COAL0192' },
-      ]);
+    const [items, setItems] = useState([]);
     const [prod, setProd] = useState([
         { pid: 1, prodName: 'Monitor'},
         { pid: 2, prodName: 'Screws'},
         { pid: 3, prodName: 'Mouse'},
         { pid: 3, prodName: 'Keyboard'}
       ]);
+
+      
+  useEffect(() => {
+    fetch('http://localhost:8080/allrfplist')
+      .then(response => response.json())
+      .then(data => {
+        console.log('Fetched vendors:', data);
+        setItems(data);
+      })
+      .catch(error => console.error('Error fetching RfpList:', error));
+  }, []);
 
       // Calculate the index range for the current page
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -54,9 +54,13 @@ const Accordion = () => {
                                 data-bs-target={`#itemCollapse${item.id}`}>
                                     <BsFillFileEarmarkTextFill className="icon" />
                                     <h6 className='mx-3'>{item.buyerName}</h6>
-                                    <h6 className='mx-1'>(Tender Id: {item.tenderId})
+                                    <h6 className='mx-1'>(Tender Id: {item.id})
                                     </h6>
+                                      <span className={`badge ${item.isSplitable ? 'bg-success' : 'bg-danger'} text-white me-2 mx-3`}>
+                                        {item.isSplitable ? 'Open for Submissions' : 'Submission Closed'}
+                                      </span>
                                 </button>
+                                
                             </h6>
 
                             <div id={`itemCollapse${item.id}`} 
@@ -74,12 +78,14 @@ const Accordion = () => {
                                         </td>
                                         <td>
                                         Other Details:
-                                                <p>Date Created: {formatDateToDdMmmYyyy(item.createDate)}</p>
-                                                <p>Tender Status: {item.isActive ? 'Open for Submissions' : 'Submission Closed'}</p>
-                                                <p>Last Date of Submission: {formatDateToDdMmmYyyy(item.dueDate)}</p>
+                                                <p>Date Created: {formatDateToDdMmmYyyy(item.rfpCreationDate)}</p>
+                                                <p>Tender Status: {item.isSplitable ? 'Open for Submissions' : 'Submission Closed'}</p>
+                                                <p>Last Date of Submission: {formatDateToDdMmmYyyy(item.bidSubmissionDate)}</p>
                                         </td>
                                         <td className='button-row'>
-                                            <button className='yes-button tender-view-button'>View Tender</button>
+                                        <Link to={`/bidsubmission/${item.id}`}>
+                                            <button className='yes-button tender-view-button'>Submit Bid</button>
+                                            </Link>
                                         </td>
                                     </tr>
                                 </table>

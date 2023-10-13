@@ -21,10 +21,10 @@ const BidView = () => {
         { id: 1, rfpName: 'Procurement of Laptops', tenderId: 'SAIL1013'},
       ]);
     const [vendor, setVendor] = useState([
-        { vid: 1, vendorName: 'Nirala Iron & Steel Co.', subDate: '2023/07/12', subTime: '2023-07-12T15:45:00Z'},
-        { vid: 2, vendorName: 'Nirala TMT Bars', subDate: '2023/07/10', subTime: '2023-07-10T06:09:00Z'},
-        { vid: 3, vendorName: 'Nirala Inc.', subDate: '2023/07/12', subTime: '2023-07-12T20:42:00Z'},
-        { vid: 3, vendorName: 'Nirala Constructions', subDate: '2023/07/11', subTime: '2023-07-12T12:13:00Z'}
+        { vid: 1, vendorName: 'Nirala Iron & Steel Co.', submitted: true, subDate: '2023/07/12', subTime: '2023-07-12T15:45:00Z'},
+        { vid: 2, vendorName: 'Nirala TMT Bars', submitted: true, subDate: '2023/07/10', subTime: '2023-07-10T06:09:00Z'},
+        { vid: 3, vendorName: 'Nirala Inc.', submitted: false, subDate: '2023/07/12', subTime: '2023-07-12T20:42:00Z'},
+        { vid: 3, vendorName: 'Nirala Constructions', submitted: false, subDate: '2023/07/11', subTime: '2023-07-12T12:13:00Z'}
       ]);
 
 //       // Calculate the index range for the current page
@@ -80,7 +80,9 @@ const BidView = () => {
                     {vendor.map((vdr) => (
                     <tr>
                         <td>
-                        <p>{vdr.vendorName} </p>
+                        <span>{vdr.vendorName} </span> <span className={`badge ${vdr.submitted ? 'bg-success' : 'bg-warning'} text-white me-2 mx-3`}>
+                                        {vdr.submitted ? 'Submitted' : 'Pending'}
+                                      </span>
                         </td>
 
                         <td>

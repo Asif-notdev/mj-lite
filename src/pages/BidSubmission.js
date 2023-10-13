@@ -11,14 +11,18 @@ import {
   BsCurrencyRupee,
 } from "react-icons/bs";
 
+
 const BidSubmit = () => {
   const navigate = useNavigate();
 
   const [editable, setEditable] = useState(false);
   const [dummyData, setDummyData] = useState([]);
   const [userName, setUserName] = useState("");
+  const [rfpData, setRfpData] = useState([]);
+
   const dummyDataApiEndpoint = "http://localhost:3040/dummyData";
-  const userNameApiEndpoint = "http://localhost:3050/userName";
+  const userNameApiEndpoint = "http://localhost:3070/userName";
+  const rfpDataApiEndpoint = "http://localhost:3060/rfpIdData";
 
   useEffect(() => {
     fetch(dummyDataApiEndpoint)
@@ -42,11 +46,18 @@ const BidSubmit = () => {
         console.error("Error fetching user name:", error);
         console.error("Error message:", error.message);
       });
+
+
+      fetch(rfpDataApiEndpoint)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Fetched RFP ID Data :", data);
+        setRfpData(data);
+      })
+      .catch((error) => console.error("Error fetching RFP data:", error));
   }, []);
 
-  const [vendors, setVendors] = useState(["Vendor 1", "Vendor 2", "Vendor 3"]);
-  const [selectedVendors, setSelectedVendors] = useState([]);
-  const [showSaveAsDraftModal, setShowSaveAsDraftModal] = useState(false);
+
   const [showFinalSubmitModal, setShowFinalSubmitModal] = useState(false);
   const [remarks, setRemarks] = useState("");
   const [prices, setPrices] = useState([]);
@@ -74,32 +85,25 @@ const BidSubmit = () => {
     const price = parseFloat(e.target.value);
     if (!isNaN(price)) {
       newPrices[index] = price;
+    } else {
+      newPrices[index] = 0;
     }
     setPrices(newPrices);
   };
-  
 
   const handleFinalSubmit = () => {
     setShowFinalSubmitModal(true);
   };
 
   const handleFinalSubmitConfirm = () => {
-    navigate("/RFPList");
+    navigate("/viewbids");
     setShowFinalSubmitModal(false);
-  };
-
-  const handleSaveAsDraft = () => {
-    setShowSaveAsDraftModal(true);
-  };
-
-  const handleSaveAsDraftConfirm = () => {
-    navigate("/RFPList");
-    setShowSaveAsDraftModal(false);
   };
 
   return (
     <div className="main-container">
       <div className="translucent-form">
+
         <div className="user-info">
           {userName !== "" ? (
             <span>Welcome, {userName}</span>
@@ -118,12 +122,45 @@ const BidSubmit = () => {
 
         <div className="table-container">
           <table>
-                <th className="th-center">
-                  <BsBox className="icon" />Product ID
+            <thead>
+              <tr style={{ background: "#007BFF" }}>
+                <th>RFQ ID</th>
+                <th>RFQ Name</th>
+                <th>RFQ Description</th>
+                <th>Bid Submission Date</th>
+                <th>
+                   Bid Opening Date
                 </th>
+              </tr>
+            </thead>
+            <tbody>
+                  {
+                  
+                    rfpData.map((rfp, index) => (
+                        <tr key={index}>
+                          <td>{rfp.id}</td>
+                          <td>{rfp.name}</td>
+                          <td>{rfp.desc}</td>
+                          <td>{rfp.bidSubmissionDate}</td>
+                          <td>{rfp.bidOpeningData}</td>
+                        </tr>
+                      ))  
 
+                  }
+            </tbody>
+          </table>
+           
+        </div>
+
+        <div className="table-container">
+          <table>
+            <thead>
+              <tr style={{ background: "#007BFF" }}>
                 <th className="th-center">
-                  <BsFillPersonFill className="icon" />Product Name
+                  <BsBox className="icon" /> Product ID
+                </th>
+                <th className="th-center">
+                  <BsFillPersonFill className="icon" /> Product Name
                 </th>
                 <th className="th-center">
                   <BsQuestion className="icon" /> Product Unit
@@ -148,7 +185,11 @@ const BidSubmit = () => {
                   <BsCurrencyRupee className="icon" />
                   Your Total Price per
                 </th>
-              {dummyData.map((item, index) => (
+              </tr>
+            </thead>
+            <tbody>
+              {
+                dummyData.map((item, index) => (
                 <tr key={index}>
                   <td>{item.indentId}</td>
                   <td>{item.name}</td>
@@ -159,14 +200,16 @@ const BidSubmit = () => {
                   <td>
                     <input
                       type="number"
-                      min={0}
+                      min="0"
                       placeholder="0"
                       onChange={(e) => handlePriceChange(e, index)}
                     />
                   </td>
                   <td>{prices[index] * item.quantity}</td>
                 </tr>
-              ))}
+                ))
+              }
+            </tbody>
           </table>
            
         </div>
@@ -194,30 +237,11 @@ const BidSubmit = () => {
           />
         </div>
 
-        <div className="create-rpf mt-5">
-          <button className="btn btn-secondary " onClick={handleSaveAsDraft}>
-            Save as Draft
-          </button>
-
+        <div className="create-rpf mt-5 d-flex justify-content-end">
+         
           <button className="btn btn-success mx-5" onClick={handleFinalSubmit}>
             Final Submit
           </button>
-
-         
-          <Modal
-            show={showSaveAsDraftModal}
-            onHide={() => setShowSaveAsDraftModal(false)}
-          >
-            <Modal.Header closeButton>
-              <Modal.Title>Save as Draft</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>Your draft is saved.</Modal.Body>
-            <Modal.Footer>
-              <Button variant="primary" onClick={handleSaveAsDraftConfirm}>
-                OK
-              </Button>
-            </Modal.Footer>
-          </Modal>
 
           <Modal
             show={showFinalSubmitModal}
@@ -240,7 +264,9 @@ const BidSubmit = () => {
             </Modal.Footer>
           </Modal>
         </div>
+        <div className="create-rpf mt-5 "></div>
       </div>
+      <div className="create-rpf mt-5 "></div>
     </div>
   );
 };

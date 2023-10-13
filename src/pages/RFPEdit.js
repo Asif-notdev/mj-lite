@@ -331,7 +331,11 @@ const RFPEdit = () => {
           </div>
         )}
         <div className="document-list mt-4">
-          <div className="form-title " >Documents</div>
+          <div className=' d-flex'>
+          <div style={{display:'inline'}}  className="form-title" >Documents </div>
+          <div className='mt-2 mx-2'>(Check The Boxes for mandatory Documents)</div>
+          </div>
+          
           <div className="row ">
             {documents.map((doc) => (
               <div className="col-md-3" key={doc.id}>

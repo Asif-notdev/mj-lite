@@ -90,7 +90,7 @@ const RPFForm = () => {
         </div>
 
         <div className="create-rpf mt-4">
-          <div className="form-title">Do you want to create RFP?</div>
+          <div className="form-title">Do you want to create RFQ?</div>
           <div className="yes-no-buttons mx-3">
             <button className="yes-button" onClick={handleCreateRPFChange}>
               Yes, Let's Go!

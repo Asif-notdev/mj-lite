@@ -122,29 +122,29 @@ const BidSubmit = () => {
                   <BsBox className="icon" />Product ID
                 </th>
 
-                <th>
+                <th className="th-center">
                   <BsFillPersonFill className="icon" />Product Name
                 </th>
-                <th>
+                <th className="th-center">
                   <BsQuestion className="icon" /> Product Unit
                 </th>
-                <th>
+                <th className="th-center">
                   <BsLayers className="icon" />
                   Product quantity
                 </th>
-                <th>
+                <th className="th-center">
                   <BsCurrencyRupee className="icon" /> Estimated Price per Unit
                   Quantity
                 </th>
-                <th>
+                <th className="th-center">
                   <BsCurrencyRupee className="icon" />
                   Estimated Price per unit Product
                 </th>
-                <th>
+                <th className="th-center">
                   <BsCurrencyRupee className="icon" />
                   Your Unit Price
                 </th>
-                <th>
+                <th className="th-center">
                   <BsCurrencyRupee className="icon" />
                   Your Total Price per
                 </th>

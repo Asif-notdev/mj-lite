@@ -60,11 +60,16 @@ const RFPEdit = () => {
     fetch('http://localhost:8080/vendorlist')
       .then(response => response.json())
       .then(data => {
-        console.log('Fetched vendors:', data);
-        setAllVendors(data);
+        if (Array.isArray(data)) {
+          // Ensure data is an array
+          setAllVendors(data);
+        } else {
+          console.error('Invalid data format for vendors:', data);
+        }
       })
       .catch(error => console.error('Error fetching vendors:', error));
   }, []);
+  
   useEffect(() => {
     fetch('http://localhost:8080/doclist')
       .then(response => response.json())

@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect, useRef } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styling/rfpstyle.css';
@@ -226,7 +224,7 @@ const RFPEdit = () => {
                   <td>
                     {editable ? (
                       <input
-                        type="text"
+                        type="number"
                         value={item.quantity}
                         onChange={(e) => {
                           const updatedIndents = [...indents];
@@ -241,7 +239,7 @@ const RFPEdit = () => {
                   <td>
                     {editable ? (
                       <input
-                        type="text"
+                        type="number"
                         value={item.price}
                         onChange={(e) => {
                           const updatedIndents = [...indents];
@@ -288,7 +286,7 @@ const RFPEdit = () => {
           </span>
         </div>
         <div className="remarks mt-4">
-          <div className="form-title">RFP Name</div>
+          <div className="form-title">RFQ Name</div>
           <input
             className="form-control"
             rows="4"
@@ -346,7 +344,7 @@ const RFPEdit = () => {
           </div>
         </div>
         <div className="rfp-decision mt-4">
-          <div className="form-title">RFP Split</div>
+          <div className="form-title">RFQ Split</div>
           <div className="btn-group" role="group" aria-label="RFP Decision">
             <div className="btn-group" role="group" aria-label="RFP Decision">
               <button

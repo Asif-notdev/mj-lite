@@ -34,16 +34,35 @@ const Accordion = () => {
       // Calculate the index range for the current page
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const currentItems = items.slice(startIndex, endIndex);
+  
+  const [showOnlyAvailable, setShowOnlyAvailable] = useState(false);
 
   // Handle page change
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
+
+  const toggleShowOnlyAvailable = () => {
+    setShowOnlyAvailable(!showOnlyAvailable);
+  };
+
+  const filteredItems = showOnlyAvailable ? items.filter((item) => item.isActive) : items;
+  const currentItems = filteredItems.slice(startIndex, endIndex);
     
     
   return (
     <div>
+      <div className='right-span'>
+        <div className= 'mb-3'>
+          <label className='mx-1'>Toggle Active:</label>
+          <button
+            className={`btn ${showOnlyAvailable ? 'btn-success' : 'btn-secondary'}`}
+            onClick={toggleShowOnlyAvailable}
+          >
+            {showOnlyAvailable ? 'On' : 'Off'}
+          </button>
+        </div>
+      </div>
     {currentItems.map((item) => (
         <div key={item.id} className="accordion" id={`itemAccordion${item.id}`}>
                 <div className="accordion-item">

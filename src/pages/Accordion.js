@@ -52,17 +52,14 @@ const Accordion = () => {
     
   return (
     <div>
-      <div className='right-span'>
-        <div className= 'mb-3'>
-          <label className='mx-1'>Toggle Active:</label>
+        <div className= 'd-flex justify-content-end mx-5 mb-3'>
           <button
-            className={`btn ${showOnlyAvailable ? 'btn-success' : 'btn-secondary'}`}
+            className={`btn ${showOnlyAvailable ? 'btn-warning' : 'btn-primary'}`}
             onClick={toggleShowOnlyAvailable}
           >
-            {showOnlyAvailable ? 'On' : 'Off'}
+            {showOnlyAvailable ? 'Show All' : 'Show Active Only'}
           </button>
         </div>
-      </div>
     {currentItems.map((item) => (
         <div key={item.id} className="accordion" id={`itemAccordion${item.id}`}>
                 <div className="accordion-item">

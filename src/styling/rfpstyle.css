@@ -180,3 +180,7 @@ th {
 .rightspan{
   text-align: right;
 }
+
+.th-center{
+  text-align: center;
+}

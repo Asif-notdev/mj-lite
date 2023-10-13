@@ -461,7 +461,9 @@ const RFPEdit = () => {
             </Modal.Footer>
           </Modal>
         </div>
+        <div className="create-rpf mt-5 "></div>
       </div>
+      <div className="create-rpf mt-5 "></div>
     </div>
   );
 };

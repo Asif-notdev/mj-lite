@@ -74,11 +74,10 @@ const BidSubmit = () => {
     const price = parseFloat(e.target.value);
     if (!isNaN(price)) {
       newPrices[index] = price;
-    } else {
-      newPrices[index] = 0;
     }
     setPrices(newPrices);
   };
+  
 
   const handleFinalSubmit = () => {
     setShowFinalSubmitModal(true);
@@ -119,40 +118,36 @@ const BidSubmit = () => {
 
         <div className="table-container">
           <table>
-            <thead>
-              <tr style={{ background: "#007BFF" }}>
-                <th>
-                  <BsBox className="icon" /> Product ID
+                <th className="th-center">
+                  <BsBox className="icon" />Product ID
                 </th>
-                <th>
-                  <BsFillPersonFill className="icon" /> Product Name
+
+                <th className="th-center">
+                  <BsFillPersonFill className="icon" />Product Name
                 </th>
-                <th>
+                <th className="th-center">
                   <BsQuestion className="icon" /> Product Unit
                 </th>
-                <th>
+                <th className="th-center">
                   <BsLayers className="icon" />
                   Product quantity
                 </th>
-                <th>
+                <th className="th-center">
                   <BsCurrencyRupee className="icon" /> Estimated Price per Unit
                   Quantity
                 </th>
-                <th>
+                <th className="th-center">
                   <BsCurrencyRupee className="icon" />
                   Estimated Price per unit Product
                 </th>
-                <th>
+                <th className="th-center">
                   <BsCurrencyRupee className="icon" />
                   Your Unit Price
                 </th>
-                <th>
+                <th className="th-center">
                   <BsCurrencyRupee className="icon" />
                   Your Total Price per
                 </th>
-              </tr>
-            </thead>
-            <tbody>
               {dummyData.map((item, index) => (
                 <tr key={index}>
                   <td>{item.indentId}</td>
@@ -164,6 +159,7 @@ const BidSubmit = () => {
                   <td>
                     <input
                       type="number"
+                      min={0}
                       placeholder="0"
                       onChange={(e) => handlePriceChange(e, index)}
                     />
@@ -171,10 +167,15 @@ const BidSubmit = () => {
                   <td>{prices[index] * item.quantity}</td>
                 </tr>
               ))}
-            </tbody>
-            <div style={{ position:'fixed', right: 0 }}>Total Price: {totalPrice}</div>
-
           </table>
+           
+        </div>
+
+        <div class="container d-flex justify-content-end">
+          <span class="form-title fs-4">Grand Total:</span>
+          <span class="text-success fw-bold  mx-2" style={{ fontSize: '1.5em' }}>
+            {totalPrice }
+          </span>
         </div>
 
         <div className="form-title my-2">

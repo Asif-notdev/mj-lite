@@ -1,8 +1,9 @@
+
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const RFPList = () => {
- 
+  // Dummy RFP data
   const rfpData = [
     {
       id: 1,
@@ -51,26 +52,40 @@ const RFPList = () => {
     color: 'white',
   };
 
-  // Define the state variable for filtering
+  // Define the state variables
   const [showActiveOnly, setShowActiveOnly] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
 
   // Sorting by creation date
   const sortedRFPData = [...rfpData].sort(
     (a, b) => new Date(b.bidCreationDate) - new Date(a.bidCreationDate)
   );
 
-  // Filtering based on the active status
-  const filteredRFPData = showActiveOnly
-    ? sortedRFPData.filter((rfp) => rfp.active)
-    : sortedRFPData;
+  // Filtering based on the search term and active status
+  const filteredRFPData = sortedRFPData.filter((rfp) => {
+    return (
+      (rfp.rfpName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        rfp.id.toString().includes(searchTerm)) &&
+      (!showActiveOnly || rfp.active)
+    );
+  });
 
   return (
     <div className="translucent-form">
       <h1>List of RFP</h1>
-      
-      <div className="d-flex justify-content-end mb-3">
+
+      <div className="d-flex justify-content-end mb-3 primary">
+        <div className="input-group w-25">
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Search RFPs"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
         <button
-          className={`btn btn-${showActiveOnly ? 'success' : 'warning'}`}
+          className={`btn btn-${showActiveOnly ? 'primary' : 'success'}`}
           onClick={() => setShowActiveOnly(!showActiveOnly)}
         >
           {showActiveOnly ? 'Show All' : 'Show Active Only'}
@@ -91,7 +106,9 @@ const RFPList = () => {
                   <div>
                     Bid ID: {rfp.id} - {rfp.rfpName}
                   </div>
-                  {rfp.active && <span className="badge bg-success">Active</span>}
+                  {rfp.active && (
+                    <span className="badge bg-success">Active</span>
+                  )}
                 </div>
               </button>
             </h2>
@@ -152,3 +169,4 @@ const RFPList = () => {
 };
 
 export default RFPList;
+

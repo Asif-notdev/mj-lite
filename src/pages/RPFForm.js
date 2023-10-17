@@ -68,9 +68,9 @@ const RPFForm = () => {
           <table>
             <thead>
               <tr>
-                <th><BsBox className="icon" /> Indent ID</th>
+                <th><BsBox className="icon" /> Product ID</th>
                 <th><BsFillPersonFill className="icon" /> Name</th>
-                <th><BsQuestion className="icon" /> Measure of Unit</th>
+                <th><BsQuestion className="icon" /> Product Unit</th>
                 <th><BsLayers className="icon" /> Quantity</th>
                 <th><BsCurrencyRupee className="icon" /> Estimated Price</th>
               </tr>
@@ -90,7 +90,7 @@ const RPFForm = () => {
         </div>
 
         <div className="create-rpf mt-4">
-          <div className="form-title">Do you want to create RFP?</div>
+          <div className="form-title">Do you want to create RFQ?</div>
           <div className="yes-no-buttons mx-3">
             <button className="yes-button" onClick={handleCreateRPFChange}>
               Yes, Let's Go!

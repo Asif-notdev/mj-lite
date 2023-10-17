@@ -43,6 +43,7 @@ const RFPList = () => {
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [selectedRFP, setSelectedRFP] = useState(null);
 
+
   // Function to handle delete confirmation
   const handleDeleteConfirmation = (rfp) => {
     setSelectedRFP(rfp);

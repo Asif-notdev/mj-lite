@@ -1,9 +1,9 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const RFPList = () => {
-  // Define your RFP data
+  // Dummy RFP data
   const rfpData = [
     {
       id: 1,
@@ -13,7 +13,7 @@ const RFPList = () => {
       bidSubmissionDate: '2023-10-15',
       documents: ['Document 1', 'Document 2'],
       vendors: ['Vendor 1', 'Vendor 2'],
-      active: true, // Set to true for the "Active" badge
+      active: true,
     },
     {
       id: 2,
@@ -23,7 +23,7 @@ const RFPList = () => {
       bidSubmissionDate: '2023-10-17',
       documents: ['Document 3', 'Document 4'],
       vendors: ['Vendor 3', 'Vendor 4'],
-      active: false, // Set to false for no badge
+      active: false,
     },
     {
       id: 3,
@@ -33,7 +33,7 @@ const RFPList = () => {
       bidSubmissionDate: '2023-10-18',
       documents: ['Document 5', 'Document 6'],
       vendors: ['Vendor 5', 'Vendor 6'],
-      active: true, // Set to true for the "Active" badge
+      active: true,
     },
     {
       id: 4,
@@ -43,19 +43,56 @@ const RFPList = () => {
       bidSubmissionDate: '2023-10-19',
       documents: ['Document 7', 'Document 8'],
       vendors: ['Vendor 7', 'Vendor 8'],
-      active: false, // Set to false for no badge
+      active: false,
     },
   ];
+
   const thStyle = {
-    backgroundColor: 'blue', // Background color of th
-    color: 'white', // Text color
+    backgroundColor: 'blue',
+    color: 'white',
   };
+
+  // Define the state variables
+  const [showActiveOnly, setShowActiveOnly] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  // Sorting by creation date
+  const sortedRFPData = [...rfpData].sort(
+    (a, b) => new Date(b.bidCreationDate) - new Date(a.bidCreationDate)
+  );
+
+  // Filtering based on the search term and active status
+  const filteredRFPData = sortedRFPData.filter((rfp) => {
+    return (
+      (rfp.rfpName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        rfp.id.toString().includes(searchTerm)) &&
+      (!showActiveOnly || rfp.active)
+    );
+  });
 
   return (
     <div className="translucent-form">
       <h1>List of RFP</h1>
 
-      {rfpData.map((rfp) => (
+      <div className="d-flex justify-content-end mb-3 primary">
+        <div className="input-group w-25">
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Search RFPs"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
+        <button
+          className={`btn btn-${showActiveOnly ? 'primary' : 'success'}`}
+          onClick={() => setShowActiveOnly(!showActiveOnly)}
+        >
+          {showActiveOnly ? 'Show All' : 'Show Active Only'}
+        </button>
+      </div>
+
+      {filteredRFPData.map((rfp) => (
         <div key={rfp.id} className="accordion" id={`rfpAccordion${rfp.id}`}>
           <div className={`${rfp.active ? '' : ''}`}>
             <h2 className="accordion-header" id={`rfpHeading${rfp.id}`}>
@@ -69,7 +106,9 @@ const RFPList = () => {
                   <div>
                     Bid ID: {rfp.id} - {rfp.rfpName}
                   </div>
-                  {rfp.active && <span className="badge bg-success">Active</span>}
+                  {rfp.active && (
+                    <span className="badge bg-success">Active</span>
+                  )}
                 </div>
               </button>
             </h2>
@@ -80,16 +119,13 @@ const RFPList = () => {
               data-bs-parent={`#rfpAccordion${rfp.id}`}
             >
               <div className="accordion-body">
-                <table
-                  className={`table ${rfp.active ? 'bg-primary' : ''}`}
-                >
+                <table className={`table ${rfp.active ? 'bg-primary' : ''}`}>
                   <thead>
                     <tr>
                       <th style={thStyle}>Document List</th>
                       <th style={thStyle}>Vendor List</th>
                       <th style={thStyle}>Dates</th>
-
-                      <th style={thStyle}>View Bid</th> {/* This empty column will push the button to the right */}
+                      <th style={thStyle}>View Bid</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -113,7 +149,6 @@ const RFPList = () => {
                           <li>Creation Date: {rfp.bidCreationDate}</li>
                           <li>Opening Date: {rfp.bidOpeningDate}</li>
                           <li>Submission Date: {rfp.bidSubmissionDate}</li>
-                       
                         </ul>
                       </td>
                       <td>
@@ -134,3 +169,4 @@ const RFPList = () => {
 };
 
 export default RFPList;
+

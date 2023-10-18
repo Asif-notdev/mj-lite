@@ -1,112 +1,93 @@
-import React, { useState,useEffect} from 'react';
-import '../styling/rfpstyle.css';
-import FileInput from './Document';
-import { Modal, Button } from 'react-bootstrap'; // Import Modal and Button from React Bootstrap
-import { useNavigate , useParams } from 'react-router-dom';
+import React, { useState, useEffect} from "react";
+import "../styling/rfpstyle.css";
+import FileInput from "./Document";
+import { Modal, Button } from "react-bootstrap";
+import { useNavigate , useParams } from "react-router-dom";
+import {
+  BsFillPersonFill,
+  BsBox,
+  BsLayers,
+  BsQuestion,
+  BsCurrencyRupee } from "react-icons/bs";
 
 const BidSubmit = () => {
-
   const navigate = useNavigate();
   const { id } = useParams();
+  const [rfpData, setRfpData] = useState([]);
   const [editable, setEditable] = useState(false);
   const [dummyData, setDummyData] = useState([]);
   const [userName, setUserName] = useState('');
   const dummyDataApiEndpoint = 'http://localhost:3040/dummyData';
-  const userNameApiEndpoint = 'http://localhost:3050/userName';
-  const docList = 'http://localhost/'+id; // Replace with your actual API endpoint
+  const userNameApiEndpoint = 'http://localhost:3050/userName'; // Replace with your actual API endpoint
 
   useEffect(() => {
-    // Fetch dummy data
     fetch(dummyDataApiEndpoint)
-      .then(response => response.json())
-      .then(data => {
-        console.log('Fetched dummy data:', data);
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Fetched dummy data:", data);
+        console.log(id);
         setDummyData(data);
       })
-      .catch(error => console.error('Error fetching dummy data:', error));
+      .catch((error) => console.error("Error fetching dummy data:", error));
 
-    // Fetch user name
     fetch(userNameApiEndpoint)
-      .then(response => response.json())
-      .then(data => {
-        console.log('Fetched user name:', data);
-        // Check if the necessary properties exist before accessing them
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Fetched user name:", data);
         const userNameValue = data && data[0] && data[0].name;
 
-        console.log('userNameValue:', userNameValue); // Log the userNameValue
-        setUserName(userNameValue || '');
+        console.log("userNameValue:", userNameValue);
+        setUserName(userNameValue || "");
       })
-      .catch(error => {
-        console.error('Error fetching user name:', error);
-        // Log the specific error message
-        console.error('Error message:', error.message);
+      .catch((error) => {
+        console.error("Error fetching user name:", error);
+        console.error("Error message:", error.message);
       });
   }, []);
 
-  // const[]
-  const [rfpData, setRfpData] = useState([]);
-  const [vendors, setVendors] = useState(['Vendor 1', 'Vendor 2', 'Vendor 3']);
-  const [selectedVendors, setSelectedVendors] = useState([]);
-  
-  const [showSaveAsDraftModal, setShowSaveAsDraftModal] = useState(false);
-  const [showFinalSubmitModal, setShowFinalSubmitModal] = useState(false);
-
- 
-  const [remarks, setRemarks] = useState('');
-  const [bidSubmissionDate, setBidSubmissionDate] = useState('');
-  const [bidOpenDate, setBidOpenDate] = useState('');
-
-  const handleEditClick = () => {
-    setEditable(true);
-  };
-
-  const handleFinalSubmit = () => {
-    setShowFinalSubmitModal(true);
-  };
-
-  const handleFinalSubmitConfirm = () => {
-    // Additional logic for final submission if needed
-    navigate('/RFPList'); // Redirect to RFPList page
-    setShowFinalSubmitModal(false);
-  };
-
-  const handleSaveAsDraft = () => {
-    setShowSaveAsDraftModal(true);
-  };
-  const handleSaveAsDraftConfirm = () => {
-    // Additional logic for saving as a draft if needed
-    navigate('/RFPList'); // Redirect to RFPList page
-    setShowSaveAsDraftModal(false);
-  };
-  const handleAddVendor = () => {
-    setVendors([...vendors, `Vendor ${vendors.length + 1}`]);
-  };
-
-  
+ console.log(id);
   useEffect(() => {
-    fetch('http://localhost:8080/rfp/'+id)
+    fetch("http://localhost:8080/rfp1/"+id)
       .then(response => response.json())
       .then(data => {
-        console.log('Fetched vendors:', data);
+        console.log('Fetched dummy data:', data);
         setRfpData(data);
       })
-      .catch(error => console.error('Error fetching RfpList:', error));
+      .catch(error => console.error('Error fetching dummy data:', error));
   }, []);
+  const thStyle = {
+    backgroundColor: 'blue',
+    color: 'white',
+  };
+
+  // const[]
+
+  const [vendors, setVendors] = useState(['Vendor 1', 'Vendor 2', 'Vendor 3']);
+  const [selectedVendors, setSelectedVendors] = useState([]);
+  const [showSaveAsDraftModal, setShowSaveAsDraftModal] = useState(false);
+  const [showFinalSubmitModal, setShowFinalSubmitModal] = useState(false);
+  const [remarks, setRemarks] = useState("");
+  const [prices, setPrices] = useState([]);
+
 
   const postData = async () => {
     try {
-      const url = 'http://localhost:8080/fillbid/'+id;
+      const url = 'http://localhost:8080/fillbid';
       const jsonData = {
         "bidId":1,
         "vendorName": userName,
-        "isActive": true,
-        "remarks": remarks,
+        "isSplitable": rfpData.isSplitable,
+        "isPublish": true,
         "isDraft": false,
         "remarks": remarks,
-        "bidPrice":328748,
-        "buyer": 2,
-        
-       
+        "rfpCreationDate": rfpData.rfpCreationDate,
+        "bidOpeningDate": rfpData.bidOpeningDate,
+        "bidSubmissionDate": rfpData.bidSubmissionDate,
+        "name":rfpData.name,
+        "buyer_name":userName,
+        "buyer": 1,
+        "doc":[''],
+        //"li":[...selectedVendors]
       
       };
       const response = await fetch(url, {
@@ -125,12 +106,65 @@ const BidSubmit = () => {
       console.error('Error:', error);
     }
   };
+
+  useEffect(() => {
+    setPrices(dummyData.map(() => 0));
+  }, [dummyData]);
+
+  const [totalPrice, setTotalPrice] = useState(0);
+
+  useEffect(() => {
+    calculateTotalPrice();
+  }, [prices]);
+
+  const calculateTotalPrice = () => {
+    const total = prices.reduce(
+      (accumulator, price, index) => accumulator + price * dummyData[index].quantity,
+      0
+    );
+    setTotalPrice(total);
+  };
+
+  const handlePriceChange = (e, index) => {
+    const newPrices = [...prices];
+    const price = parseFloat(e.target.value);
+    if (!isNaN(price)) {
+      newPrices[index] = price;
+    }
+    setPrices(newPrices);
+  };
+  
+
+  const handleFinalSubmit = () => {
+    setShowFinalSubmitModal(true);
+  };
+
+  const handleFinalSubmitConfirm = () => {
+    postData();
+    navigate("/RFPList");
+    setShowFinalSubmitModal(false);
+  };
+
+  const handleSaveAsDraft = () => {
+    setShowSaveAsDraftModal(true);
+  };
+
+  const handleSaveAsDraftConfirm = () => {
+    navigate("/RFPList");
+    setShowSaveAsDraftModal(false);
+  };
+  const handleAddVendor = () => {
+    setVendors([...vendors, `Vendor ${vendors.length + 1}`]);
+  };
   return (
     <div className="main-container">
       <div className="translucent-form">
-        <div className="form-title">
-            <span style={{float: 'left'}}>Bid Submission</span>
-            <span style={{float: 'right'}}>Split/NotSplit</span>
+        <div className="user-info">
+          {userName !== "" ? (
+            <span>Welcome, {userName}</span>
+          ) : (
+            <span>Loading...</span>
+          )}
         </div>
 
         <div className="table-container">
@@ -146,70 +180,81 @@ const BidSubmit = () => {
             
             <tbody>
                 <tr>
-                  <td>{id}</td>
-                  <td>{rfpData.getBuyerName}</td>
+                  <td>{rfpData.id}</td>
+                  <td>{rfpData.name}</td>
                   <td>{rfpData.remarks}</td>
                   <td>......</td>
                 </tr>
             </tbody>
           </table>
         </div>
-        
+
         <div className="table-container">
           <table>
-            <thead>
-              <tr>
-                <th>Item ID</th>
-                <th>Item Name</th>
-                <th>Item Unit</th>
-                <th>Item quantity</th>
-                <th>Estimate Price</th>
-                <th>Your Price</th>
+                <th className="th-center">
+                  <BsBox className="icon" />Product ID
+                </th>
 
-              </tr>
-            </thead>
-            <tbody>
+                <th className="th-center">
+                  <BsFillPersonFill className="icon" />Product Name
+                </th>
+                <th className="th-center">
+                  <BsQuestion className="icon" /> Product Unit
+                </th>
+                <th className="th-center">
+                  <BsLayers className="icon" />
+                  Product quantity
+                </th>
+                <th className="th-center">
+                  <BsCurrencyRupee className="icon" /> Estimated Price per Unit
+                  Quantity
+                </th>
+                <th className="th-center">
+                  <BsCurrencyRupee className="icon" />
+                  Estimated Price per unit Product
+                </th>
+                <th className="th-center">
+                  <BsCurrencyRupee className="icon" />
+                  Your Unit Price
+                </th>
+                <th className="th-center">
+                  <BsCurrencyRupee className="icon" />
+                  Your Total Price per
+                </th>
               {dummyData.map((item, index) => (
                 <tr key={index}>
                   <td>{item.indentId}</td>
                   <td>{item.name}</td>
                   <td>{item.unit}</td>
                   <td>{item.quantity}</td>
-                  <td>858494949</td>
-                  <td><input type='number'></input></td>
+                  <td>{item.price}</td>
+                  <td>{item.quantity * item.price}</td>
+                  <td>
+                    <input
+                      type="number"
+                      min={0}
+                      placeholder="0"
+                      onChange={(e) => handlePriceChange(e, index)}
+                    />
+                  </td>
+                  <td>{prices[index] * item.quantity}</td>
                 </tr>
               ))}
-            </tbody>
           </table>
+           
         </div>
 
-        {/* {editable && (
-          <div className="vendor-section mt-4">
-            <label className="me-2">Select Vendor:</label>
-            <select
-              className="form-select"
-              multiple
-              value={selectedVendors}
-              onChange={(e) => setSelectedVendors(Array.from(e.target.selectedOptions, option => option.value))}
-            >
-              {vendors.map((vendor, index) => (
-                <option key={index} value={vendor}>
-                  {vendor}
-                </option>
-              ))}
-            </select>
-            <button type="button" onClick={handleAddVendor}>
-              Add Vendor
-            </button>
-          </div>
-        )} */}
+        <div class="container d-flex justify-content-end">
+          <span class="form-title fs-4">Grand Total:</span>
+          <span class="text-success fw-bold  mx-2" style={{ fontSize: '1.5em' }}>
+            {totalPrice }
+          </span>
+        </div>
 
         <div className='form-title my-2'> <h3 className='font-weight-bold'
         >Attach Documents</h3></div>
 
-        <FileInput/>
-        {/* <FileUploadComponent/> */}
-
+        <FileInput props={JSON.stringify(rfpData.docNameList)}/>
 
         <div className="remarks mt-4">
           <div className="form-title">Comments</div>
@@ -222,28 +267,19 @@ const BidSubmit = () => {
         </div>
 
         <div className="create-rpf mt-5">
-          
-          <button
-              class
-              
-              Name="btn btn-secondary "
-              onClick={handleSaveAsDraft}
-              
-            >
-              Save as Draft
-            </button>
-            <button
-              className="btn btn-success mx-5"
-              onClick={handleFinalSubmit}
-             
-            >
-              Final Submit
-            </button>
-           
-          
+          <button className="btn btn-secondary " onClick={handleSaveAsDraft}>
+            Save as Draft
+          </button>
 
-          {/* Save as Draft Modal */}
-          <Modal show={showSaveAsDraftModal} onHide={() => setShowSaveAsDraftModal(false)}>
+          <button className="btn btn-success mx-5" onClick={handleFinalSubmit}>
+            Final Submit
+          </button>
+
+         
+          <Modal
+            show={showSaveAsDraftModal}
+            onHide={() => setShowSaveAsDraftModal(false)}
+          >
             <Modal.Header closeButton>
               <Modal.Title>Save as Draft</Modal.Title>
             </Modal.Header>
@@ -255,17 +291,24 @@ const BidSubmit = () => {
             </Modal.Footer>
           </Modal>
 
-          {/* Final Submit Modal */}
-          <Modal show={showFinalSubmitModal} onHide={() => setShowFinalSubmitModal(false)}>
+          <Modal
+            show={showFinalSubmitModal}
+            onHide={() => setShowFinalSubmitModal(false)}
+          >
             <Modal.Header closeButton>
               <Modal.Title>Final Submit</Modal.Title>
             </Modal.Header>
             <Modal.Body>Are you sure you want to submit?</Modal.Body>
             <Modal.Footer>
-              <Button variant="secondary" onClick={() => setShowFinalSubmitModal(false)}>
+              <Button
+                variant="secondary"
+                onClick={() => setShowFinalSubmitModal(false)}
+              >
                 Cancel
               </Button>
-              <Button variant="primary" onClick={postData}>
+              <Button variant="primary"
+              onClick={() => handleFinalSubmitConfirm()}
+              >
                 OK
               </Button>
             </Modal.Footer>

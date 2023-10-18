@@ -34,39 +34,55 @@ const Accordion = () => {
       // Calculate the index range for the current page
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const currentItems = items.slice(startIndex, endIndex);
+  
+  const [showOnlyAvailable, setShowOnlyAvailable] = useState(false);
 
   // Handle page change
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
+
+  const toggleShowOnlyAvailable = () => {
+    setShowOnlyAvailable(!showOnlyAvailable);
+  };
+
+  const filteredItems = showOnlyAvailable ? items.filter((item) => item.isActive) : items;
+  const currentItems = filteredItems.slice(startIndex, endIndex);
     
     
   return (
     <div>
+        <div className= 'd-flex justify-content-end mx-5 mb-3'>
+          <button
+            className={`btn ${showOnlyAvailable ? 'btn-warning' : 'btn-primary'}`}
+            onClick={toggleShowOnlyAvailable}
+          >
+            {showOnlyAvailable ? 'Show All' : 'Show Active Only'}
+          </button>
+        </div>
     {currentItems.map((item) => (
-        <div key={item.id} className="accordion" id={`itemAccordion${item.id}`}>
+        <div key={item.rfp_id} className="accordion" id={`itemAccordion${item.rfp_id}`}>
                 <div className="accordion-item">
-                            <h6 className="accordion-header" id={`itemHeading${item.id}`}>
+                            <h6 className="accordion-header" id={`itemHeading${item.rfp_id}`}>
                                 <button className="accordion-button" 
                                 type="button" 
                                 data-bs-toggle="collapse" 
-                                data-bs-target={`#itemCollapse${item.id}`}>
+                                data-bs-target={`#itemCollapse${item.rfp_id}`}>
                                     <BsFillFileEarmarkTextFill className="icon" />
                                     <h6 className='mx-3'>{item.buyerName}</h6>
-                                    <h6 className='mx-1'>(Tender Id: {item.id})
+                                    <h6 className='mx-1'>(Tender Id: {item.rfp_id})
                                     </h6>
-                                      <span className={`badge ${item.isSplitable ? 'bg-success' : 'bg-danger'} text-white me-2 mx-3`}>
-                                        {item.isSplitable ? 'Open for Submissions' : 'Submission Closed'}
+                                      <span className={`badge ${item.isSplitable ? 'bg-success' : ''} text-white me-2 mx-3`}>
+                                        {item.isSplitable ? 'Splitable' : ''}
                                       </span>
                                 </button>
                                 
                             </h6>
 
-                            <div id={`itemCollapse${item.id}`} 
+                            <div id={`itemCollapse${item.rfp_id}`} 
                             className="accordion-collapse collapse" 
-                            aria-labelledby={`itemHeading${item.id}`} 
-                            data-bs-parent={`#itemAccordion${item.id}`}>
+                            aria-labelledby={`itemHeading${item.rfp_id}`} 
+                            data-bs-parent={`#itemAccordion${item.rfp_id}`}>
                             <div className='accordion-body'>
                                 <table id='acc-table'>
                                     <tr>

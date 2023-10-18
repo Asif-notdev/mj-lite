@@ -48,40 +48,78 @@ const RFPList = () => {
   //     active: false, // Set to false for no badge
   //   },
   // ];
-  const thStyle = {
-    backgroundColor: 'blue', // Background color of th
-    color: 'white', // Text color
-  };
 
   useEffect(() => {
-    fetch('http://localhost:8080/rfplist/2')
+    fetch("http://localhost:8080/rfplist/1")
       .then(response => response.json())
       .then(data => {
-        console.log('Fetched vendors:', data);
+        console.log('Fetched dummy data:', data);
         setRfpData(data);
       })
-      .catch(error => console.error('Error fetching RfpList:', error));
+      .catch(error => console.error('Error fetching dummy data:', error));
   }, []);
+  const thStyle = {
+    backgroundColor: 'blue',
+    color: 'white',
+  };
+
+  // Define the state variables
+  const [showActiveOnly, setShowActiveOnly] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  // Sorting by creation date
+  const sortedRFPData = [...rfpData].sort(
+    (a, b) => new Date(b.bidCreationDate) - new Date(a.bidCreationDate)
+  );
+
+  // Filtering based on the search term and active status
+  const filteredRFPData = sortedRFPData.filter((rfp) => {
+    return ( null
+      // (rfp.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      //   rfp.id.toString().includes(searchTerm)) &&
+      // (!showActiveOnly || rfp.active)
+    );
+  });
 
   return (
     <div className="translucent-form">
       <h1>List of RFP</h1>
 
+      <div className="d-flex justify-content-end mb-3 primary">
+        <div className="input-group w-25">
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Search RFPs"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
+        <button
+          className={`btn btn-${showActiveOnly ? 'primary' : 'success'}`}
+          onClick={() => setShowActiveOnly(!showActiveOnly)}
+        >
+          {showActiveOnly ? 'Show All' : 'Show Active Only'}
+        </button>
+      </div>
+
       {rfpData.map((rfp) => (
-        <div key={rfp.rfpId} className="accordion" id={`rfpAccordion${rfp.rfpId}`}>
-          <div className={`${rfp.isPublish ? '' : ''}`}>
-            <h2 className="accordion-header" id={`rfpHeading${rfp.rfpId}`}>
+        <div key={rfp.id} className="accordion" id={`rfpAccordion${rfp.id}`}>
+          <div className={`${rfp.active ? '' : ''}`}>
+            <h2 className="accordion-header" id={`rfpHeading${rfp.id}`}>
               <button
                 className="accordion-button"
                 type="button"
                 data-bs-toggle="collapse"
-                data-bs-target={`#rfpCollapse${rfp.rfpId}`}
+                data-bs-target={`#rfpCollapse${rfp.id}`}
               >
                 <div className="d-flex justify-content-between align-items-center">
                   <div>
-                    RFP ID: {rfp.rfpId} - {rfp.id}
+                    RFP ID: {rfp.id} - {rfp.name}
                   </div>
-                  {rfp.isPublish && <span className="badge bg-success">Active</span>}
+                  {rfp.active && (
+                    <span className="badge bg-success">Active</span>
+                  )}
                 </div>
               </button>
             </h2>
@@ -92,16 +130,13 @@ const RFPList = () => {
               data-bs-parent={`#rfpAccordion${rfp.id}`}
             >
               <div className="accordion-body">
-                <table
-                  className={`table ${rfp.isPublish ? 'bg-primary' : ''}`}
-                >
+                <table className={`table ${rfp.active ? 'bg-primary' : ''}`}>
                   <thead>
                     <tr>
                       <th style={thStyle}>Document List</th>
                       <th style={thStyle}>Vendor List</th>
                       <th style={thStyle}>Dates</th>
-
-                      <th style={thStyle}>View Bid</th> {/* This empty column will push the button to the right */}
+                      <th style={thStyle}>View Bid</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -125,7 +160,6 @@ const RFPList = () => {
                           <li>Creation Date: {rfp.rfpCreationDate}</li>
                           <li>Opening Date: {rfp.bidOpeningDate}</li>
                           <li>Submission Date: {rfp.bidSubmissionDate}</li>
-                       
                         </ul>
                       </td>
                       <td>
@@ -146,3 +180,4 @@ const RFPList = () => {
 };
 
 export default RFPList;
+

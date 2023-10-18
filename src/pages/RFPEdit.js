@@ -45,9 +45,11 @@ const RFPEdit = () => {
   useEffect(() => {
     console.log('userName in RFPEdit:', userName);
   }, [userName]);
+
   const navigate = useNavigate();
   const [editable, setEditable] = useState(true);
   const [indents, setIndents] = useState(location.state?.dummyData || []);
+
   const [allVendors, setAllVendors] = useState(['Vendor 1', 'Vendor 2', 'Vendor 3']);
   const [selectedVendors, setSelectedVendors] = useState([]);
   const [removedVendors, setRemovedVendors] = useState([]);
@@ -86,11 +88,13 @@ const RFPEdit = () => {
     const updatedVendors = allVendors.filter((v) => v !== vendor.name);
     setAllVendors(updatedVendors);
   };
+
   const handleRemoveVendor = (vendor) => {
     const updatedVendors = selectedVendors.filter((v) => v !== vendor);
     setSelectedVendors(updatedVendors);
     setRemovedVendors([...removedVendors, vendor]);
   };
+
   const handleEditClick = () => {
     setEditable(true);
   };
@@ -125,6 +129,7 @@ const RFPEdit = () => {
         //"li":[...selectedVendors]
       
       };
+
       const response = await fetch(url, {
         method: 'POST',
         headers: {
@@ -132,16 +137,20 @@ const RFPEdit = () => {
         },
         body: JSON.stringify(jsonData),
       });
+
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
+
       const responseData = await response.json();
       console.log(responseData);
     } catch (error) {
       console.error('Error:', error);
     }
   };
+
   const filteredVendors = allVendors.filter((vendor) => !selectedVendors.includes(vendor) && !removedVendors.includes(vendor));
+
   const handleFinalSubmit = () => {
     if (!areAllFieldsFilled()) {
       setShowFillDataModal(true);
@@ -158,9 +167,11 @@ const RFPEdit = () => {
     navigate('/RFPList');
     setShowFinalSubmitModal(false);
   };
+
   const handleSaveAsDraft = () => {
     setShowSaveAsDraftModal(true);
   };
+
   const handleSaveAsDraftConfirm = () => {
     navigate('/RFPList');
     setShowSaveAsDraftModal(false);
@@ -319,6 +330,7 @@ const RFPEdit = () => {
             </option>
           ))}
         </select>
+
         {selectedVendors.length > 0 && (
           <div className="selected-vendor mt-4">
             <div className="form-title">Selected Vendors</div>
@@ -339,8 +351,13 @@ const RFPEdit = () => {
             </div>
           </div>
         )}
+
         <div className="document-list mt-4">
-          <div className="form-title " >Documents</div>
+          <div className=' d-flex'>
+          <div style={{display:'inline'}}  className="form-title" >Documents </div>
+          <div className='mt-2 mx-2'>(Check The Boxes for mandatory Documents)</div>
+          </div>
+          
           <div className="row ">
             {documents.map((doc) => (
               <div className="col-md-3" key={doc.id}>
@@ -357,6 +374,7 @@ const RFPEdit = () => {
             ))}
           </div>
         </div>
+
         <div className="rfp-decision mt-4">
           <div className="form-title">RFQ Split</div>
           <div className="btn-group" role="group" aria-label="RFP Decision">
@@ -378,6 +396,7 @@ const RFPEdit = () => {
             </div>
           </div>
         </div>
+
         <div className="remarks mt-4">
           <div className="form-title">Remarks</div>
           <textarea
@@ -481,5 +500,6 @@ const RFPEdit = () => {
     </div>
   );
 };
+
 export default RFPEdit;
 

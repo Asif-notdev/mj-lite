@@ -78,10 +78,10 @@ export default function NavBar2() {
             <div class="offcanvas-body">
               <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
                 <li class="nav-item">
-                <Link to="/suppliers" className="nav-link active text-light" aria-current="page" >Suppliers</Link>
+                <Link to="/" className="nav-link active text-light" aria-current="page" >Suppliers</Link>
                 </li>
                 <li class="nav-item">
-                <Link to="/tenders" className="nav-link active text-light" aria-current="page" >Tenders</Link>
+                <Link to="/vendorhome" className="nav-link active text-light" aria-current="page" >Tenders</Link>
                 </li>
                 <li class="nav-item">
                 <Link to="/contact" className="nav-link active text-light" aria-current="page" >Contact</Link>

@@ -1,14 +1,15 @@
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import "../styling/rfpstyle.css";
 import FileInput from "./Document";
 import { Modal, Button } from "react-bootstrap";
-import { useNavigate , useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   BsFillPersonFill,
   BsBox,
   BsLayers,
   BsQuestion,
-  BsCurrencyRupee } from "react-icons/bs";
+  BsCurrencyRupee
+} from "react-icons/bs";
 
 
 const BidSubmit = () => {
@@ -46,7 +47,7 @@ const BidSubmit = () => {
       });
 
 
-      fetch("http://localhost:8080/rfp1"+id)
+    fetch("http://localhost:8080/rfp1/"+id)
       .then((response) => response.json())
       .then((data) => {
         console.log("Fetched RFP ID Data :", data);
@@ -55,9 +56,9 @@ const BidSubmit = () => {
       .catch((error) => console.error("Error fetching RFP data:", error));
   }, []);
 
- console.log(id);
+  console.log(id);
   useEffect(() => {
-    fetch("http://localhost:8080/rfp1/"+id)
+    fetch("http://localhost:8080/rfp1/" + id)
       .then(response => response.json())
       .then(data => {
         console.log('Fetched dummy data:', data);
@@ -78,13 +79,20 @@ const BidSubmit = () => {
   const [showFinalSubmitModal, setShowFinalSubmitModal] = useState(false);
   const [remarks, setRemarks] = useState("");
   const [prices, setPrices] = useState([]);
+  const docData = [
+    { 'idName': "Adhar Card", 'isRequired': true },
+    { 'idName': "PAN Card", 'isRequired': false },
+    { 'idName': "VCard Card", 'isRequired': true },
+    { 'idName': "VCard Card", 'isRequired': true },
+    { 'idName': "VCard Card", 'isRequired': true }
+  ];
 
 
   const postData = async () => {
     try {
       const url = 'http://localhost:8080/fillbid';
       const jsonData = {
-        "bidId":1,
+        "bidId": 1,
         "vendorName": userName,
         "isSplitable": rfpData.isSplitable,
         "isPublish": true,
@@ -93,12 +101,12 @@ const BidSubmit = () => {
         "rfpCreationDate": rfpData.rfpCreationDate,
         "bidOpeningDate": rfpData.bidOpeningDate,
         "bidSubmissionDate": rfpData.bidSubmissionDate,
-        "name":rfpData.name,
-        "buyer_name":userName,
+        "name": rfpData.name,
+        "buyer_name": userName,
         "buyer": 1,
-        "doc":[''],
+        "doc": [''],
         //"li":[...selectedVendors]
-      
+
       };
       const response = await fetch(url, {
         method: 'POST',
@@ -189,49 +197,21 @@ const BidSubmit = () => {
                 <th>.......</th>
               </tr>
             </thead>
-            
-            <tbody>
-                <tr>
-                  <td>{rfpData.id}</td>
-                  <td>{rfpData.name}</td>
-                  <td>{rfpData.remarks}</td>
-                  <td>......</td>
-                </tr>
-            </tbody>
-          </table>
-        </div>
 
-        <div className="table-container">
-          <table>
-            <thead>
-              <tr style={{ background: "#007BFF" }}>
-                <th>RFQ ID</th>
-                <th>RFQ Name</th>
-                <th>RFQ Description</th>
-                <th>Bid Submission Date</th>
-                <th>
-                   Bid Opening Date
-                </th>
+            <tbody>
+              <tr>
+                <td>{rfpData.id}</td>
+                <td>{rfpData.name}</td>
+                <td>{rfpData.remarks}</td>
+                <td>......</td>
               </tr>
-            </thead>
-            <tbody>
-                  {
-                  
-                    rfpData.map((rfp, index) => (
-                        <tr key={index}>
-                          <td>{rfp.id}</td>
-                          <td>{rfp.name}</td>
-                          <td>{rfp.desc}</td>
-                          <td>{rfp.bidSubmissionDate}</td>
-                          <td>{rfp.bidOpeningData}</td>
-                        </tr>
-                      ))  
-
-                  }
             </tbody>
           </table>
-           
         </div>
+
+       
+
+        
 
         <div className="table-container">
           <table>
@@ -271,41 +251,59 @@ const BidSubmit = () => {
             <tbody>
               {
                 dummyData.map((item, index) => (
-                <tr key={index}>
-                  <td>{item.indentId}</td>
-                  <td>{item.name}</td>
-                  <td>{item.unit}</td>
-                  <td>{item.quantity}</td>
-                  <td>{item.price}</td>
-                  <td>{item.quantity * item.price}</td>
-                  <td>
-                    <input
-                      type="number"
-                      min="0"
-                      placeholder="0"
-                      onChange={(e) => handlePriceChange(e, index)}
-                    />
-                  </td>
-                  <td>{prices[index] * item.quantity}</td>
-                </tr>
+                  <tr key={index}>
+                    <td>{item.indentId}</td>
+                    <td>{item.name}</td>
+                    <td>{item.unit}</td>
+                    <td>{item.quantity}</td>
+                    <td>{item.price}</td>
+                    <td>{item.quantity * item.price}</td>
+                    <td>
+                      <input
+                        type="number"
+                        min="0"
+                        placeholder="0"
+                        onChange={(e) => handlePriceChange(e, index)}
+                      />
+                    </td>
+                    <td>{prices[index] * item.quantity}</td>
+                  </tr>
                 ))
               }
             </tbody>
           </table>
-           
+
         </div>
 
         <div class="container d-flex justify-content-end">
           <span class="form-title fs-4">Grand Total:</span>
           <span class="text-success fw-bold  mx-2" style={{ fontSize: '1.5em' }}>
-            {totalPrice }
+            {totalPrice}
           </span>
         </div>
 
         <div className='form-title my-2'> <h3 className='font-weight-bold'
         >Attach Documents</h3></div>
 
-        <FileInput props={JSON.stringify(rfpData.docNameList)}/>
+        <div className="mt-3">
+          <div className="row">
+            {
+              docData.map((val, ind) => (
+                <div key={ind} className="col-md-4 mb-3" style={{ marginLeft: '10px' }}>
+                  <div className="input-group">
+                    <span className="input-group-text">{val.idName} {val.isRequired && (<sub className='ms-1' style={{ color: 'red' }}> * </sub>)}</span>
+                    <input
+                      type="file"
+                      aria-label={val.idName}
+                      className="form-control"
+                      required={val.isRequired}
+                    />
+                  </div>
+                </div>
+              ))
+            }
+          </div>
+        </div>
 
         <div className="remarks mt-4">
           <div className="form-title">Comments</div>
@@ -318,7 +316,7 @@ const BidSubmit = () => {
         </div>
 
         <div className="create-rpf mt-5 d-flex justify-content-end">
-         
+
           <button className="btn btn-success mx-5" onClick={handleFinalSubmit}>
             Final Submit
           </button>
@@ -339,7 +337,7 @@ const BidSubmit = () => {
                 Cancel
               </Button>
               <Button variant="primary"
-              onClick={() => handleFinalSubmitConfirm()}
+                onClick={() => handleFinalSubmitConfirm()}
               >
                 OK
               </Button>

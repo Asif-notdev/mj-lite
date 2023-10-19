@@ -46,7 +46,7 @@ const BidSubmit = () => {
       });
 
 
-      fetch(rfpDataApiEndpoint)
+      fetch("http://localhost:8080/rfp1"+id)
       .then((response) => response.json())
       .then((data) => {
         console.log("Fetched RFP ID Data :", data);

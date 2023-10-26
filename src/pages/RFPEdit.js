@@ -114,6 +114,7 @@ const RFPEdit = () => {
       const url = 'http://localhost:8080/fillrfp';
       const jsonData = {
         "id":1,
+        "rfp_id":"5",
         "estimatedPrice": 100000,
         "isSplitable": rfpDivision,
         "isPublish": true,

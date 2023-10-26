@@ -46,14 +46,6 @@ const BidSubmit = () => {
         console.error("Error message:", error.message);
       });
 
-
-    fetch("http://localhost:8080/rfp1/"+id)
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Fetched RFP ID Data :", data);
-        setRfpData(data);
-      })
-      .catch((error) => console.error("Error fetching RFP data:", error));
   }, []);
 
   console.log(id);
@@ -87,6 +79,8 @@ const BidSubmit = () => {
     { 'idName': "VCard Card", 'isRequired': true }
   ];
 
+  console.log("hello"+rfpData.bidOpeningDate);
+  console.log("there"+ rfpData.bidSubmissionDate);
 
   const postData = async () => {
     try {
@@ -98,12 +92,15 @@ const BidSubmit = () => {
         "isPublish": true,
         "isDraft": false,
         "remarks": remarks,
-        "rfpCreationDate": rfpData.rfpCreationDate,
-        "bidOpeningDate": rfpData.bidOpeningDate,
-        "bidSubmissionDate": rfpData.bidSubmissionDate,
+        "rfpCreationDateTime": rfpData.rfpCreationDate,
+        "bidOpeningDateTime": rfpData.bidOpeningDate,
+        "bidSubmissionDateTime": rfpData.bidSubmissionDate,
         "name": rfpData.name,
         "buyer_name": userName,
+        "bidStatus": true,
+        "bidPrice": 567894.90,
         "buyer": 1,
+        "rfp_id":rfpData.id,
         "doc": [''],
         //"li":[...selectedVendors]
 
@@ -128,6 +125,7 @@ const BidSubmit = () => {
   useEffect(() => {
     setPrices(dummyData.map(() => 0));
   }, [dummyData]);
+  
 
   const [totalPrice, setTotalPrice] = useState(0);
 

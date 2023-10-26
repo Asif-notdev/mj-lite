@@ -115,9 +115,9 @@ const RFPList = () => {
               >
                 <div className="d-flex justify-content-between align-items-center">
                   <div>
-                    RFP ID: {rfp.id} - {rfp.name}
+                    RFP ID: {rfp.rfp_id} - {rfp.name}
                   </div>
-                  {rfp.active && (
+                  {rfp.isPublish && (
                     <span className="badge bg-success">Active</span>
                   )}
                 </div>
@@ -163,7 +163,7 @@ const RFPList = () => {
                         </ul>
                       </td>
                       <td>
-                        <Link to={`/viewbids/${rfp.rfp_id}`}>
+                        <Link to={`/viewbids/${rfp.id}`}>
                           <button className="btn btn-success">View Bid</button>
                         </Link>
                       </td>

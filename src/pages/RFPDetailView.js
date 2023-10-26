@@ -9,7 +9,7 @@ const RFPDetailView = () => {
 
 
   useEffect(() => {
-    fetch("http://localhost:8080/rfp/"+id)
+    fetch("http://localhost:8080/rfp1/382")
       .then(response => response.json())
       .then(data => {
         console.log('Fetched dummy data:', data);
@@ -111,9 +111,9 @@ const RFPDetailView = () => {
               <div>
                 <strong>Attached Documents:</strong>
                 <ul>
-                  {(rfpData.docNameList).map((doc) => (
-                    <li>{doc}</li>
-                  ))}
+                {rfpData.docNameList.map((document, index) => (
+                            <li key={index}>{document}</li>
+                          ))}
                 </ul>
               </div>
               <p>

@@ -1,19 +1,28 @@
-import React, { useState, useEffect, useRef } from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '../styling/rfpstyle.css';
-import { BsFillPersonFill, BsBox, BsLayers, BsQuestion, BsTrash, BsCurrencyRupee } from 'react-icons/bs';
-import { Modal, Button } from 'react-bootstrap'; // Import Modal and Button from React Bootstrap
-import { useNavigate, useLocation } from 'react-router-dom';
-import { BsCalendar, BsClock } from 'react-icons/bs';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
+import React, { useState, useEffect, useRef } from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "../styling/rfpstyle.css";
+import {
+  BsFillPersonFill,
+  BsBox,
+  BsLayers,
+  BsQuestion,
+  BsTrash,
+  BsCurrencyRupee,
+} from "react-icons/bs";
+import { Modal, Button } from "react-bootstrap"; // Import Modal and Button from React Bootstrap
+import { useNavigate, useLocation } from "react-router-dom";
+import { BsCalendar, BsClock } from "react-icons/bs";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 const RFPEdit = () => {
   const location = useLocation();
-  const userName = location.state?.userName || '';
+  const userName = location.state?.userName || "";
   const [showSaveAsDraftModal, setShowSaveAsDraftModal] = useState(false);
   const [showFillDataModal, setShowFillDataModal] = useState(false);
   const [showFinalSubmitModal, setShowFinalSubmitModal] = useState(false);
-  const [bidSubmissionDateTime, setBidSubmissionDateTime] = useState(new Date());
+  const [bidSubmissionDateTime, setBidSubmissionDateTime] = useState(
+    new Date()
+  );
   const [bidOpenDateTime, setBidOpenDateTime] = useState(new Date());
   const [minBidOpenDate, setMinBidOpenDate] = useState(new Date());
   const handleBidSubmissionDateTimeChange = (date) => {
@@ -43,51 +52,73 @@ const RFPEdit = () => {
     clockRef.current.setOpen(true);
   };
   useEffect(() => {
-    console.log('userName in RFPEdit:', userName);
+    console.log("userName in RFPEdit:", userName);
   }, [userName]);
 
   const navigate = useNavigate();
   const [editable, setEditable] = useState(true);
   const [indents, setIndents] = useState(location.state?.dummyData || []);
 
-  const [allVendors, setAllVendors] = useState(['Vendor 1', 'Vendor 2', 'Vendor 3']);
+  const [allVendors, setAllVendors] = useState([
+    "Vendor 1",
+    "Vendor 2",
+    "Vendor 3",
+  ]);
+  const [selectedValue, setSelectedValue] = useState("");
+
   const [selectedVendors, setSelectedVendors] = useState([]);
   const [removedVendors, setRemovedVendors] = useState([]);
   const [selectedDocuments, setSelectedDocuments] = useState([]);
   const [documents, setDocuments] = useState([]);
   const [rfpDivision, setrfpDivision] = useState(true);
-  const [remarks, setRemarks] = useState('');
-  const [rfpName, setRfpName] = useState('');
+  const [remarks, setRemarks] = useState("");
+  const [rfpName, setRfpName] = useState("");
   useEffect(() => {
-    fetch('http://localhost:8080/vendorlist')
-      .then(response => response.json())
-      .then(data => {
+    fetch("http://localhost:8080/vendorlist")
+      .then((response) => response.json())
+      .then((data) => {
         if (Array.isArray(data)) {
-          // Ensure data is an array
           setAllVendors(data);
         } else {
-          console.error('Invalid data format for vendors:', data);
+          console.error("Invalid data format for vendors:", data);
         }
       })
-      .catch(error => console.error('Error fetching vendors:', error));
+      .catch((error) => console.error("Error fetching vendors:", error));
   }, []);
-  
+
+  // useEffect(() => {
+  //   console.log("Current Selected Vendors: ", selectedVendors);
+  // })
+
   useEffect(() => {
-    fetch('http://localhost:8080/doclist')
-      .then(response => response.json())
-      .then(data => {
-        console.log('Fetched vendors:', data);
+    fetch("http://localhost:8080/doclist")
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Fetched vendors:", data);
         setDocuments(data);
       })
-      .catch(error => console.error('Error fetching vendors:', error));
+      .catch((error) => console.error("Error fetching vendors:", error));
   }, []);
+
+  useEffect(() => {
+
+    console.log("MJ: ", selectedVendors);
+
+  })
+
   const handleVendorSelect = (vendor) => {
+    
+    setSelectedValue(vendor);
+   
     //const vendor = allVendors.find(vendor => vendor.id === selectedVendor.id);
 
+    console.log("Hi--current selected vendor is: ",vendor);
     setSelectedVendors([...selectedVendors, vendor]);
     const updatedVendors = allVendors.filter((v) => v !== vendor.name);
     setAllVendors(updatedVendors);
   };
+
+  
 
   const handleRemoveVendor = (vendor) => {
     const updatedVendors = selectedVendors.filter((v) => v !== vendor);
@@ -99,42 +130,42 @@ const RFPEdit = () => {
     setEditable(true);
   };
   const handleDocumentChange = (documentId) => {
-    const updatedDocuments = documents.map(doc => ({
+    const updatedDocuments = documents.map((doc) => ({
       ...doc,
       selected: doc.id === documentId ? !doc.selected : doc.selected,
     }));
     setDocuments(updatedDocuments);
-    const selectedDocs = updatedDocuments.filter(doc => doc.selected).map(doc => doc.id);
+    const selectedDocs = updatedDocuments
+      .filter((doc) => doc.selected)
+      .map((doc) => doc.id);
     setSelectedDocuments(selectedDocs);
     console.log("docList" + selectedDocuments);
-  }
+  };
   const data = "MJ".concat(Math.random());
   const postData = async () => {
     try {
-      const url = 'http://localhost:8080/fillrfp';
+      const url = "http://localhost:8080/fillrfp";
       const jsonData = {
-        "id":1,
-        "rfp_id":"5",
-        "estimatedPrice": 100000,
-        "isSplitable": rfpDivision,
-        "isPublish": true,
-        "isDraft": false,
-        "remarks": remarks,
-        "rfpCreationDate": "12-09-2023",
-        "bidOpeningDate": bidOpenDate,
-        "bidSubmissionDate": bidSubmissionDate,
-        "name":rfpName,
-        "buyer_name":userName,
-        "buyer": 1,
-        "doc":[...selectedDocuments],
-        //"li":[...selectedVendors]
-      
+        id: 1,
+        estimatedPrice: 100000,
+        isSplitable: rfpDivision,
+        isPublish: true,
+        isDraft: false,
+        remarks: remarks,
+        rfpCreationDate: "12-09-2023",
+        bidOpeningDate: bidOpenDate,
+        bidSubmissionDate: bidSubmissionDate,
+        name: rfpName,
+        buyer_name: userName,
+        buyer: 1,
+        doc: [...selectedDocuments],
+      //  li:[...selectedVendors]
       };
 
       const response = await fetch(url, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(jsonData),
       });
@@ -146,11 +177,14 @@ const RFPEdit = () => {
       const responseData = await response.json();
       console.log(responseData);
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
     }
   };
 
-  const filteredVendors = allVendors.filter((vendor) => !selectedVendors.includes(vendor) && !removedVendors.includes(vendor));
+  const filteredVendors = allVendors.filter(
+    (vendor) =>
+      !selectedVendors.includes(vendor) && !removedVendors.includes(vendor)
+  );
 
   const handleFinalSubmit = () => {
     if (!areAllFieldsFilled()) {
@@ -165,7 +199,7 @@ const RFPEdit = () => {
       return;
     }
     await postData();
-    navigate('/RFPList');
+    navigate("/RFPList");
     setShowFinalSubmitModal(false);
   };
 
@@ -174,18 +208,18 @@ const RFPEdit = () => {
   };
 
   const handleSaveAsDraftConfirm = () => {
-    navigate('/RFPList');
+    navigate("/RFPList");
     setShowSaveAsDraftModal(false);
   };
   const areAllFieldsFilled = () => {
     return (
-      indents.every(item => item.quantity && item.price) &&
-      rfpName.trim() !== '' &&
+      indents.every((item) => item.quantity && item.price) &&
+      rfpName.trim() !== "" &&
       selectedVendors.length > 0 &&
       selectedDocuments.length > 0 &&
-      remarks.trim() !== '' &&
-      bidSubmissionDate !== '' &&
-      bidOpenDate !== ''
+      remarks.trim() !== "" &&
+      bidSubmissionDate !== "" &&
+      bidOpenDate !== ""
     );
   };
   useEffect(() => {
@@ -203,17 +237,19 @@ const RFPEdit = () => {
     <div className="main-container">
       <div className="translucent-form">
         <div className="user-info">
-          {userName !== '' ? (
+          {userName !== "" ? (
             <span>Welcome, {userName}</span>
           ) : (
             <span>Loading...</span>
           )}
         </div>
-        <div className="form-title"><BsLayers className="icon" /> Proposed Indent</div>
+        <div className="form-title">
+          <BsLayers className="icon" /> Proposed Indent
+        </div>
         <div className="table-container mt-4">
           <table>
             <thead>
-              <tr style={{ background: '#007BFF' }}>
+              <tr style={{ background: "#007BFF" }}>
                 <th>
                   <BsBox className="icon" /> Product ID
                 </th>
@@ -240,7 +276,7 @@ const RFPEdit = () => {
                 <tr
                   key={index}
                   style={{
-                    background: index % 2 === 0 ? '#f0f0f0' : 'white',
+                    background: index % 2 === 0 ? "#f0f0f0" : "white",
                   }}
                 >
                   <td>{item.indentId}</td>
@@ -277,17 +313,15 @@ const RFPEdit = () => {
                     )}
                   </td>
                   <td>
-                     
-                      <input
-                        type="text"
-                        value={item.estimatedPrice}
-                        onChange={(e) => {
-                          const updatedIndents = [...indents];
-                          updatedIndents[index].estimatedPrice = e.target.value;
-                          setIndents(updatedIndents);
-                        }}
-                      />
-                    
+                    <input
+                      type="text"
+                      value={item.estimatedPrice}
+                      onChange={(e) => {
+                        const updatedIndents = [...indents];
+                        updatedIndents[index].estimatedPrice = e.target.value;
+                        setIndents(updatedIndents);
+                      }}
+                    />
                   </td>
                   {editable && (
                     <td>
@@ -306,8 +340,14 @@ const RFPEdit = () => {
         </div>
         <div class="container d-flex justify-content-end">
           <span class="form-title fs-4">Grand Total:</span>
-          <span class="text-success fw-bold  mx-2" style={{ fontSize: '1.5em' }}>
-            {indents.reduce((total, item) => total + (item.estimatedPrice || 0), 0)}
+          <span
+            class="text-success fw-bold  mx-2"
+            style={{ fontSize: "1.5em" }}
+          >
+            {indents.reduce(
+              (total, item) => total + (item.estimatedPrice || 0),
+              0
+            )}
           </span>
         </div>
         <div className="remarks mt-4">
@@ -319,31 +359,37 @@ const RFPEdit = () => {
             onChange={(e) => setRfpName(e.target.value)}
           />
         </div>
+
         <select
-          className="form-select mt-4"
-          value={''}
-          onChange={(e) => handleVendorSelect(e.target.value)}
-        >
-          <option value={''} disabled>Select Vendor</option>
-          {allVendors.map((vendor, index) => (
-            <option key={index} value={vendor}>
-              {vendor.name}
+            className="form-select mt-4"
+            value={selectedValue}
+            onChange={(e) => handleVendorSelect(e.target.value)}
+          >
+            <option value="" disabled>
+              Select Vendor
             </option>
-          ))}
-        </select>
+            {allVendors.map((vendor, index) => (
+              <option key={vendor.id} value={vendor.name}>
+                {vendor.name}
+              </option>
+            ))}
+          </select>
 
         {selectedVendors.length > 0 && (
           <div className="selected-vendor mt-4">
             <div className="form-title">Selected Vendors</div>
             <div className="selected-vendor-box d-flex">
-              {selectedVendors.map((vendor) => (
-                <div key={vendor} className="selected-vendor-item mx-2 ">
-                  {console.log(vendor.id)}
-                  {vendor.name}
+              {selectedVendors.map((vendorName,index) => (
+                <div key={index} className="selected-vendor-item mx-2 ">
+                
+                  {console.log("Lalu Bhai")}
+                  {console.log(vendorName)}
+          
+                  {vendorName}
                   <button
                     className="btn btn-sm btn-danger ml-2 mx-1"
-                    style={{ padding: '0.2rem 0.4rem', fontSize: '0.8rem' }}
-                    onClick={() => handleRemoveVendor(vendor)}
+                    style={{ padding: "0.2rem 0.4rem", fontSize: "0.8rem" }}
+                    onClick={() => handleRemoveVendor(vendorName)}
                   >
                     &times;
                   </button>
@@ -354,11 +400,15 @@ const RFPEdit = () => {
         )}
 
         <div className="document-list mt-4">
-          <div className=' d-flex'>
-          <div style={{display:'inline'}}  className="form-title" >Documents </div>
-          <div className='mt-2 mx-2'>(Check The Boxes for mandatory Documents)</div>
+          <div className=" d-flex">
+            <div style={{ display: "inline" }} className="form-title">
+              Documents{" "}
+            </div>
+            <div className="mt-2 mx-2">
+              (Check The Boxes for mandatory Documents)
+            </div>
           </div>
-          
+
           <div className="row ">
             {documents.map((doc) => (
               <div className="col-md-3" key={doc.id}>
@@ -382,14 +432,14 @@ const RFPEdit = () => {
             <div className="btn-group" role="group" aria-label="RFP Decision">
               <button
                 type="button"
-                className={`btn btn-${rfpDivision ? 'success' : 'secondary'}`}
+                className={`btn btn-${rfpDivision ? "success" : "secondary"}`}
                 onClick={() => setrfpDivision(true)}
               >
                 Yes
               </button>
               <button
                 type="button"
-                className={`btn btn-${!rfpDivision ? 'success' : 'secondary'}`}
+                className={`btn btn-${!rfpDivision ? "success" : "secondary"}`}
                 onClick={() => setrfpDivision(false)}
               >
                 No
@@ -409,7 +459,9 @@ const RFPEdit = () => {
         </div>
         <div className="calendar mt-4 border p-2 d-flex flex-row justify-content-between">
           <div className="form-group mx-2">
-            <label className="form-title fs-4">Bid Submission Date and Time</label>
+            <label className="form-title fs-4">
+              Bid Submission Date and Time
+            </label>
             <DatePicker
               selected={bidSubmissionDateTime}
               onChange={handleBidSubmissionDateTimeChange}
@@ -446,19 +498,16 @@ const RFPEdit = () => {
           >
             Edit
           </button> */}
-          <button
-            className="btn btn-secondary "
-            onClick={handleSaveAsDraft}
-          >
+          <button className="btn btn-secondary " onClick={handleSaveAsDraft}>
             Save as Draft
           </button>
-          <button
-            className="btn btn-success mx-5"
-            onClick={handleFinalSubmit}
-          >
+          <button className="btn btn-success mx-5" onClick={handleFinalSubmit}>
             Final Submit
           </button>
-          <Modal show={showSaveAsDraftModal} onHide={() => setShowSaveAsDraftModal(false)}>
+          <Modal
+            show={showSaveAsDraftModal}
+            onHide={() => setShowSaveAsDraftModal(false)}
+          >
             <Modal.Header closeButton>
               <Modal.Title>Save as Draft</Modal.Title>
             </Modal.Header>
@@ -469,24 +518,38 @@ const RFPEdit = () => {
               </Button>
             </Modal.Footer>
           </Modal>
-          <Modal show={showFillDataModal} onHide={() => setShowFillDataModal(false)}>
+          <Modal
+            show={showFillDataModal}
+            onHide={() => setShowFillDataModal(false)}
+          >
             <Modal.Header closeButton>
               <Modal.Title>Please Fill in All Data</Modal.Title>
             </Modal.Header>
-            <Modal.Body>Please fill in all required fields before submitting.</Modal.Body>
+            <Modal.Body>
+              Please fill in all required fields before submitting.
+            </Modal.Body>
             <Modal.Footer>
-              <Button variant="primary" onClick={() => setShowFillDataModal(false)}>
+              <Button
+                variant="primary"
+                onClick={() => setShowFillDataModal(false)}
+              >
                 OK
               </Button>
             </Modal.Footer>
           </Modal>
-          <Modal show={showFinalSubmitModal} onHide={() => setShowFinalSubmitModal(false)}>
+          <Modal
+            show={showFinalSubmitModal}
+            onHide={() => setShowFinalSubmitModal(false)}
+          >
             <Modal.Header closeButton>
               <Modal.Title>Final Submit</Modal.Title>
             </Modal.Header>
             <Modal.Body>Are you sure you want to submit?</Modal.Body>
             <Modal.Footer>
-              <Button variant="secondary" onClick={() => setShowFinalSubmitModal(false)}>
+              <Button
+                variant="secondary"
+                onClick={() => setShowFinalSubmitModal(false)}
+              >
                 Cancel
               </Button>
               <Button variant="primary" onClick={handleFinalSubmitConfirm}>
@@ -503,4 +566,3 @@ const RFPEdit = () => {
 };
 
 export default RFPEdit;
-

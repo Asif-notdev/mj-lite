@@ -30,7 +30,7 @@ function App() {
         <Route path="/rfplist" element={<RFPList />} />
         <Route path="/draftlist" element={<Draftlist />} />
         <Route path="/rfpdraft" element={<RFPDraft />} />
-        <Route path="/rfpdetailview/:id" element={<RFPDetailView />} />
+        <Route path="/rfpdetailview" element={<RFPDetailView />} />
         <Route path="/bidsubmission/:id" element={<BidSubmit />} />
         <Route path="/vendorhome" element={<ItemList />} />
         <Route path="/biddetailview/:id" element={<BidDetailView />} />
